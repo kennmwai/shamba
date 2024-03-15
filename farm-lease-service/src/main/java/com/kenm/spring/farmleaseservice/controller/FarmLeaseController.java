@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kenm.spring.farmleaseservice.FarmLease;
+import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmleaseservice.exception.RecordNotFoundException;
 import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
+
+import jakarta.validation.Valid;
 
 /**
  * @author User
@@ -27,67 +30,72 @@ import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
 @RestController
 @RequestMapping(path = "/api/leases", produces = "application/json")
 public class FarmLeaseController {
+    @Autowired
+    private FarmLeaseService farmLeaseService;
 
-	@Autowired
-	private FarmLeaseService farmLeaseService;
+    @GetMapping
+    public List<FarmLeaseDTO> getAllFarmLeases() {
+        return farmLeaseService.findAll();
+    }
+    
+    @GetMapping("/{id}")
+    public FarmLeaseDTO getFarmLeaseById(@PathVariable Long id) throws RecordNotFoundException {
+        FarmLeaseDTO farmLeaseDTO = farmLeaseService.findById(id);
+        return farmLeaseDTO;
+    }
 
-	@GetMapping
-	public ResponseEntity<List<FarmLease>> getAllFarmLeases() {
-		List<FarmLease> farmLeases = farmLeaseService.findAll();
-		return new ResponseEntity<>(farmLeases, HttpStatus.OK);
-	}
+    @PostMapping
+    public ResponseEntity<FarmLeaseDTO> createFarmLease(@Valid @RequestBody FarmLeaseDTO farmLeaseDTO) {
+        FarmLeaseDTO createdFarmLeaseDTO = farmLeaseService.createFarmLease(farmLeaseDTO);
+        return new ResponseEntity<>(createdFarmLeaseDTO, HttpStatus.CREATED);
+    }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<FarmLease> findById(@PathVariable Long id) throws RecordNotFoundException {
-		FarmLease farmLease = farmLeaseService.findById(id);
-		if (farmLease == null) {
-			throw new RecordNotFoundException("Farm Lease with id " + id + " not found.");
-		}
-		return new ResponseEntity<>(farmLease, HttpStatus.OK);
-	}
+    @PutMapping("/{id}")
+    public FarmLeaseDTO updateFarmLease(@PathVariable Long id, @RequestBody FarmLeaseDTO farmLeaseDTO)
+            throws RecordNotFoundException {
+        FarmLeaseDTO updatedFarmLeaseDTO = farmLeaseService.updateFarmLease(id, farmLeaseDTO);
+        return updatedFarmLeaseDTO;
+    }
 
-	@PostMapping
-	public ResponseEntity<FarmLease> createFarmLease(@RequestBody FarmLease farmLease) {
-		FarmLease createdFarmLease = farmLeaseService.createFarmLease(farmLease);
-		return new ResponseEntity<>(createdFarmLease, HttpStatus.CREATED);
-	}
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteFarmLease(@PathVariable Long id) throws RecordNotFoundException {
+        farmLeaseService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 
-	@PutMapping("/{id}")
-	public ResponseEntity<FarmLease> updateFarmLease(@PathVariable Long id, @RequestBody FarmLease farmLease) {
-		FarmLease existingFarmLease = farmLeaseService.findById(id);
-		if (existingFarmLease == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		farmLease.setId(id);
-		FarmLease updatedFarmLease = farmLeaseService.updateFarmLease(farmLease);
-		return new ResponseEntity<>(updatedFarmLease, HttpStatus.OK);
-	}
+    @DeleteMapping
+   public ResponseEntity<?> deleteAllFarmLeases() {
+        farmLeaseService.deleteAll();
+        return ResponseEntity.ok().build();
+    }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteFarmLease(@PathVariable Long id) {
-		FarmLease farmLease = farmLeaseService.findById(id);
-		if (farmLease == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		farmLeaseService.deleteById(id);
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
+    @GetMapping("/count")
+    public long countFarmLeases() {
+        long count = farmLeaseService.count();
+        return count;
+    }
 
-	@DeleteMapping
-	public ResponseEntity<Void> deleteAllFarmLeases() {
-		farmLeaseService.deleteAll();
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	}
+    @GetMapping("/exists/{id}")
+    public boolean existsFarmLeaseById(@PathVariable Long id) {
+        boolean exists = farmLeaseService.existsById(id);
+        return exists;
+    }
 
-	@GetMapping("/exists/{id}")
-	public ResponseEntity<Boolean> existsFarmLeaseById(@PathVariable Long id) {
-		boolean exists = farmLeaseService.existsById(id);
-		return new ResponseEntity<>(exists, HttpStatus.OK);
-	}
+    @GetMapping("/find-all-by-ids")
+    public List<FarmLeaseDTO> getAllFarmLeasesByIds(@RequestParam List<Long> ids) {
+        List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.findAllById(ids);
+        return farmLeaseDTOs;
+    }
 
-	@GetMapping("/count")
-	public ResponseEntity<Long> countFarmLeases() {
-		long count = farmLeaseService.count();
-		return new ResponseEntity<>(count, HttpStatus.OK);
-	}
+    @DeleteMapping("/delete-all-by-ids")
+    public ResponseEntity<?> deleteAllById(@RequestBody List<Long> ids) {
+        farmLeaseService.deleteAllById(ids);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/price/{id}")
+    public double calculateTotalPrice(@PathVariable Long id) throws RecordNotFoundException {
+        double totalPrice = farmLeaseService.calculateTotalPrice(id);
+        return totalPrice;
+    }
 }

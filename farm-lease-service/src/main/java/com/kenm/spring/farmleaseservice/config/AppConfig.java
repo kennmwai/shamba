@@ -20,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
 import com.kenm.spring.farmleaseservice.service.impl.FarmLeaseServiceImpl;
+import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
+import com.kenm.spring.farmleaseservice.mapper.impl.FarmLeaseMapperImpl;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -34,8 +36,6 @@ import com.zaxxer.hikari.HikariDataSource;
 public class AppConfig {
 	@Bean
 	DataSource dataSource() {
-		// Configure your data source here
-		// For example, using a connection pool like HikariCP
 		HikariConfig config = new HikariConfig();
 		config.setJdbcUrl("jdbc:mysql://localhost:3306/farm_db");
 		config.setUsername("root");
@@ -72,5 +72,10 @@ public class AppConfig {
 	@Bean
 	FarmLeaseService farmLeaseService() {
 		return new FarmLeaseServiceImpl();
+	}
+	
+	@Bean
+	public FarmLeaseMapper farmLeaseMapper() {
+	    return new FarmLeaseMapperImpl();
 	}
 }

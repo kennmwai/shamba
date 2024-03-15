@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.kenm.spring.farmleaseservice;
+package com.kenm.spring.farmleaseservice.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
