@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.kenm.spring.farmleaseservice.config;
 
@@ -23,10 +23,8 @@ import com.kenm.spring.farmleaseservice.service.impl.FarmLeaseServiceImpl;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-
 /**
- * @author User
- *F
+ * @author User F
  */
 @Configuration
 @EnableWebMvc
@@ -34,45 +32,45 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan(basePackages = "com.kenm.spring.farmleaseservice")
 @EnableTransactionManagement
 public class AppConfig {
-    @Bean
-    DataSource dataSource() {
-        // Configure your data source here
-        // For example, using a connection pool like HikariCP
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/farm_db");
-        config.setUsername("root");
-        config.setPassword("");
-        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        return new HikariDataSource(config);
-    }
+	@Bean
+	DataSource dataSource() {
+		// Configure your data source here
+		// For example, using a connection pool like HikariCP
+		HikariConfig config = new HikariConfig();
+		config.setJdbcUrl("jdbc:mysql://localhost:3306/farm_db");
+		config.setUsername("root");
+		config.setPassword("");
+		config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+		return new HikariDataSource(config);
+	}
 
-    @Bean
-    LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[]{"com.kenm.spring.farmleaseservice"});
+	@Bean
+	LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+		em.setDataSource(dataSource());
+		em.setPackagesToScan(new String[] { "com.kenm.spring.farmleaseservice" });
 
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        em.setJpaVendorAdapter(vendorAdapter);
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		em.setJpaVendorAdapter(vendorAdapter);
 
-        Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
-        em.setJpaProperties(properties);
+		Properties properties = new Properties();
+		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+		properties.setProperty("hibernate.show_sql", "true");
+		properties.setProperty("hibernate.hbm2ddl.auto", "update");
+		em.setJpaProperties(properties);
 
-        return em;
-    }
+		return em;
+	}
 
-    @Bean
-    PlatformTransactionManager transactionManager() {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-        return transactionManager;
-    }
+	@Bean
+	PlatformTransactionManager transactionManager() {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+		return transactionManager;
+	}
 
-    @Bean
-    FarmLeaseService farmLeaseService() {
-        return new FarmLeaseServiceImpl();
-    }
+	@Bean
+	FarmLeaseService farmLeaseService() {
+		return new FarmLeaseServiceImpl();
+	}
 }
