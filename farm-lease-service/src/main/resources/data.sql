@@ -1,0 +1,2 @@
+INSERT INTO farm_leases (farmer_name, farm_address, crop, acres, price_per_acre) VALUES ('John Doe', '123 Main St', 'Corn', 100, 100.0);
+INSERT INTO farm_leases (farmer_name, farm_address, crop, acres, price_per_acre) VALUES ('Jane Doe', '456 Main St', 'Soybeans', 200, 200.0);
