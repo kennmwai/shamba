@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.kenm.spring.farmleaseservice;
 
@@ -20,19 +20,19 @@ public class FarmLease {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(nullable = false)
     private String farmerName;
-    
+
     @Column(nullable = false)
     private String farmAddress;
-    
+
     @Column(nullable = false)
     private String crop;
-    
+
     @Column(nullable = false)
     private Integer acres;
-    
+
     @Column(nullable = false)
     private Double pricePerAcre;
 

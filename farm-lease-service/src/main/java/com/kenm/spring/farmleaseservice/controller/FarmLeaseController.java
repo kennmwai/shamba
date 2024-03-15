@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.kenm.spring.farmleaseservice.controller;
 
@@ -72,7 +72,7 @@ public class FarmLeaseController {
         farmLeaseService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    
+
     @DeleteMapping
     public ResponseEntity<Void> deleteAllFarmLeases() {
         farmLeaseService.deleteAll();
@@ -89,32 +89,5 @@ public class FarmLeaseController {
     public ResponseEntity<Long> countFarmLeases() {
         long count = farmLeaseService.count();
         return new ResponseEntity<>(count, HttpStatus.OK);
-    }
-
-    @GetMapping("/{ids}")
-    public ResponseEntity<List<FarmLease>> findAllById(@RequestBody List<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        List<FarmLease> farmLeases = farmLeaseService.findAllById(ids);
-        return new ResponseEntity<>(farmLeases, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{ids}")
-	public ResponseEntity<Void> deleteAllById(@RequestBody List<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        farmLeaseService.deleteAllById(ids);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/delete-all")
-    public ResponseEntity<Void> deleteAll(@RequestBody List<FarmLease> entities) {
-        if (entities == null || entities.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        farmLeaseService.deleteAll(entities);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
  }
