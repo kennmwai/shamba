@@ -1,0 +1,15 @@
+CREATE TABLE farms (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    farmId BIGINT NOT NULL,
+    farmName VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    farmSize INTEGER NOT NULL,
+    farmStatus VARCHAR(255) NOT NULL,
+    farmType VARCHAR(255) NOT NULL,
+    pricePerAcre DOUBLE NOT NULL,
+    FOREIGN KEY (ownerId) REFERENCES farm_owners(id),
+    FOREIGN KEY (tenantId) REFERENCES farm_tenants(id),
+    FOREIGN KEY (leaseId) REFERENCES farm_leases(id),
+    FOREIGN KEY (weatherId) REFERENCES farm_weather(id),
+    FOREIGN KEY (soilId) REFERENCES farm_soil(id),
+);
