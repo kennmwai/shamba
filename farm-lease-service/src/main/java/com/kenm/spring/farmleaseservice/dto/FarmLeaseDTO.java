@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.kenm.spring.farmleaseservice.dto;
 
@@ -16,7 +16,7 @@ public class FarmLeaseDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	
+
 	@NotBlank(message = "Farmer name is required")
 	private String farmerName;
 	private String farmAddress;

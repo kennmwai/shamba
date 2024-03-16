@@ -1,0 +1,19 @@
+meta {
+  name: createLease
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8080/api/leases
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {"farmerName":"John Doe","farmAddress":"123 Main St","crop":"Corn","acres":100,"pricePerAcre":100.0}
+}

@@ -18,10 +18,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
-import com.kenm.spring.farmleaseservice.service.impl.FarmLeaseServiceImpl;
 import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
 import com.kenm.spring.farmleaseservice.mapper.impl.FarmLeaseMapperImpl;
+import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
+import com.kenm.spring.farmleaseservice.service.impl.FarmLeaseServiceImpl;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -73,7 +73,7 @@ public class AppConfig {
 	FarmLeaseService farmLeaseService() {
 		return new FarmLeaseServiceImpl();
 	}
-	
+
 	@Bean
 	public FarmLeaseMapper farmLeaseMapper() {
 	    return new FarmLeaseMapperImpl();

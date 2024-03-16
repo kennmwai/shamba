@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.kenm.spring.farmleaseservice.mapper.impl;
 
