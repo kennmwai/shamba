@@ -1,5 +1,5 @@
 /**
- *
+ * Farm.java - Entity class for Farm
  */
 package com.kenm.spring.farmservice.entity;
 
@@ -9,6 +9,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author User
@@ -16,72 +20,36 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "farms")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class Farm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Column(nullable = false)
-	private String farmerName;
+	private String farmName;
 
 	@Column(nullable = false)
 	private String farmAddress;
 
 	@Column(nullable = false)
-	private String crop;
+	private String farmType; // i.e Crop, Livestock, Orchard
 
 	@Column(nullable = false)
-	private Integer acres;
+	private String farmStatus; // i.e. Active, Inactive
+
+	@Column(nullable = false)
+	private Integer farmSize; // in Acres
+
+	@Column(nullable = false)
+	private String farmOwner;
 
 	@Column(nullable = false)
 	private Double pricePerAcre;
 
-	// Getters and setters
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFarmerName() {
-		return farmerName;
-	}
-
-	public void setFarmerName(String farmerName) {
-		this.farmerName = farmerName;
-	}
-
-	public String getFarmAddress() {
-		return farmAddress;
-	}
-
-	public void setFarmAddress(String farmAddress) {
-		this.farmAddress = farmAddress;
-	}
-
-	public String getCrop() {
-		return crop;
-	}
-
-	public void setCrop(String crop) {
-		this.crop = crop;
-	}
-
-	public Integer getAcres() {
-		return acres;
-	}
-
-	public void setAcres(Integer acres) {
-		this.acres = acres;
-	}
-
-	public Double getPricePerAcre() {
-		return pricePerAcre;
-	}
-
-	public void setPricePerAcre(Double pricePerAcre) {
-		this.pricePerAcre = pricePerAcre;
-	}
+	@Column(nullable = false)
+	private Long leaseId = 0L;  // Corresponds to the id field in FarmLease entity set default value to zero.
 }

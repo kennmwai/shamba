@@ -64,7 +64,7 @@ public class FarmController {
     }
 
     @DeleteMapping
-   public ResponseEntity<?> deleteAllFarms() {
+    public ResponseEntity<?> deleteAllFarms() {
         farmService.deleteAll();
         return ResponseEntity.ok().build();
     }
@@ -73,6 +73,12 @@ public class FarmController {
     public long countFarms() {
         long count = farmService.count();
         return count;
+    }
+
+    @GetMapping("/price/{id}")
+    public double calculateTotalPrice(@PathVariable Long id) throws RecordNotFoundException {
+        double totalPrice = farmService.calculateTotalPrice(id);
+        return totalPrice;
     }
 
     @GetMapping("/exists/{id}")
@@ -91,11 +97,5 @@ public class FarmController {
     public ResponseEntity<?> deleteAllById(@RequestBody List<Long> ids) {
         farmService.deleteAllById(ids);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/price/{id}")
-    public double calculateTotalPrice(@PathVariable Long id) throws RecordNotFoundException {
-        double totalPrice = farmService.calculateTotalPrice(id);
-        return totalPrice;
     }
 }

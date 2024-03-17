@@ -46,20 +46,28 @@ public class FarmServiceImpl implements FarmService {
 	}
 
 	@Override
+	public List<FarmDTO> findAllById(Iterable<Long> ids) {
+		List<Farm> farms = farmRepository.findAllById(ids);
+		List<FarmDTO> farmDTOs = farms.stream()
+				.map(farm -> farmMapper.toFarmDTO(farm)).collect(Collectors.toList());
+		return farmDTOs;
+	}
+
+	@Override
 	public FarmDTO createFarm(FarmDTO farmDTO) {
-		Farm farm = farmMapper.toFarm(farmDTO);
-		farm = farmRepository.save(farm);
-		FarmDTO createdFarmDTO = farmMapper.toFarmDTO(farm);
+		Farm newFarm = farmMapper.toFarm(farmDTO);
+		newFarm = farmRepository.save(newFarm);
+		FarmDTO createdFarmDTO = farmMapper.toFarmDTO(newFarm);
 		return createdFarmDTO;
 	}
 
 	@Override
 	public FarmDTO updateFarm(Long id, FarmDTO farmDTO) throws RecordNotFoundException {
-	    Farm updatedFarm = farmMapper.toFarm(farmDTO);
-	    updatedFarm.setId(id);
-	    updatedFarm = farmRepository.save(updatedFarm);
-	    FarmDTO updatedFarmDTO = farmMapper.toFarmDTO(updatedFarm);
-	    return updatedFarmDTO;
+		Farm updatedFarm = farmMapper.toFarm(farmDTO);
+		updatedFarm.setId(id);
+		updatedFarm = farmRepository.save(updatedFarm);
+		FarmDTO updatedFarmDTO = farmMapper.toFarmDTO(updatedFarm);
+		return updatedFarmDTO;
 	}
 
 	@Override
@@ -75,6 +83,14 @@ public class FarmServiceImpl implements FarmService {
 	}
 
 	@Override
+	public void deleteAllById(Iterable<Long> ids) {
+		List<Farm> farms = farmRepository.findAllById(ids);
+		List<Farm> farmsToDelete = farms.stream().filter(farm -> farm != null)
+				.collect(Collectors.toList());
+		farmRepository.deleteAll(farmsToDelete);
+	}
+
+	@Override
 	public boolean existsById(Long id) {
 		return farmRepository.existsById(id);
 	}
@@ -85,26 +101,10 @@ public class FarmServiceImpl implements FarmService {
 	}
 
 	@Override
-	public List<FarmDTO> findAllById(Iterable<Long> ids) {
-		List<Farm> farms = farmRepository.findAllById(ids);
-		List<FarmDTO> farmDTOs = farms.stream()
-				.map(farm -> farmMapper.toFarmDTO(farm)).collect(Collectors.toList());
-		return farmDTOs;
-	}
-
-	@Override
-	public void deleteAllById(Iterable<Long> ids) {
-		List<Farm> farms = farmRepository.findAllById(ids);
-		List<Farm> farmsToDelete = farms.stream().filter(farm -> farm != null)
-				.collect(Collectors.toList());
-		farmRepository.deleteAll(farmsToDelete);
-	}
-
-	@Override
 	public double calculateTotalPrice(Long id) throws RecordNotFoundException {
 		Farm farm = farmRepository.findById(id)
 				.orElseThrow(() -> new RecordNotFoundException("Farm with id " + id + " not found."));
-		double totalPrice = farm.getAcres() * farm.getPricePerAcre();
+		double totalPrice = farm.getFarmSize() * farm.getPricePerAcre();
 		return totalPrice;
 	}
 

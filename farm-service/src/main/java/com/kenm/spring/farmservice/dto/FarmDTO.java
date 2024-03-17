@@ -1,5 +1,5 @@
 /**
- *
+ * FarmDTO.java - DTO class for Farm
  */
 package com.kenm.spring.farmservice.dto;
 
@@ -9,88 +9,60 @@ package com.kenm.spring.farmservice.dto;
  */
 import java.io.Serializable;
 
-import jakarta.validation.constraints.NotBlank;
+import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor @Getter @Setter
+@ToString
 public class FarmDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
 
-	@NotBlank(message = "Farmer name is required")
-	private String farmerName;
+	@NotBlank(message = "Farm name cannot be blank")
+	@Size(min = 1, max = 255)
+	private String farmName;
+	
+	@NotBlank(message = "Farm address cannot be blank")
+	@Size(min = 1, max = 255)
 	private String farmAddress;
-	private String crop;
-	private Integer acres;
+	
+	@NotBlank(message = "Farm Type cannot be blank")
+	@Size(min = 1, max = 255)
+	private String farmType;
+	
+	@NotBlank(message = "Farm Status cannot be blank")
+	@Size(min = 1, max = 255)
+	private String farmStatus;
+
+	@Positive(message = "farm Size (Acres) must be greater than or equal to 1")
+	private Integer farmSize;
+	
+	@PositiveOrZero(message = "Price per acre must be greater than or equal to 0")
 	private Double pricePerAcre;
 
-	public FarmDTO() {
-		super();
-	}
+	@NotBlank(message = "Farm Owner cannot be blank")
+	@Size(min = 1, max = 255)
+	private String farmOwner;
 
-	public FarmDTO(Long id, String farmerName, String farmAddress, String crop, Integer acres,
-			Double pricePerAcre) {
-		super();
-		this.id = id;
-		this.farmerName = farmerName;
-		this.farmAddress = farmAddress;
-		this.crop = crop;
-		this.acres = acres;
-		this.pricePerAcre = pricePerAcre;
-	}
+	private FarmLeaseDTO leaseId;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getFarmerName() {
-		return farmerName;
-	}
-
-	public void setFarmerName(String farmerName) {
-		this.farmerName = farmerName;
-	}
-
-	public String getFarmAddress() {
-		return farmAddress;
-	}
-
-	public void setFarmAddress(String farmAddress) {
-		this.farmAddress = farmAddress;
-	}
-
-	public String getCrop() {
-		return crop;
-	}
-
-	public void setCrop(String crop) {
-		this.crop = crop;
-	}
-
-	public Integer getAcres() {
-		return acres;
-	}
-
-	public void setAcres(Integer acres) {
-		this.acres = acres;
-	}
-
-	public Double getPricePerAcre() {
-		return pricePerAcre;
-	}
-
-	public void setPricePerAcre(Double pricePerAcre) {
-		this.pricePerAcre = pricePerAcre;
-	}
-
-	@Override
-	public String toString() {
-		return "FarmDTO [id=" + id + ", farmerName=" + farmerName + ", farmAddress=" + farmAddress + ", crop="
-				+ crop + ", acres=" + acres + ", pricePerAcre=" + pricePerAcre + "]";
-	}
-
+	// Pagination fields
+    private int pageNumber;
+    private int pageSize;
+    private long totalElements;
+    private int totalPages;
 }
