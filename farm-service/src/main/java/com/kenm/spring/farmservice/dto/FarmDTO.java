@@ -9,14 +9,13 @@ package com.kenm.spring.farmservice.dto;
  */
 import java.io.Serializable;
 
-import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +24,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor @Getter @Setter
+@EqualsAndHashCode
 @ToString
 public class FarmDTO implements Serializable {
 
@@ -58,11 +58,5 @@ public class FarmDTO implements Serializable {
 	@Size(min = 1, max = 255)
 	private String farmOwner;
 
-	private FarmLeaseDTO leaseId;
-
-	// Pagination fields
-    private int pageNumber;
-    private int pageSize;
-    private long totalElements;
-    private int totalPages;
+	private Long leaseId; // FarmLease entity Id
 }

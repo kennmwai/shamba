@@ -5,6 +5,9 @@ package com.kenm.spring.farmservice.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.exception.RecordNotFoundException;
 
@@ -14,6 +17,8 @@ import com.kenm.spring.farmservice.exception.RecordNotFoundException;
  */
 public interface FarmService {
 	List<FarmDTO> findAll();
+
+	Page<FarmDTO> findAll(Pageable pageable);
 
 	FarmDTO findById(Long id) throws RecordNotFoundException;
 

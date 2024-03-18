@@ -7,13 +7,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.entity.Farm;
 import com.kenm.spring.farmservice.exception.RecordNotFoundException;
 import com.kenm.spring.farmservice.mapper.FarmMapper;
 import com.kenm.spring.farmservice.repository.FarmRepository;
+import com.kenm.spring.farmservice.service.FarmLeaseServiceClient;
 import com.kenm.spring.farmservice.service.FarmService;
 
 /**
@@ -29,6 +34,9 @@ public class FarmServiceImpl implements FarmService {
 	@Autowired
 	private FarmMapper farmMapper;
 
+	@Autowired
+	private FarmLeaseServiceClient farmLeaseServiceClient;
+
 	@Override
 	public List<FarmDTO> findAll() {
 		List<Farm> farms = farmRepository.findAll();
@@ -38,10 +46,20 @@ public class FarmServiceImpl implements FarmService {
 	}
 
 	@Override
+	public Page<FarmDTO> findAll(Pageable pageable) {
+		List<Farm> farms = farmRepository.findAll(pageable).getContent();
+		List<FarmDTO> farmDTOs = farms.stream()
+				.map(farm -> farmMapper.toFarmDTO(farm)).collect(Collectors.toList());
+		return new PageImpl<>(farmDTOs, pageable, farms.size());
+	}
+
+	@Override
 	public FarmDTO findById(Long id) throws RecordNotFoundException {
+		FarmLeaseDTO farmLeaseDTO = farmLeaseServiceClient.getFarmLeaseById(id);
 		Farm farm = farmRepository.findById(id)
 				.orElseThrow(() -> new RecordNotFoundException("Farm with id " + id + " not found."));
 		FarmDTO farmDTO = farmMapper.toFarmDTO(farm);
+		farmDTO.setLeaseId(farmLeaseDTO.getId());
 		return farmDTO;
 	}
 
