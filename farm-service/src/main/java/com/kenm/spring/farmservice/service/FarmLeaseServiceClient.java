@@ -3,31 +3,28 @@ package com.kenm.spring.farmservice.service;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
-import com.kenm.spring.farmservice.config.FeignClientConfig;
-
-import feign.Headers;
-import feign.Param;
-import feign.RequestLine;
-
-@FeignClient(name = "farm-lease-service", url = "${farm-lease-service.url}", configuration = FeignClientConfig.class)
+@FeignClient(name = "farm-lease-service", url = "${farm-lease-service.url}")
 public interface FarmLeaseServiceClient {
-    @RequestLine("GET /api/leases")
-    List<FarmLeaseDTO> getFarmLeases();
+    @RequestMapping(method = RequestMethod.GET, value ="/api/leases")
+    List<FarmLeaseDTO> getLeases();
 
-    @RequestLine("GET /api/leases/{id}")
-    FarmLeaseDTO getFarmLeaseById(@Param("id") Long id);
+    @RequestMapping(method = RequestMethod.GET, value ="/api/leases/{leaseId}")
+    FarmLeaseDTO getLeaseById(@PathVariable Long leaseId);
 
-    @Headers("Content-Type: application/json")
-    @RequestLine("POST /api/leases")
-    FarmLeaseDTO createFarmLease(@RequestBody FarmLeaseDTO farmLeaseDTO);
+    @RequestMapping(method = RequestMethod.POST, value ="/api/leases", consumes = "application/json")
+    FarmLeaseDTO create(@RequestBody FarmLeaseDTO farmLeaseDTO);
 
-    @RequestLine("PUT /api/leases/{id}")
-    FarmLeaseDTO updateFarmLease(@Param("id") Long id, @RequestBody FarmLeaseDTO farmLeaseDTO);
+    @PutMapping(path = "/api/leases/{leaseId}")
+    FarmLeaseDTO update(@PathVariable Long leaseId, @RequestBody FarmLeaseDTO farmLeaseDTO);
 
-    @RequestLine("DELETE /api/leases/{id}")
-    void deleteFarmLease(@Param("id") Long id);
+    @RequestMapping(method = RequestMethod.DELETE, value ="/api/leases/{leaseId}")
+    void delete(@PathVariable Long leaseId);
 
 }

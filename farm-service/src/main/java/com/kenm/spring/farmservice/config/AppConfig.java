@@ -76,6 +76,6 @@ public class AppConfig {
 
 	@Bean
 	public FarmMapper farmMapper() {
-	    return new FarmMapperImpl();
+		return new FarmMapperImpl();
 	}
 }

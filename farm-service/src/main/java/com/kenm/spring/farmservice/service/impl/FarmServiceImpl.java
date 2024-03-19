@@ -55,11 +55,18 @@ public class FarmServiceImpl implements FarmService {
 
 	@Override
 	public FarmDTO findById(Long id) throws RecordNotFoundException {
-		FarmLeaseDTO farmLeaseDTO = farmLeaseServiceClient.getFarmLeaseById(id);
 		Farm farm = farmRepository.findById(id)
 				.orElseThrow(() -> new RecordNotFoundException("Farm with id " + id + " not found."));
+
+		Long leaseId = farm.getLeaseId();
+		if (leaseId == null || leaseId == 0) {
+			return farmMapper.toFarmDTO(farm);
+		}
+
+		FarmLeaseDTO farmLeaseDTO = farmLeaseServiceClient.getLeaseById(leaseId);
 		FarmDTO farmDTO = farmMapper.toFarmDTO(farm);
 		farmDTO.setLeaseId(farmLeaseDTO.getId());
+
 		return farmDTO;
 	}
 
