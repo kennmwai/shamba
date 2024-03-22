@@ -12,7 +12,9 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -23,6 +25,8 @@ import lombok.ToString;
 @Table(name = "farms")
 @Data
 @NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
@@ -32,26 +36,23 @@ public class Farm {
 	private Long id;
 
 	@Column(nullable = false)
-	private String farmName;
+	private String name;
 
 	@Column(nullable = false)
-	private String farmAddress;
+	private String owner;
 
 	@Column(nullable = false)
-	private String farmType; // i.e Crop, Livestock, Orchard
+	private String location;
 
 	@Column(nullable = false)
-	private String farmStatus; // i.e. Active, Inactive
+	private String type; // i.e Crop, Livestock, Mixed, Orchard
 
 	@Column(nullable = false)
-	private Integer farmSize; // in Acres
+	private String status; // i.e. Active, Inactive
 
 	@Column(nullable = false)
-	private String farmOwner;
+	private Integer size; // in Acres
 
 	@Column(nullable = false)
 	private Double pricePerAcre;
-
-	@Column(nullable = false)
-	private Long leaseId = 0L;  // Corresponds to the id field in FarmLease entity set default value to zero.
 }

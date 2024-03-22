@@ -3,7 +3,7 @@
  */
 package com.kenm.spring.farmservice.mapper;
 
-import com.kenm.spring.farmservice.dto.FarmDTO;
+import com.kenm.spring.farmservice.dto.FarmDetailsDTO;
 import com.kenm.spring.farmservice.entity.Farm;
 
 /**
@@ -12,8 +12,8 @@ import com.kenm.spring.farmservice.entity.Farm;
  */
 public interface FarmMapper {
 
-	FarmDTO toFarmDTO(Farm farm);
+	FarmDetailsDTO mapToFarmDetailsDTO(Farm farm);
 
-	Farm toFarm(FarmDTO farmDTO);
+	Farm mapToFarm(FarmDetailsDTO farmDTO);
 
 }

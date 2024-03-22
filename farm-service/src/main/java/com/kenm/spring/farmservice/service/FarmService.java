@@ -8,25 +8,28 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.kenm.spring.farmservice.dto.FarmDTO;
-import com.kenm.spring.farmservice.exception.RecordNotFoundException;
+import com.kenm.spring.farmservice.dto.FarmDetailsDTO;
+import com.kenm.spring.farmservice.dto.FarmResourceDTO;
+import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 
 /**
  * @author User
  *
  */
 public interface FarmService {
-	List<FarmDTO> findAll();
+	List<FarmDetailsDTO> findAll();
 
-	Page<FarmDTO> findAll(Pageable pageable);
+	List<FarmResourceDTO> getAllFarms();
 
-	FarmDTO findById(Long id) throws RecordNotFoundException;
+	Page<FarmDetailsDTO> findAll(Pageable pageable);
 
-	FarmDTO createFarm(FarmDTO farmDTO);
+	FarmDetailsDTO findById(Long id) throws ResourceNotFoundException;
 
-	FarmDTO updateFarm(Long id, FarmDTO farmDTO) throws RecordNotFoundException;
+	FarmDetailsDTO createFarm(FarmDetailsDTO farmDTO);
 
-	void deleteById(Long id) throws RecordNotFoundException;
+	FarmDetailsDTO updateFarm(Long id, FarmDetailsDTO farmDTO) throws ResourceNotFoundException;
+
+	void deleteById(Long id) throws ResourceNotFoundException;
 
 	void deleteAll();
 
@@ -34,10 +37,10 @@ public interface FarmService {
 
 	long count();
 
-	List<FarmDTO> findAllById(Iterable<Long> ids);
+	List<FarmDetailsDTO> findAllById(Iterable<Long> ids);
 
 	void deleteAllById(Iterable<Long> ids);
 
-	double calculateTotalPrice(Long id) throws RecordNotFoundException;
+	double calculateTotalPrice(Long id) throws ResourceNotFoundException;
 
 }

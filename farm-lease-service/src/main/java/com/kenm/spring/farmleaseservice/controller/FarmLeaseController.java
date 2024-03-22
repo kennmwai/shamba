@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
-import com.kenm.spring.farmleaseservice.exception.RecordNotFoundException;
+import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
 
 import jakarta.validation.Valid;
@@ -34,16 +34,22 @@ public class FarmLeaseController {
     private FarmLeaseService farmLeaseService;
 
     @GetMapping
-    public List<FarmLeaseDTO> getAllFarmLeases() {
-        return farmLeaseService.findAll();
+    public ResponseEntity<List<FarmLeaseDTO>> getAllFarmLeases() {
+        return new ResponseEntity<>(farmLeaseService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public FarmLeaseDTO getFarmLeaseById(@PathVariable Long id) throws RecordNotFoundException {
+    public ResponseEntity<FarmLeaseDTO> getFarmLeaseById(@PathVariable Long id) throws ResourceNotFoundException {
         FarmLeaseDTO farmLeaseDTO = farmLeaseService.findById(id);
-        return farmLeaseDTO;
+        return new ResponseEntity<>(farmLeaseDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/farms/{id}")
+    public ResponseEntity<FarmLeaseDTO> getFarmLeaseByFarmId(@PathVariable Long id) throws ResourceNotFoundException {
+        FarmLeaseDTO farmLeaseDTO = farmLeaseService.findByFarmId(id);
+        return new ResponseEntity<>(farmLeaseDTO, HttpStatus.OK);
+    }
+    
     @PostMapping
     public ResponseEntity<FarmLeaseDTO> createFarmLease(@Valid @RequestBody FarmLeaseDTO farmLeaseDTO) {
         FarmLeaseDTO createdFarmLeaseDTO = farmLeaseService.createFarmLease(farmLeaseDTO);
@@ -51,20 +57,20 @@ public class FarmLeaseController {
     }
 
     @PutMapping("/{id}")
-    public FarmLeaseDTO updateFarmLease(@PathVariable Long id, @RequestBody FarmLeaseDTO farmLeaseDTO)
-            throws RecordNotFoundException {
+    public ResponseEntity<FarmLeaseDTO> updateFarmLease(@PathVariable Long id, @RequestBody FarmLeaseDTO farmLeaseDTO)
+            throws ResourceNotFoundException {
         FarmLeaseDTO updatedFarmLeaseDTO = farmLeaseService.updateFarmLease(id, farmLeaseDTO);
-        return updatedFarmLeaseDTO;
+        return new ResponseEntity<>(updatedFarmLeaseDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteFarmLease(@PathVariable Long id) throws RecordNotFoundException {
+    public ResponseEntity<?> deleteFarmLease(@PathVariable Long id) throws ResourceNotFoundException {
         farmLeaseService.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping
-   public ResponseEntity<?> deleteAllFarmLeases() {
+    public ResponseEntity<?> deleteAllFarmLeases() {
         farmLeaseService.deleteAll();
         return ResponseEntity.ok().build();
     }
@@ -82,20 +88,20 @@ public class FarmLeaseController {
     }
 
     @GetMapping("/find-all-by-ids")
-    public List<FarmLeaseDTO> getAllFarmLeasesByIds(@RequestParam List<Long> ids) {
+    public ResponseEntity<List<FarmLeaseDTO>> getAllFarmLeasesByIds(@RequestParam List<Long> ids) throws ResourceNotFoundException {
         List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.findAllById(ids);
-        return farmLeaseDTOs;
+        return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-all-by-ids")
-    public ResponseEntity<?> deleteAllById(@RequestBody List<Long> ids) {
+    public ResponseEntity<?> deleteAllById(@RequestBody List<Long> ids) throws ResourceNotFoundException {
         farmLeaseService.deleteAllById(ids);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/price/{id}")
-    public double calculateTotalPrice(@PathVariable Long id) throws RecordNotFoundException {
-        double totalPrice = farmLeaseService.calculateTotalPrice(id);
-        return totalPrice;
-    }
+    // @GetMapping("/price/{id}")
+    // public double calculateTotalPrice(@PathVariable Long id) throws RecordNotFoundException {
+    //     double totalPrice = farmLeaseService.calculateTotalPrice(id);
+    //     return totalPrice;
+    // }
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmleaseservice.entity.FarmLease;
-import com.kenm.spring.farmleaseservice.exception.RecordNotFoundException;
+import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
 import com.kenm.spring.farmleaseservice.repository.FarmLeaseRepository;
 import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
@@ -38,9 +38,17 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public FarmLeaseDTO findById(Long id) throws RecordNotFoundException {
+	public FarmLeaseDTO findById(Long id) throws ResourceNotFoundException {
 		FarmLease farmLease = farmLeaseRepository.findById(id)
-				.orElseThrow(() -> new RecordNotFoundException("Farm Lease with id " + id + " not found."));
+				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with id " + id + " not found."));
+		FarmLeaseDTO farmLeaseDTO = farmLeaseMapper.toFarmLeaseDTO(farmLease);
+		return farmLeaseDTO;
+	}
+
+	@Override
+	public FarmLeaseDTO findByFarmId(Long id) throws ResourceNotFoundException {
+		FarmLease farmLease = farmLeaseRepository.findByFarmId(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with id " + id + " not found."));
 		FarmLeaseDTO farmLeaseDTO = farmLeaseMapper.toFarmLeaseDTO(farmLease);
 		return farmLeaseDTO;
 	}
@@ -54,18 +62,18 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws RecordNotFoundException {
-	    FarmLease updatedFarmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
-	    updatedFarmLease.setId(id);
-	    updatedFarmLease = farmLeaseRepository.save(updatedFarmLease);
-	    FarmLeaseDTO updatedFarmLeaseDTO = farmLeaseMapper.toFarmLeaseDTO(updatedFarmLease);
-	    return updatedFarmLeaseDTO;
+	public FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException {
+		FarmLease updatedFarmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
+		updatedFarmLease.setId(id);
+		updatedFarmLease = farmLeaseRepository.save(updatedFarmLease);
+		FarmLeaseDTO updatedFarmLeaseDTO = farmLeaseMapper.toFarmLeaseDTO(updatedFarmLease);
+		return updatedFarmLeaseDTO;
 	}
 
 	@Override
-	public void deleteById(Long id) throws RecordNotFoundException {
+	public void deleteById(Long id) throws ResourceNotFoundException {
 		FarmLease farmLease = farmLeaseRepository.findById(id)
-				.orElseThrow(() -> new RecordNotFoundException("Farm Lease with id " + id + " not found."));
+				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with id " + id + " not found."));
 		farmLeaseRepository.delete(farmLease);
 	}
 
@@ -85,7 +93,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public List<FarmLeaseDTO> findAllById(Iterable<Long> ids) {
+	public List<FarmLeaseDTO> findAllById(Iterable<Long> ids) throws ResourceNotFoundException {
 		List<FarmLease> farmLeases = farmLeaseRepository.findAllById(ids);
 		List<FarmLeaseDTO> farmLeaseDTOs = farmLeases.stream()
 				.map(farmLease -> farmLeaseMapper.toFarmLeaseDTO(farmLease)).collect(Collectors.toList());
@@ -93,19 +101,19 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public void deleteAllById(Iterable<Long> ids) {
+	public void deleteAllById(Iterable<Long> ids) throws ResourceNotFoundException {
 		List<FarmLease> farmLeases = farmLeaseRepository.findAllById(ids);
 		List<FarmLease> farmLeasesToDelete = farmLeases.stream().filter(farmLease -> farmLease != null)
 				.collect(Collectors.toList());
 		farmLeaseRepository.deleteAll(farmLeasesToDelete);
 	}
 
-	@Override
-	public double calculateTotalPrice(Long id) throws RecordNotFoundException {
-		FarmLease farmLease = farmLeaseRepository.findById(id)
-				.orElseThrow(() -> new RecordNotFoundException("Farm Lease with id " + id + " not found."));
-		double totalPrice = farmLease.getAcres() * farmLease.getPricePerAcre();
-		return totalPrice;
-	}
+	// @Override
+	// public double calculateTotalPrice(Long id) throws RecordNotFoundException {
+	// 	FarmLease farmLease = farmLeaseRepository.findById(id)
+	// 			.orElseThrow(() -> new RecordNotFoundException("Farm Lease with id " + id + " not found."));
+	// 	double totalPrice = farmLease.getAcres() * farmLease.getPricePerAcre();
+	// 	return totalPrice;
+	// }
 
 }

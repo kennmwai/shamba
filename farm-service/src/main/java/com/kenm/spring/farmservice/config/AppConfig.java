@@ -3,72 +3,33 @@
  */
 package com.kenm.spring.farmservice.config;
 
-import java.util.Properties;
+import java.time.Duration;
 
-import javax.sql.DataSource;
-
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.kenm.spring.farmservice.mapper.FarmMapper;
 import com.kenm.spring.farmservice.mapper.impl.FarmMapperImpl;
+import com.kenm.spring.farmservice.service.LeaseServiceClient;
 import com.kenm.spring.farmservice.service.FarmService;
 import com.kenm.spring.farmservice.service.impl.FarmServiceImpl;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 
 /**
  * @author User F
  */
 @Configuration
 @EnableWebMvc
-@EnableJpaRepositories(basePackages = "com.kenm.spring.farmservice.repository")
 @ComponentScan(basePackages = "com.kenm.spring.farmservice")
-@EnableTransactionManagement
+@EnableJpaRepositories(basePackages = "com.kenm.spring.farmservice.repository")
+@EnableFeignClients(clients = LeaseServiceClient.class)
 public class AppConfig {
-	@Bean
-	DataSource dataSource() {
-		HikariConfig config = new HikariConfig();
-		config.setJdbcUrl("jdbc:mysql://localhost:3306/farm_db");
-		config.setUsername("root");
-		config.setPassword("");
-		config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		return new HikariDataSource(config);
-	}
-
-	@Bean
-	LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		em.setDataSource(dataSource());
-		em.setPackagesToScan(new String[] { "com.kenm.spring.farmservice" });
-
-		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-		em.setJpaVendorAdapter(vendorAdapter);
-
-		Properties properties = new Properties();
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-		properties.setProperty("hibernate.show_sql", "true");
-		properties.setProperty("hibernate.hbm2ddl.auto", "update");
-		em.setJpaProperties(properties);
-
-		return em;
-	}
-
-	@Bean
-	PlatformTransactionManager transactionManager() {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-		return transactionManager;
-	}
-
 	@Bean
 	FarmService farmService() {
 		return new FarmServiceImpl();
@@ -78,4 +39,18 @@ public class AppConfig {
 	public FarmMapper farmMapper() {
 		return new FarmMapperImpl();
 	}
+
+    @Bean
+    CircuitBreakerConfig circuitBreakerConfig() {
+        return CircuitBreakerConfig.custom()
+                .waitDurationInOpenState(Duration.ofMillis(5000))
+                .build();
+    }
+
+    @Bean
+    TimeLimiterConfig timeLimiterConfig() {
+        return TimeLimiterConfig.custom()
+                .timeoutDuration(Duration.ofMillis(5000))
+                .build();
+    }
 }

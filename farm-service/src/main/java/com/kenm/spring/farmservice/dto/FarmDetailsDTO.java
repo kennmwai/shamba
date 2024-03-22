@@ -23,10 +23,12 @@ import lombok.ToString;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor @Getter @Setter
+@AllArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode
 @ToString
-public class FarmDTO implements Serializable {
+public class FarmDetailsDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,29 +36,27 @@ public class FarmDTO implements Serializable {
 
 	@NotBlank(message = "Farm name cannot be blank")
 	@Size(min = 1, max = 255)
-	private String farmName;
-	
-	@NotBlank(message = "Farm address cannot be blank")
-	@Size(min = 1, max = 255)
-	private String farmAddress;
-	
-	@NotBlank(message = "Farm Type cannot be blank")
-	@Size(min = 1, max = 255)
-	private String farmType;
-	
-	@NotBlank(message = "Farm Status cannot be blank")
-	@Size(min = 1, max = 255)
-	private String farmStatus;
-
-	@Positive(message = "farm Size (Acres) must be greater than or equal to 1")
-	private Integer farmSize;
-	
-	@PositiveOrZero(message = "Price per acre must be greater than or equal to 0")
-	private Double pricePerAcre;
+	private String name;
 
 	@NotBlank(message = "Farm Owner cannot be blank")
 	@Size(min = 1, max = 255)
-	private String farmOwner;
+	private String owner;
 
-	private Long leaseId; // FarmLease entity Id
+	@NotBlank(message = "Farm address cannot be blank")
+	@Size(min = 1, max = 255)
+	private String location;
+
+	@NotBlank(message = "Farm Type cannot be blank")
+	@Size(min = 1, max = 255)
+	private String type;
+
+	@NotBlank(message = "Farm Status cannot be blank")
+	@Size(min = 1, max = 255)
+	private String status;
+
+	@Positive(message = "farm Size (Acres) must be greater than or equal to 1")
+	private Integer size;
+
+	@PositiveOrZero(message = "Price per acre must be greater than or equal to 0")
+	private Double pricePerAcre;
 }

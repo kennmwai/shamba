@@ -6,7 +6,7 @@ package com.kenm.spring.farmleaseservice.service;
 import java.util.List;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
-import com.kenm.spring.farmleaseservice.exception.RecordNotFoundException;
+import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 
 /**
  * @author User
@@ -15,13 +15,15 @@ import com.kenm.spring.farmleaseservice.exception.RecordNotFoundException;
 public interface FarmLeaseService {
 	List<FarmLeaseDTO> findAll();
 
-	FarmLeaseDTO findById(Long id) throws RecordNotFoundException;
+	FarmLeaseDTO findById(Long id) throws ResourceNotFoundException;
+
+	FarmLeaseDTO findByFarmId(Long id) throws ResourceNotFoundException;
 
 	FarmLeaseDTO createFarmLease(FarmLeaseDTO farmLeaseDTO);
 
-	FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws RecordNotFoundException;
+	FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException;
 
-	void deleteById(Long id) throws RecordNotFoundException;
+	void deleteById(Long id) throws ResourceNotFoundException;
 
 	void deleteAll();
 
@@ -29,10 +31,10 @@ public interface FarmLeaseService {
 
 	long count();
 
-	List<FarmLeaseDTO> findAllById(Iterable<Long> ids);
+	List<FarmLeaseDTO> findAllById(Iterable<Long> ids) throws ResourceNotFoundException;
 
-	void deleteAllById(Iterable<Long> ids);
+	void deleteAllById(Iterable<Long> ids) throws ResourceNotFoundException;
 
-	double calculateTotalPrice(Long id) throws RecordNotFoundException;
+	// double calculateTotalPrice(Long id) throws RecordNotFoundException;
 
 }

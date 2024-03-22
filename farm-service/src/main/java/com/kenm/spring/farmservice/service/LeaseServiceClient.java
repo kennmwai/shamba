@@ -10,13 +10,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
+import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 @FeignClient(name = "farm-lease-service", url = "${farm-lease-service.url}")
-public interface FarmLeaseServiceClient {
+public interface LeaseServiceClient {
     @RequestMapping(method = RequestMethod.GET, value ="/api/leases")
     List<FarmLeaseDTO> getLeases();
 
     @RequestMapping(method = RequestMethod.GET, value ="/api/leases/{leaseId}")
-    FarmLeaseDTO getLeaseById(@PathVariable Long leaseId);
+    FarmLeaseDTO getLeaseById(@PathVariable Long leaseId) throws ResourceNotFoundException;
+
+    @RequestMapping(method = RequestMethod.GET, value ="/api/leases/farms/{farmId}")
+    FarmLeaseDTO getLeaseByFarmId(@PathVariable Long farmId);
 
     @RequestMapping(method = RequestMethod.POST, value ="/api/leases", consumes = "application/json")
     FarmLeaseDTO create(@RequestBody FarmLeaseDTO farmLeaseDTO);

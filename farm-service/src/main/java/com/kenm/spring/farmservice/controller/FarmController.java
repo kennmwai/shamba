@@ -6,9 +6,6 @@ package com.kenm.spring.farmservice.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kenm.spring.farmservice.dto.FarmDTO;
-import com.kenm.spring.farmservice.exception.RecordNotFoundException;
+import com.kenm.spring.farmservice.dto.FarmDetailsDTO;
+import com.kenm.spring.farmservice.dto.FarmResourceDTO;
+import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmservice.service.FarmService;
 
 import jakarta.validation.Valid;
@@ -36,35 +34,42 @@ public class FarmController {
     @Autowired
     private FarmService farmService;
 
+
     @GetMapping
-    public ResponseEntity<Page<FarmDTO>> getAllFarms(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                    @RequestParam(value = "size", defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<FarmDTO> farmDTOs = farmService.findAll(pageable);
-        return ResponseEntity.ok(farmDTOs);
+    public ResponseEntity<List<FarmResourceDTO>> getAllFarms() {
+        List<FarmResourceDTO> farmResources = farmService.getAllFarms();
+        return new ResponseEntity<>(farmResources, HttpStatus.OK);
     }
 
+    // @GetMapping
+    // public ResponseEntity<Page<FarmDetails>> getAllFarms(@RequestParam(value = "page", defaultValue = "0") int page,
+    //                                                 @RequestParam(value = "size", defaultValue = "10") int size) {
+    //     Pageable pageable = PageRequest.of(page, size);
+    //     Page<FarmDetails> farmDTOs = farmService.findAll(pageable);
+    //     return ResponseEntity.ok(farmDTOs);
+    // }
+
     @GetMapping("/{id}")
-    public FarmDTO getFarmById(@PathVariable Long id) throws RecordNotFoundException {
-        FarmDTO farmDTO = farmService.findById(id);
-        return farmDTO;
+    public ResponseEntity<FarmDetailsDTO> getFarmById(@PathVariable Long id) throws ResourceNotFoundException {
+        FarmDetailsDTO farmDTO = farmService.findById(id);
+        return new ResponseEntity<>(farmDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<FarmDTO> createFarm(@Valid @RequestBody FarmDTO farmDTO) {
-        FarmDTO createdFarmDTO = farmService.createFarm(farmDTO);
+    public ResponseEntity<FarmDetailsDTO> createFarm(@Valid @RequestBody FarmDetailsDTO farmDTO) {
+        FarmDetailsDTO createdFarmDTO = farmService.createFarm(farmDTO);
         return new ResponseEntity<>(createdFarmDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public FarmDTO updateFarm(@PathVariable Long id, @RequestBody FarmDTO farmDTO)
-            throws RecordNotFoundException {
-        FarmDTO updatedFarmDTO = farmService.updateFarm(id, farmDTO);
-        return updatedFarmDTO;
+    public ResponseEntity<FarmDetailsDTO> updateFarm(@PathVariable Long id, @RequestBody FarmDetailsDTO farmDTO)
+            throws ResourceNotFoundException {
+        FarmDetailsDTO updatedFarmDTO = farmService.updateFarm(id, farmDTO);
+        return new ResponseEntity<>(updatedFarmDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteFarm(@PathVariable Long id) throws RecordNotFoundException {
+    public ResponseEntity<?> deleteFarm(@PathVariable Long id) throws ResourceNotFoundException {
         farmService.deleteById(id);
         return ResponseEntity.ok().build();
     }
@@ -82,7 +87,7 @@ public class FarmController {
     }
 
     @GetMapping("/price/{id}")
-    public double calculateTotalPrice(@PathVariable Long id) throws RecordNotFoundException {
+    public double calculateTotalPrice(@PathVariable Long id) throws ResourceNotFoundException {
         double totalPrice = farmService.calculateTotalPrice(id);
         return totalPrice;
     }
@@ -94,9 +99,9 @@ public class FarmController {
     }
 
     @GetMapping("/find-all-by-ids")
-    public List<FarmDTO> getAllFarmsByIds(@RequestParam List<Long> ids) {
-        List<FarmDTO> farmDTOs = farmService.findAllById(ids);
-        return farmDTOs;
+    public ResponseEntity<List<FarmDetailsDTO>> getAllFarmsByIds(@RequestParam List<Long> ids) {
+        List<FarmDetailsDTO> farmDTOs = farmService.findAllById(ids);
+        return new ResponseEntity<>(farmDTOs, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete-all-by-ids")
@@ -104,4 +109,13 @@ public class FarmController {
         farmService.deleteAllById(ids);
         return ResponseEntity.ok().build();
     }
+
+    // Leases
+    // @GetMapping("/leases")
+    // public ResponseEntity<Page<FarmDTO>> getAllFarmsLeases(@RequestParam(value = "page", defaultValue = "0") int page,
+    //                                                 @RequestParam(value = "size", defaultValue = "10") int size) {
+    //     Pageable pageable = PageRequest.of(page, size);
+    //     Page<FarmDTO> farmDTOs = farmService.findAllLeases(pageable);
+    //     return ResponseEntity.ok(farmDTOs);
+    
 }
