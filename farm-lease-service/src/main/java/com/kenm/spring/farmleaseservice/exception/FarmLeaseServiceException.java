@@ -9,16 +9,16 @@ package com.kenm.spring.farmleaseservice.exception;
  */
 public class FarmLeaseServiceException extends RuntimeException {
 
-    /**
+	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	public FarmLeaseServiceException(String message) {
-        super(message);
-    }
+		super(message);
+	}
 
-    public FarmLeaseServiceException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public FarmLeaseServiceException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

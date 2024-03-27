@@ -108,12 +108,39 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 		farmLeaseRepository.deleteAll(farmLeasesToDelete);
 	}
 
-	// @Override
-	// public double calculateTotalPrice(Long id) throws RecordNotFoundException {
-	// 	FarmLease farmLease = farmLeaseRepository.findById(id)
-	// 			.orElseThrow(() -> new RecordNotFoundException("Farm Lease with id " + id + " not found."));
-	// 	double totalPrice = farmLease.getAcres() * farmLease.getPricePerAcre();
-	// 	return totalPrice;
-	// }
+	@Override
+	public FarmLeaseDTO getFarmLeaseByFarmId(Long id) throws ResourceNotFoundException {
+		FarmLease farmLease = farmLeaseRepository.findByFarmId(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with id " + id + " not found."));
+		FarmLeaseDTO farmLeaseDTO = farmLeaseMapper.toFarmLeaseDTO(farmLease);
+		return farmLeaseDTO;
+	}
+
+	@Override
+	public List<FarmLeaseDTO> getFarmLeaseByStatus(String status) throws ResourceNotFoundException {
+		List<FarmLease> farmLeases = farmLeaseRepository.findByStatus(status)
+				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with status " + status + " not found."));
+		List<FarmLeaseDTO> farmLeaseDTOs = farmLeases.stream()
+				.map(farmLease -> farmLeaseMapper.toFarmLeaseDTO(farmLease)).collect(Collectors.toList());
+		return farmLeaseDTOs;
+	}
+
+	@Override
+	public List<FarmLeaseDTO> getFarmLeaseByType(String type) throws ResourceNotFoundException {
+		List<FarmLease> farmLeases = farmLeaseRepository.findByType(type)
+				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with type " + type + " not found."));
+		List<FarmLeaseDTO> farmLeaseDTOs = farmLeases.stream()
+				.map(farmLease -> farmLeaseMapper.toFarmLeaseDTO(farmLease)).collect(Collectors.toList());
+		return farmLeaseDTOs;
+	}
+
+	@Override
+	public List<FarmLeaseDTO> getFarmLeaseByTenant(String tenant) throws ResourceNotFoundException {
+		List<FarmLease> farmLeases = farmLeaseRepository.findByTenant(tenant)
+				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with tenant " + tenant + " not found."));
+		List<FarmLeaseDTO> farmLeaseDTOs = farmLeases.stream()
+				.map(farmLease -> farmLeaseMapper.toFarmLeaseDTO(farmLease)).collect(Collectors.toList());
+		return farmLeaseDTOs;
+	}
 
 }

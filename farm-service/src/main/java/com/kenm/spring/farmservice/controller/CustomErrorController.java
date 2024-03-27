@@ -3,7 +3,7 @@ package com.kenm.spring.farmservice.controller;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kenm.spring.farmservice.entity.CustomErrorResponse;
@@ -15,11 +15,11 @@ public class CustomErrorController implements ErrorController {
 
     private static final String ERROR_PATH = "/error";
 
-    @RequestMapping(value = ERROR_PATH)
+    @GetMapping(ERROR_PATH)
     public ResponseEntity<CustomErrorResponse> handleError(HttpServletRequest request) {
         // Map exception to custom error response
         HttpStatus status = getStatus(request);
-        
+
         CustomErrorResponse errorResponse = new CustomErrorResponse();
         errorResponse.setStatus(status.value());
         errorResponse.setError(status.getReasonPhrase());

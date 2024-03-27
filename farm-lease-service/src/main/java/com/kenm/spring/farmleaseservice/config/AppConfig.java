@@ -35,22 +35,19 @@ public class AppConfig {
 		return new FarmLeaseServiceImpl();
 	}
 
-	@Bean
-	public FarmLeaseMapper farmLeaseMapper() {
-		return new FarmLeaseMapperImpl();
-	}
     @Bean
-    CircuitBreakerConfig circuitBreakerConfig() {
-        return CircuitBreakerConfig.custom()
-                .waitDurationInOpenState(Duration.ofMillis(5000))
-                .build();
+    FarmLeaseMapper farmLeaseMapper() {
+        return new FarmLeaseMapperImpl();
     }
 
-    @Bean
-    TimeLimiterConfig timeLimiterConfig() {
-        return TimeLimiterConfig.custom()
-                .timeoutDuration(Duration.ofMillis(5000))
-                .build();
-    }
+	@Bean
+	CircuitBreakerConfig circuitBreakerConfig() {
+		return CircuitBreakerConfig.custom().waitDurationInOpenState(Duration.ofMillis(5000)).build();
+	}
+
+	@Bean
+	TimeLimiterConfig timeLimiterConfig() {
+		return TimeLimiterConfig.custom().timeoutDuration(Duration.ofMillis(5000)).build();
+	}
 
 }

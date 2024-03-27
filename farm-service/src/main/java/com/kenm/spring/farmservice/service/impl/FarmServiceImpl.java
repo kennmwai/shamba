@@ -58,10 +58,10 @@ public class FarmServiceImpl implements FarmService {
 					try {
 						leaseDetails = farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
 					} catch (Exception e) {
-						// Log or handle the exception as needed
+						// TODO Log or handle the exception
 						System.err.println("Error fetching lease details for farm with ID: " + farm.getId());
 					}
-	
+
 					FarmResourceDTO farmResource = new FarmResourceDTO();
 					farmResource.setFarm(farmDetails);
 					farmResource.setLease(leaseDetails);

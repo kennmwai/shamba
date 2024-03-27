@@ -35,6 +35,12 @@ public interface FarmLeaseService {
 
 	void deleteAllById(Iterable<Long> ids) throws ResourceNotFoundException;
 
-	// double calculateTotalPrice(Long id) throws RecordNotFoundException;
+	FarmLeaseDTO getFarmLeaseByFarmId(Long id) throws ResourceNotFoundException;
+
+	List<FarmLeaseDTO> getFarmLeaseByStatus(String status) throws ResourceNotFoundException;
+
+	List<FarmLeaseDTO> getFarmLeaseByType(String type) throws ResourceNotFoundException;
+
+	List<FarmLeaseDTO> getFarmLeaseByTenant(String tenant) throws ResourceNotFoundException;
 
 }

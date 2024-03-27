@@ -14,8 +14,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.kenm.spring.farmservice.mapper.FarmMapper;
 import com.kenm.spring.farmservice.mapper.impl.FarmMapperImpl;
-import com.kenm.spring.farmservice.service.LeaseServiceClient;
 import com.kenm.spring.farmservice.service.FarmService;
+import com.kenm.spring.farmservice.service.LeaseServiceClient;
 import com.kenm.spring.farmservice.service.impl.FarmServiceImpl;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
@@ -35,10 +35,10 @@ public class AppConfig {
 		return new FarmServiceImpl();
 	}
 
-	@Bean
-	public FarmMapper farmMapper() {
-		return new FarmMapperImpl();
-	}
+    @Bean
+    FarmMapper farmMapper() {
+        return new FarmMapperImpl();
+    }
 
     @Bean
     CircuitBreakerConfig circuitBreakerConfig() {

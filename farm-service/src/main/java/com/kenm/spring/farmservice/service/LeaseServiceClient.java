@@ -3,32 +3,28 @@ package com.kenm.spring.farmservice.service;
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
+import org.springframework.web.bind.annotation.*;
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
+
 @FeignClient(name = "farm-lease-service", url = "${farm-lease-service.url}")
 public interface LeaseServiceClient {
-    @RequestMapping(method = RequestMethod.GET, value ="/api/leases")
+    @GetMapping("/api/leases")
     List<FarmLeaseDTO> getLeases();
 
-    @RequestMapping(method = RequestMethod.GET, value ="/api/leases/{leaseId}")
+    @GetMapping("/api/leases/{leaseId}")
     FarmLeaseDTO getLeaseById(@PathVariable Long leaseId) throws ResourceNotFoundException;
 
-    @RequestMapping(method = RequestMethod.GET, value ="/api/leases/farms/{farmId}")
+    @GetMapping("/api/leases/farms/{farmId}")
     FarmLeaseDTO getLeaseByFarmId(@PathVariable Long farmId);
 
-    @RequestMapping(method = RequestMethod.POST, value ="/api/leases", consumes = "application/json")
+    @PostMapping(value = "/api/leases", consumes = "application/json")
     FarmLeaseDTO create(@RequestBody FarmLeaseDTO farmLeaseDTO);
 
     @PutMapping(path = "/api/leases/{leaseId}")
     FarmLeaseDTO update(@PathVariable Long leaseId, @RequestBody FarmLeaseDTO farmLeaseDTO);
 
-    @RequestMapping(method = RequestMethod.DELETE, value ="/api/leases/{leaseId}")
+    @DeleteMapping("/api/leases/{leaseId}")
     void delete(@PathVariable Long leaseId);
 
 }
