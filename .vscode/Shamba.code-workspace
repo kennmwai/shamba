@@ -5,6 +5,23 @@
 		}
 	],
 	"settings": {
-		"java.compile.nullAnalysis.mode": "automatic"
+		"java.compile.nullAnalysis.mode": "automatic",
+		"sqltools.connections": [
+			{
+				"mysqlOptions": {
+					"authProtocol": "default",
+					"enableSsl": "Disabled"
+				},
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 3306,
+				"driver": "MySQL",
+				"database": "farm_db",
+				"username": "root",
+				"name": "MySQL",
+				"group": "SpringBoot",
+				"password": ""
+			}
+		]
 	}
 }

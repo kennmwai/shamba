@@ -1,0 +1,19 @@
+meta {
+  name: updateFarm
+  type: http
+  seq: 6
+}
+
+put {
+  url: http://localhost:8080/api/client/farms/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {"farmerName":"Jane Doe","farmAddress":"456 Main St","crop":"Soybeans","acres":200,"pricePerAcre":200.0}
+}
