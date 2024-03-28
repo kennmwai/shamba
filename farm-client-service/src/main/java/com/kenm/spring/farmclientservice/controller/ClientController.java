@@ -1,17 +1,18 @@
 package com.kenm.spring.farmclientservice.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/client")
+@RequestMapping("/api/v1")
 public class ClientController {
 
-    @GetMapping
-    public ResponseEntity<String> home() {
-        return ResponseEntity.ok("Welcome to Shamba the Rent a Farm Service!");
+    @RequestMapping
+    public ResponseEntity<String> root() {
+        return ResponseEntity.status(HttpStatus.OK).body("Welcome to Shamba the Rent a Farm Service!");
     }
+    
 
 }
