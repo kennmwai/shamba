@@ -7,12 +7,12 @@ import com.kenm.spring.farmclientservice.entities.User;
 
 public interface UserMapper {
 
-    UserDTO userToUserDTO(User user);
+    UserDTO mapUserToUserDTO(User user);
 
-    User userDTOToUser(UserDTO userDTO);
+    User mapUserDTOToUser(UserDTO userDTO);
 
-    List<UserDTO> userToUserDTO(List<User> user);
+    List<UserDTO> mapUsersToUserDTOs(List<User> users);
 
-    List<User> userDTOToUser(List<UserDTO> userDTO);
+    List<User> mapUserDTOsToUsers(List<UserDTO> userDTOs);
 
 }
