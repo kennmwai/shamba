@@ -1,4 +1,4 @@
-package com.kenm.spring.farmclientservice.entities;
+package com.kenm.spring.farmclientservice.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

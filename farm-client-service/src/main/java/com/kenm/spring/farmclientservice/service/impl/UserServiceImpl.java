@@ -7,10 +7,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kenm.spring.farmclientservice.dto.UserDTO;
-import com.kenm.spring.farmclientservice.entities.User;
 import com.kenm.spring.farmclientservice.exception.UserAlreadyExistsException;
 import com.kenm.spring.farmclientservice.exception.UserNotFoundException;
 import com.kenm.spring.farmclientservice.mapper.impl.UserMapperImpl;
+import com.kenm.spring.farmclientservice.models.User;
 import com.kenm.spring.farmclientservice.repository.UserRepository;
 import com.kenm.spring.farmclientservice.service.UserService;
 

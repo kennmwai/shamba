@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 
 import com.kenm.spring.farmclientservice.dto.UserDTO;
-import com.kenm.spring.farmclientservice.entities.User;
 import com.kenm.spring.farmclientservice.mapper.UserMapper;
+import com.kenm.spring.farmclientservice.models.User;
 
 public class UserMapperImpl implements UserMapper {
 
