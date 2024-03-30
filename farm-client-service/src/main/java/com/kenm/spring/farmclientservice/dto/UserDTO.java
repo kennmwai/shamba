@@ -1,4 +1,8 @@
 package com.kenm.spring.farmclientservice.dto;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -24,4 +28,5 @@ public class UserDTO {
     @NotBlank(message = "Password is required")
     private String password;
 
+    private Set<UserRoleDTO> roles = new HashSet<>();
 }

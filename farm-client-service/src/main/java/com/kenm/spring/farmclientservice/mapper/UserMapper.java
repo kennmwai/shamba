@@ -7,12 +7,12 @@ import com.kenm.spring.farmclientservice.models.User;
 
 public interface UserMapper {
 
-    UserDTO mapUserToUserDTO(User user);
+    UserDTO toUserDTO(User user);
 
-    User mapUserDTOToUser(UserDTO userDTO);
+    User toUser(UserDTO userDTO);
 
-    List<UserDTO> mapUsersToUserDTOs(List<User> users);
+    List<UserDTO> toUserDTOs(List<User> users);
 
-    List<User> mapUserDTOsToUsers(List<UserDTO> userDTOs);
+    List<User> toUsers(List<UserDTO> userDTOs);
 
 }

@@ -5,15 +5,19 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.kenm.spring.farmclientservice.dto.UserDTO;
+import com.kenm.spring.farmclientservice.dto.UserRoleDTO;
 import com.kenm.spring.farmclientservice.exception.UserAlreadyExistsException;
 import com.kenm.spring.farmclientservice.exception.UserNotFoundException;
 import com.kenm.spring.farmclientservice.mapper.impl.UserMapperImpl;
+import com.kenm.spring.farmclientservice.mapper.impl.UserRoleMapperImpl;
 import com.kenm.spring.farmclientservice.models.User;
 import com.kenm.spring.farmclientservice.repository.UserRepository;
 import com.kenm.spring.farmclientservice.service.UserService;
 
+@Component
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -21,6 +25,12 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private UserMapperImpl userMapper;
+
+    @Autowired
+    private UserRoleServiceImpl roleService;
+
+    @Autowired
+    private UserRoleMapperImpl roleMapper;
     
 
     @Override
@@ -29,7 +39,7 @@ public class UserServiceImpl implements UserService {
         if (users.isEmpty()) {
             return Collections.emptyList();
         }
-        return userMapper.mapUsersToUserDTOs(users);
+        return userMapper.toUserDTOs(users);
     }
 
     @Override
@@ -38,7 +48,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return userRepository.findById(id)
-                .map(userMapper::mapUserToUserDTO)
+                .map(userMapper::toUserDTO)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
@@ -48,7 +58,7 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return userRepository.findByEmailIgnoreCase(email)
-                .map(userMapper::mapUserToUserDTO)
+                .map(userMapper::toUserDTO)
                 .orElseThrow(() -> new UserNotFoundException("User not found with email: " + email));
     }
 
@@ -58,33 +68,46 @@ public class UserServiceImpl implements UserService {
             return null;
         }
         return userRepository.findByUsernameIgnoreCase(username)
-                .map(userMapper::mapUserToUserDTO)
+                .map(userMapper::toUserDTO)
                 .orElseThrow(() -> new UserNotFoundException("User not found with username: " + username));
     }
 
     @Override
     public UserDTO createUser(UserDTO userDto) throws UserAlreadyExistsException {
         if (userDto == null) {
-            return null;
+            throw new IllegalArgumentException("User DTO must not be null");
         }
+
+        if (userDto.getId() != null) {
+            throw new IllegalArgumentException("User ID must be null when creating a new user");
+        }
+
+        if (userDto.getRoles() == null || userDto.getRoles().isEmpty()) {
+            throw new IllegalArgumentException("User must have at least one role");
+        }
+
         String username = userDto.getUsername();
         String email = userDto.getEmail();
-        
-        if (userRepository.existsByUsernameIgnoreCase(username)) {
+
+        if (userRepository.existsByUsername(username)) {
             throw new UserAlreadyExistsException("User already exists with username: " + username);
         }
-        
-        if (userRepository.existsByEmailIgnoreCase(email)) {
+
+        if (userRepository.existsByEmail(email)) {
             throw new UserAlreadyExistsException("User already exists with email: " + email);
         }
-        
-        User newUser = userMapper.mapUserDTOToUser(userDto);
-        if (newUser == null) {
-            return null;
-        }
+
+        // Ensuring only one role is used for the new user.
+        // This assumes the business logic is such that a new user should have exactly one role.
+        // If the business logic allows for multiple roles, this section should be adapted accordingly.
+        UserRoleDTO roleDTO = userDto.getRoles().iterator().next();
+        UserRoleDTO existingRoleDTO = roleService.findByName(roleDTO.getName());
+        userDto.setRoles(Collections.singleton(existingRoleDTO != null ? existingRoleDTO : roleService.createRole(roleDTO)));
+
+        User newUser = userMapper.toUser(userDto);
         newUser = userRepository.save(newUser);
-        
-        return userMapper.mapUserToUserDTO(newUser);
+
+        return userMapper.toUserDTO(newUser);
     }
 
     @Override
@@ -102,7 +125,7 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userDto, existingUser, "id");
 
         User updatedUser = userRepository.save(existingUser);
-        return userMapper.mapUserToUserDTO(updatedUser);
+        return userMapper.toUserDTO(updatedUser);
     }
 
     @Override
@@ -110,6 +133,11 @@ public class UserServiceImpl implements UserService {
         if (id == null) {
             throw new IllegalArgumentException("User ID must not be null");
         }
+
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("User not found with id: " + id);
+        }
+
         userRepository.deleteById(id);
         userRepository.flush();
     }

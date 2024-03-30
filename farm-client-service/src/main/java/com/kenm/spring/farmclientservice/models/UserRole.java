@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_roles")
+@Table(name = "farm_roles")
 public class UserRole {
 
     @Id
