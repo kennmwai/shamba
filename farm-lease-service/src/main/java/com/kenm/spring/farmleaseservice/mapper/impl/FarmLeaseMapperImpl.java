@@ -22,10 +22,9 @@ public class FarmLeaseMapperImpl implements FarmLeaseMapper {
 
 	@Override
 	public FarmLeaseDTO toFarmLeaseDTO(FarmLease farmLease) {
-		List<FarmPayment> payments = farmLease.getPayments();
-		List<FarmPaymentDTO> paymentDTOs = mapPaymentsToDTOs(payments);
-
+		List<FarmPaymentDTO> paymentDTOs = mapPaymentsToDTOs(farmLease.getPayments());
 		FarmLeaseDTO farmLeaseDTO = new FarmLeaseDTO();
+
 		BeanUtils.copyProperties(farmLease, farmLeaseDTO);
 		farmLeaseDTO.setPayments(paymentDTOs);
 
@@ -34,10 +33,9 @@ public class FarmLeaseMapperImpl implements FarmLeaseMapper {
 
 	@Override
 	public FarmLease toFarmLease(FarmLeaseDTO farmLeaseDTO) {
-		List<FarmPaymentDTO> paymentDTOs = farmLeaseDTO.getPayments();
-		List<FarmPayment> payments = mapDTOsToPayments(paymentDTOs);
-
+		List<FarmPayment> payments = mapDTOsToPayments(farmLeaseDTO.getPayments());
 		FarmLease farmLease = new FarmLease();
+
 		BeanUtils.copyProperties(farmLeaseDTO, farmLease);
 		farmLease.setPayments(payments);
 
@@ -47,6 +45,9 @@ public class FarmLeaseMapperImpl implements FarmLeaseMapper {
 	private List<FarmPaymentDTO> mapPaymentsToDTOs(List<FarmPayment> payments) {
         return payments.stream()
                 .map(payment -> {
+					if (payment == null) {
+						return null;
+					}
                     FarmPaymentDTO paymentDTO = new FarmPaymentDTO();
                     BeanUtils.copyProperties(payment, paymentDTO);
                     return paymentDTO;
@@ -55,13 +56,18 @@ public class FarmLeaseMapperImpl implements FarmLeaseMapper {
     }
 
 	private List<FarmPayment> mapDTOsToPayments(List<FarmPaymentDTO> paymentDTOs) {
-        return paymentDTOs.stream()
-                .map(paymentDTO -> {
-                    FarmPayment payment = new FarmPayment();
-                    BeanUtils.copyProperties(paymentDTO, payment);
-                    return payment;
-                })
-                .collect(Collectors.toList());
-    }
-	
+
+		List<FarmPayment> payments = paymentDTOs.stream()
+				.map(paymentDTO -> {
+					if (paymentDTO == null) {
+						return null;
+					}
+					FarmPayment payment = new FarmPayment();
+					BeanUtils.copyProperties(paymentDTO, payment);
+					return payment;
+				})
+				.collect(Collectors.toList());
+		
+		return payments;
+	}
 }
