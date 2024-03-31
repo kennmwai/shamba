@@ -106,37 +106,41 @@ public class UserServiceImpl implements UserService {
         userDto.setRoles(Collections.singleton(existingRoleDTO != null ? existingRoleDTO : roleService.createRole(roleDTO)));
 
         User newUser = userMapper.toUser(userDto);
+        if (newUser.getId() != null) {
+            throw new IllegalArgumentException("User ID must be null when creating a new user");
+        }
         newUser = userRepository.save(newUser);
 
         return userMapper.toUserDTO(newUser);
     }
 
-@Override
-public UserDTO updateUser(Long userId, UserDTO userDto) throws UserNotFoundException {
-    if (userDto == null || userId == null) {
-        throw new IllegalArgumentException("User ID and DTO must not be null");
+    @Override
+    public UserDTO updateUser(Long userId, UserDTO userDto) throws UserNotFoundException {
+        if (userDto == null || userId == null) {
+            throw new IllegalArgumentException("User ID and DTO must not be null");
+        }
+
+        return userRepository.findById(userId).map(existingUser -> {
+            Set<UserRoleDTO> userRoles = userDto.getRoles();
+            if (userRoles == null || userRoles.isEmpty()) {
+                throw new IllegalArgumentException("User must have at least one role");
+            }
+
+            // Update the user's roles
+            UserRoleDTO newRole = userRoles.iterator().next();
+            UserRoleDTO updatedRole = roleService.updateRole(newRole);
+            if (updatedRole == null) {
+                updatedRole = roleService.createRole(newRole);
+            }
+
+            Set<UserRoleDTO> rolesToSet = Collections.singleton(updatedRole);
+            userDto.setRoles(rolesToSet);
+            existingUser.setRoles(roleMapper.toUserRoles(rolesToSet));
+
+            BeanUtils.copyProperties(userDto, existingUser, "id");
+            return userMapper.toUserDTO(userRepository.save(existingUser));
+        }).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
     }
-
-    return userRepository.findById(userId).map(existingUser -> {
-        Set<UserRoleDTO> userRoles = userDto.getRoles();
-        if (userRoles == null || userRoles.isEmpty()) {
-            throw new IllegalArgumentException("User must have at least one role");
-        }
-
-        UserRoleDTO newRole = userRoles.iterator().next();
-        UserRoleDTO persistedRole = roleService.findByName(newRole.getName());
-        if (persistedRole == null) {
-            persistedRole = roleService.createRole(newRole);
-        }
-
-        Set<UserRoleDTO> rolesToSet = Collections.singleton(persistedRole);
-        userDto.setRoles(rolesToSet);
-        existingUser.setRoles(roleMapper.toUserRoles(rolesToSet));
-
-        BeanUtils.copyProperties(userDto, existingUser, "id");
-        return userMapper.toUserDTO(userRepository.save(existingUser));
-    }).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
-}
 
     @Override
     public void deleteUser(Long id) throws UserNotFoundException {

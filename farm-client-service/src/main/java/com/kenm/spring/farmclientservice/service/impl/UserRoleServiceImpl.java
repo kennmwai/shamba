@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.kenm.spring.farmclientservice.dto.UserRoleDTO;
 import com.kenm.spring.farmclientservice.mapper.impl.UserRoleMapperImpl;
+import com.kenm.spring.farmclientservice.models.UserRole;
 import com.kenm.spring.farmclientservice.models.enums.EUserRole;
 import com.kenm.spring.farmclientservice.repository.UserRoleRepository;
 import com.kenm.spring.farmclientservice.service.UserRoleService;
@@ -21,6 +22,10 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Autowired
     private UserRoleMapperImpl roleMapper;
+
+    private boolean isRoleNameUnique(UserRole userRole) {
+        return !roleRepository.findByName(userRole.getName()).isPresent();
+    }
     @Override
     public UserRoleDTO findByName(EUserRole name) {
         return Optional.ofNullable(name)
@@ -30,23 +35,24 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRoleDTO createRole(UserRoleDTO userRoleDTO) {
-        return Optional.ofNullable(userRoleDTO)
+    public UserRoleDTO createRole(UserRoleDTO roleToCreate) {
+        return Optional.ofNullable(roleToCreate)
                 .map(roleMapper::toUserRole)
-                .filter(userRole -> !roleRepository.findByName(userRole.getName()).isPresent())
+                .filter(this::isRoleNameUnique)
                 .map(roleRepository::save)
                 .map(roleMapper::toUserRoleDTO)
                 .orElse(null);
     }
 
     @Override
-    public UserRoleDTO updateRole(UserRoleDTO userRoleDTO) {
-        if (userRoleDTO == null) {
+    public UserRoleDTO updateRole(UserRoleDTO roleToUpdate) {
+        if (roleToUpdate == null || roleToUpdate.getId() == null) {
             return null;
         }
-        return roleRepository.findById(userRoleDTO.getId())
+
+        return roleRepository.findById(roleToUpdate.getId())
                 .map(existingRole -> {
-                    existingRole.setName(userRoleDTO.getName());
+                    existingRole.setName(roleToUpdate.getName());
                     return roleMapper.toUserRoleDTO(roleRepository.save(existingRole));
                 })
                 .orElse(null);
