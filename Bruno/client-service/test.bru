@@ -1,0 +1,16 @@
+meta {
+  name: test
+  type: http
+  seq: 11
+}
+
+get {
+  url: http://localhost:8080/api/v1/test/admin
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMTkwODk5MywiZXhwIjoxNzExOTk1MzkzfQ.06nGhNvpVY1cTaXNO50Ddlyaso9gsnK59uH_tGVAuRw
+  ~Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtb2QiLCJpYXQiOjE3MTE5MDg4NzQsImV4cCI6MTcxMTk5NTI3NH0.4VkpAPhAyJ5plYa2rlwSRWCD5zk4k8H_rSIfuUd7uc8
+}

@@ -35,13 +35,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 20)
-    private String firstName;
+    // @NotBlank
+    // @Size(max = 20)
+    // private String firstName;
 
-    @NotBlank
-    @Size(max = 20)
-    private String lastName;
+    // @NotBlank
+    // @Size(max = 20)
+    // private String lastName;
 
     @NotBlank(message = "Username is required")
     @Size(max = 20)

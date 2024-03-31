@@ -49,6 +49,16 @@
             "projectName": "farm-api-gateway-service",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-FarmClientServiceApplication<farm-client-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kenm.spring.farmclientservice.FarmClientServiceApplication",
+            "projectName": "farm-client-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
