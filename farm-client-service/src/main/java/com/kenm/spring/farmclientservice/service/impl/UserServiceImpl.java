@@ -2,6 +2,7 @@ package com.kenm.spring.farmclientservice.service.impl;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,23 +111,32 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserDTO(newUser);
     }
 
-    @Override
-    public UserDTO updateUser(Long id, UserDTO userDto) throws UserNotFoundException {
-        if (userDto == null || id == null) {
-            throw new IllegalArgumentException("User ID and DTO must not be null");
+@Override
+public UserDTO updateUser(Long userId, UserDTO userDto) throws UserNotFoundException {
+    if (userDto == null || userId == null) {
+        throw new IllegalArgumentException("User ID and DTO must not be null");
+    }
+
+    return userRepository.findById(userId).map(existingUser -> {
+        Set<UserRoleDTO> userRoles = userDto.getRoles();
+        if (userRoles == null || userRoles.isEmpty()) {
+            throw new IllegalArgumentException("User must have at least one role");
         }
 
-        User existingUser = userRepository.findById(id).orElse(null);
-
-        if (existingUser == null) {
-            throw new UserNotFoundException("User not found with id: " + id);
+        UserRoleDTO newRole = userRoles.iterator().next();
+        UserRoleDTO persistedRole = roleService.findByName(newRole.getName());
+        if (persistedRole == null) {
+            persistedRole = roleService.createRole(newRole);
         }
+
+        Set<UserRoleDTO> rolesToSet = Collections.singleton(persistedRole);
+        userDto.setRoles(rolesToSet);
+        existingUser.setRoles(roleMapper.toUserRoles(rolesToSet));
 
         BeanUtils.copyProperties(userDto, existingUser, "id");
-
-        User updatedUser = userRepository.save(existingUser);
-        return userMapper.toUserDTO(updatedUser);
-    }
+        return userMapper.toUserDTO(userRepository.save(existingUser));
+    }).orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+}
 
     @Override
     public void deleteUser(Long id) throws UserNotFoundException {
