@@ -1,6 +1,7 @@
 package com.kenm.spring.farmservice.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ public interface LeaseServiceClient {
     List<FarmLeaseDTO> getLeases();
 
     @GetMapping("/api/leases/{leaseId}")
-    FarmLeaseDTO getLeaseById(@PathVariable Long leaseId) throws ResourceNotFoundException;
+    Optional <FarmLeaseDTO> getLeaseById(@PathVariable Long leaseId) throws ResourceNotFoundException;
 
     @GetMapping("/api/leases/farms/{farmId}")
     FarmLeaseDTO getLeaseByFarmId(@PathVariable Long farmId);

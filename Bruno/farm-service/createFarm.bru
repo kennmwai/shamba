@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://localhost:8080/api/farms
+  url: http://localhost:8081/api/v1/farms
   body: json
   auth: none
 }
@@ -15,5 +15,13 @@ headers {
 }
 
 body:json {
-  {"farmerName":"John Doe","farmAddress":"123 Main St","crop":"Corn","acres":100,"pricePerAcre":100.0}
+  {
+    "name": "JD Farm",
+    "owner": "John Doe",
+    "location": "123 Main St",
+    "type": "Corn",
+    "status": "Active",
+    "size": 100,
+    "pricePerAcre": 100
+  }
 }

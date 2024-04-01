@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.kenm.spring.farmservice.dto.FarmDetailsDTO;
+import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.dto.FarmResourceDTO;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 
@@ -17,17 +17,18 @@ import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
  *
  */
 public interface FarmService {
-	List<FarmDetailsDTO> findAll();
+
+	List<FarmDTO> findAll();
 
 	List<FarmResourceDTO> getAllFarms();
 
-	Page<FarmDetailsDTO> findAll(Pageable pageable);
+	Page<FarmDTO> findAll(Pageable pageable);
 
-	FarmDetailsDTO findById(Long id) throws ResourceNotFoundException;
+	FarmResourceDTO  findById(Long farmId) throws ResourceNotFoundException;
 
-	FarmDetailsDTO createFarm(FarmDetailsDTO farmDTO);
+	FarmDTO createFarm(FarmDTO farmDTO);
 
-	FarmDetailsDTO updateFarm(Long id, FarmDetailsDTO farmDTO) throws ResourceNotFoundException;
+	FarmDTO updateFarm(Long id, FarmDTO farmDTO) throws ResourceNotFoundException;
 
 	void deleteById(Long id) throws ResourceNotFoundException;
 
@@ -37,7 +38,7 @@ public interface FarmService {
 
 	long count();
 
-	List<FarmDetailsDTO> findAllById(Iterable<Long> ids);
+	List<FarmDTO> findAllById(Iterable<Long> ids);
 
 	void deleteAllById(Iterable<Long> ids);
 

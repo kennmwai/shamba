@@ -18,7 +18,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class FarmResourceDTO {
-    private FarmDetailsDTO farm;
+    private FarmDTO farm;
     private FarmLeaseDTO lease;
 
     // private List<Link> links;

@@ -11,10 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
-import com.kenm.spring.farmservice.dto.FarmDetailsDTO;
+import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.dto.FarmResourceDTO;
 import com.kenm.spring.farmservice.entity.Farm;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
@@ -40,87 +42,91 @@ public class FarmServiceImpl implements FarmService {
 	private LeaseServiceClient farmLeaseServiceClient;
 
 	@Override
-	public List<FarmDetailsDTO> findAll() {
+	public List<FarmDTO> findAll() {
 		List<Farm> farms = farmRepository.findAll();
-		List<FarmDetailsDTO> farmDetails = farms.stream()
-				.map(farm -> farmMapper.mapToFarmDetailsDTO(farm)).collect(Collectors.toList());
+		List<FarmDTO> farmDetails = farms.stream().map(farm -> farmMapper.mapToFarmDetailsDTO(farm))
+				.collect(Collectors.toList());
 		return farmDetails;
 	}
 
 	@Override
 	public List<FarmResourceDTO> getAllFarms() {
 		List<Farm> farms = farmRepository.findAll();
-		List<FarmResourceDTO> farmResources = farms.stream()
-				.map(farm -> {
-					FarmDetailsDTO farmDetails = farmMapper.mapToFarmDetailsDTO(farm);
-					FarmLeaseDTO leaseDetails = null; // Initialize leaseDetails to null
+		List<FarmResourceDTO> farmResources = farms.stream().map(farm -> {
+			FarmDTO farmDetails = farmMapper.mapToFarmDetailsDTO(farm);
+			FarmLeaseDTO leaseDetails = null; // Initialize leaseDetails to null
 
-					try {
-						leaseDetails = farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
-					} catch (Exception e) {
-						// TODO Log or handle the exception
-						System.err.println("Error fetching lease details for farm with ID: " + farm.getId());
-					}
+			try {
+				leaseDetails = farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
+			} catch (Exception e) {
+				// TODO Log or handle the exception
+				System.err.println("Error fetching lease details for farm with ID: " + farm.getId());
+			}
 
-					FarmResourceDTO farmResource = new FarmResourceDTO();
-					farmResource.setFarm(farmDetails);
-					farmResource.setLease(leaseDetails);
+			FarmResourceDTO farmResource = new FarmResourceDTO();
+			farmResource.setFarm(farmDetails);
+			farmResource.setLease(leaseDetails);
 
-					return farmResource;
-				})
-				.filter(Objects::nonNull) // Filter out null FarmResource objects
+			return farmResource;
+		}).filter(Objects::nonNull) // Filter out null FarmResource objects
 				.collect(Collectors.toList());
 
 		return farmResources;
 	}
 
 	@Override
-	public Page<FarmDetailsDTO> findAll(Pageable pageable) {
+	public Page<FarmDTO> findAll(Pageable pageable) {
 		List<Farm> farms = farmRepository.findAll(pageable).getContent();
-		List<FarmDetailsDTO> farmDetails = farms.stream()
-				.map(farm -> farmMapper.mapToFarmDetailsDTO(farm)).collect(Collectors.toList());
+		List<FarmDTO> farmDetails = farms.stream().map(farm -> farmMapper.mapToFarmDetailsDTO(farm))
+				.collect(Collectors.toList());
 		return new PageImpl<>(farmDetails, pageable, farms.size());
 	}
 
 	@Override
-	public FarmDetailsDTO findById(Long id) throws ResourceNotFoundException {
-		Farm farm = farmRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Farm with id " + id + " not found."));
+	public FarmResourceDTO findById(Long farmId) throws ResourceNotFoundException {
 
-		// Long leaseId = farm.getLeaseId();
-		// if (leaseId == null || leaseId == 0) {
-		// 	return farmMapper.mapToFarmDetails(farm);
-		// }
+		Farm farm = farmRepository.findById(farmId)
+				.orElseThrow(() -> new ResourceNotFoundException("Farm with id " + farmId + " not found."));
 
-		// FarmLeaseDTO farmLeaseDTO = farmLeaseServiceClient.getLeaseById(leaseId);
-		FarmDetailsDTO farmDTO = farmMapper.mapToFarmDetailsDTO(farm);
-		// farmDTO.setLeaseId(farmLeaseDTO.getId());
+		FarmDTO farmDetails = farmMapper.mapToFarmDetailsDTO(farm);
+		FarmLeaseDTO leaseDetails = null; // Initialize leaseDetails to null
 
-		return farmDTO;
+		try {
+			leaseDetails = farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
+		} catch (Exception e) {
+			// TODO Log or handle the exception
+			System.err.println("Error fetching lease details for farm with ID: " + farm.getId());
+		}
+
+		FarmResourceDTO farmResource = new FarmResourceDTO();
+		farmResource.setFarm(farmDetails);
+		farmResource.setLease(leaseDetails);
+
+		return farmResource;
 	}
 
 	@Override
-	public List<FarmDetailsDTO> findAllById(Iterable<Long> ids) {
+	public List<FarmDTO> findAllById(Iterable<Long> ids) {
 		List<Farm> farms = farmRepository.findAllById(ids);
-		List<FarmDetailsDTO> farmDetails = farms.stream()
-				.map(farm -> farmMapper.mapToFarmDetailsDTO(farm)).collect(Collectors.toList());
+		List<FarmDTO> farmDetails = farms.stream().map(farm -> farmMapper.mapToFarmDetailsDTO(farm))
+				.collect(Collectors.toList());
 		return farmDetails;
 	}
 
 	@Override
-	public FarmDetailsDTO createFarm(FarmDetailsDTO farmDTO) {
+	public FarmDTO createFarm(FarmDTO farmDTO) {
 		Farm newFarm = farmMapper.mapToFarm(farmDTO);
 		newFarm = farmRepository.save(newFarm);
-		FarmDetailsDTO createdFarmDTO = farmMapper.mapToFarmDetailsDTO(newFarm);
+		FarmDTO createdFarmDTO = farmMapper.mapToFarmDetailsDTO(newFarm);
 		return createdFarmDTO;
 	}
 
 	@Override
-	public FarmDetailsDTO updateFarm(Long id, FarmDetailsDTO farmDTO) throws ResourceNotFoundException {
+	public FarmDTO updateFarm(Long id, FarmDTO farmDTO) throws ResourceNotFoundException {
 		Farm updatedFarm = farmMapper.mapToFarm(farmDTO);
 		updatedFarm.setId(id);
 		updatedFarm = farmRepository.save(updatedFarm);
-		FarmDetailsDTO updatedFarmDTO = farmMapper.mapToFarmDetailsDTO(updatedFarm);
+		FarmDTO updatedFarmDTO = farmMapper.mapToFarmDetailsDTO(updatedFarm);
 		return updatedFarmDTO;
 	}
 
@@ -139,8 +145,7 @@ public class FarmServiceImpl implements FarmService {
 	@Override
 	public void deleteAllById(Iterable<Long> ids) {
 		List<Farm> farms = farmRepository.findAllById(ids);
-		List<Farm> farmsToDelete = farms.stream().filter(farm -> farm != null)
-				.collect(Collectors.toList());
+		List<Farm> farmsToDelete = farms.stream().filter(farm -> farm != null).collect(Collectors.toList());
 		farmRepository.deleteAll(farmsToDelete);
 	}
 
@@ -161,13 +166,4 @@ public class FarmServiceImpl implements FarmService {
 		double totalPrice = farm.getSize() * farm.getPricePerAcre();
 		return totalPrice;
 	}
-
-	// Leases Methods
-	// //findAllLeases
-	// public FarmDTO findLeaseById(Long id) throws RecordNotFoundException {
-	// 	FarmLeaseDTO farmLeaseDTO = farmLeaseServiceClient.getLeaseById(id);
-	// 	FarmDTO farmDTO = farmMapper.mapToFarmDetails(farmLeaseDTO.getFarmId());
-	// 	farmDTO.setLeaseId(farmLeaseDTO.getId());
-	// 	return farmDTO;
-	// }
 }

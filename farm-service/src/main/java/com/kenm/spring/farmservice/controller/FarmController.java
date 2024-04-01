@@ -6,6 +6,9 @@ package com.kenm.spring.farmservice.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kenm.spring.farmservice.dto.FarmDetailsDTO;
+import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
+import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.dto.FarmResourceDTO;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmservice.service.FarmService;
+import com.kenm.spring.farmservice.service.LeaseServiceClient;
 
 import jakarta.validation.Valid;
 
@@ -29,11 +34,13 @@ import jakarta.validation.Valid;
  * @author User
  */
 @RestController
-@RequestMapping(path = "/api/farms", produces = "application/json")
+@RequestMapping(path = "/api/v1/farms", produces = "application/json")
 public class FarmController {
     @Autowired
     private FarmService farmService;
-
+    
+	@Autowired
+	private LeaseServiceClient leaseServiceClient;
 
     @GetMapping
     public ResponseEntity<List<FarmResourceDTO>> getAllFarms() {
@@ -50,21 +57,21 @@ public class FarmController {
     // }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FarmDetailsDTO> getFarmById(@PathVariable Long id) throws ResourceNotFoundException {
-        FarmDetailsDTO farmDTO = farmService.findById(id);
-        return new ResponseEntity<>(farmDTO, HttpStatus.OK);
+    public ResponseEntity<FarmResourceDTO > getFarmById(@PathVariable Long id) throws ResourceNotFoundException {
+    	FarmResourceDTO  farmData = farmService.findById(id);
+        return new ResponseEntity<>(farmData, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<FarmDetailsDTO> createFarm(@Valid @RequestBody FarmDetailsDTO farmDTO) {
-        FarmDetailsDTO createdFarmDTO = farmService.createFarm(farmDTO);
+    public ResponseEntity<FarmDTO> createFarm(@Valid @RequestBody FarmDTO farmDTO) {
+        FarmDTO createdFarmDTO = farmService.createFarm(farmDTO);
         return new ResponseEntity<>(createdFarmDTO, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FarmDetailsDTO> updateFarm(@PathVariable Long id, @RequestBody FarmDetailsDTO farmDTO)
+    public ResponseEntity<FarmDTO> updateFarm(@PathVariable Long id, @RequestBody FarmDTO farmDTO)
             throws ResourceNotFoundException {
-        FarmDetailsDTO updatedFarmDTO = farmService.updateFarm(id, farmDTO);
+        FarmDTO updatedFarmDTO = farmService.updateFarm(id, farmDTO);
         return new ResponseEntity<>(updatedFarmDTO, HttpStatus.OK);
     }
 
@@ -99,8 +106,8 @@ public class FarmController {
     }
 
     @GetMapping("/find-all-by-ids")
-    public ResponseEntity<List<FarmDetailsDTO>> getAllFarmsByIds(@RequestParam List<Long> ids) {
-        List<FarmDetailsDTO> farmDTOs = farmService.findAllById(ids);
+    public ResponseEntity<List<FarmDTO>> getAllFarmsByIds(@RequestParam List<Long> ids) {
+        List<FarmDTO> farmDTOs = farmService.findAllById(ids);
         return new ResponseEntity<>(farmDTOs, HttpStatus.OK);
     }
 
@@ -111,11 +118,10 @@ public class FarmController {
     }
 
     // Leases
-    // @GetMapping("/leases")
-    // public ResponseEntity<Page<FarmDTO>> getAllFarmsLeases(@RequestParam(value = "page", defaultValue = "0") int page,
-    //                                                 @RequestParam(value = "size", defaultValue = "10") int size) {
-    //     Pageable pageable = PageRequest.of(page, size);
-    //     Page<FarmDTO> farmDTOs = farmService.findAllLeases(pageable);
-    //     return ResponseEntity.ok(farmDTOs);
+    @GetMapping("/leases")
+    public ResponseEntity<?> getLeases() {
+    	List<FarmLeaseDTO> leaseDetails = leaseServiceClient.getLeases();	
+    	return ResponseEntity.ok().body(leaseDetails);
+    }
 
 }

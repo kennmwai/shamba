@@ -28,7 +28,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode
 @ToString
-public class FarmDetailsDTO implements Serializable {
+public class FarmDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

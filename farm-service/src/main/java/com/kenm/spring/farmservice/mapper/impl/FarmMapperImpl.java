@@ -6,7 +6,7 @@ package com.kenm.spring.farmservice.mapper.impl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import com.kenm.spring.farmservice.dto.FarmDetailsDTO;
+import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.entity.Farm;
 import com.kenm.spring.farmservice.mapper.FarmMapper;
 
@@ -22,14 +22,14 @@ public class FarmMapperImpl implements FarmMapper {
 
 
 	@Override
-	public FarmDetailsDTO mapToFarmDetailsDTO(Farm farm) {
-		FarmDetailsDTO farmDetails = new FarmDetailsDTO();
+	public FarmDTO mapToFarmDetailsDTO(Farm farm) {
+		FarmDTO farmDetails = new FarmDTO();
 		BeanUtils.copyProperties(farm, farmDetails);
 		return farmDetails;
 	}
 
 	@Override
-	public Farm mapToFarm(FarmDetailsDTO farmDetails) {
+	public Farm mapToFarm(FarmDTO farmDetails) {
 		Farm farm = new Farm();
 		BeanUtils.copyProperties(farmDetails, farm);
 		return farm;
