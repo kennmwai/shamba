@@ -64,7 +64,7 @@ public class FarmController {
 	}
 
 	@GetMapping("/price/{id}")
-	public double calculateTotalPrice(@PathVariable Long id) throws ResourceNotFoundException {
+	public double calculateTotalPrice(@NonNull @PathVariable Long id) throws ResourceNotFoundException {
 		double totalPrice = farmService.calculateTotalPrice(id);
 		return totalPrice;
 	}
@@ -82,13 +82,13 @@ public class FarmController {
 	}
 
 	@PostMapping
-	public ResponseEntity<FarmDTO> createFarm(@Valid @RequestBody FarmDTO farmDTO) {
+	public ResponseEntity<FarmDTO> createFarm(@RequestBody FarmDTO farmDTO) {
 		FarmDTO createdFarmDTO = farmService.createFarm(farmDTO);
 		return new ResponseEntity<>(createdFarmDTO, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<FarmDTO> updateFarm(@PathVariable @NonNull Long id, @RequestBody FarmDTO farmDTO)
+	public ResponseEntity<FarmDTO> updateFarm(@PathVariable @NonNull Long id, @Valid @NonNull @RequestBody FarmDTO farmDTO)
 			throws ResourceNotFoundException {
 		FarmDTO updatedFarmDTO = farmService.updateFarm(id, farmDTO);
 		return new ResponseEntity<>(updatedFarmDTO, HttpStatus.OK);
@@ -101,7 +101,7 @@ public class FarmController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteAllById(@RequestParam List<Long> ids) {
+	public ResponseEntity<?> deleteByIds(@RequestParam List<Long> ids) {
 		farmService.deleteAllById(ids);
 		return ResponseEntity.noContent().build();
 	}

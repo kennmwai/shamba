@@ -37,7 +37,7 @@ public interface FarmService {
 
 	FarmDTO updateFarm(@NonNull Long id, @Valid @NonNull FarmDTO farmDTO) throws ResourceNotFoundException;
 
-	FarmDTO createFarm(@NonNull FarmDTO farmDTO);
+	FarmDTO createFarm(FarmDTO farmDTO);
 
 	void deleteAll();
 

@@ -3,7 +3,7 @@ package com.kenm.spring.farmservice.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +18,7 @@ import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.dto.FarmResourceDTO;
 import com.kenm.spring.farmservice.entity.Farm;
+import com.kenm.spring.farmservice.exception.ResourceAlreadyExistsException;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmservice.mapper.FarmMapper;
 import com.kenm.spring.farmservice.repository.FarmRepository;
@@ -96,7 +97,6 @@ public class FarmServiceImpl implements FarmService {
 
 	@Override
 	public FarmResourceDTO getFarmById(@NonNull Long farmId) throws ResourceNotFoundException {
-
 		Farm farm = farmRepository.findById(farmId)
 				.orElseThrow(() -> new ResourceNotFoundException("Farm with id " + farmId + " not found."));
 		FarmDTO farmDetails = farmMapper.mapToFarmDTO(farm);
@@ -104,15 +104,18 @@ public class FarmServiceImpl implements FarmService {
 		FarmResourceDTO farmResource = new FarmResourceDTO();
 		farmResource.setFarm(farmDetails);
 
-		try {
-			List<FarmLeaseDTO> leaseDetails = farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
-			if (leaseDetails.isEmpty()) {
-				farmResource.setLease(Collections.emptyList());
+		CompletableFuture<List<FarmLeaseDTO>> leaseDetailsFuture = CompletableFuture.supplyAsync(() -> {
+			try {
+				return farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
+			} catch (Exception e) {
+				logger.error("Error: {}", e.getMessage());
+				return Collections.emptyList();
 			}
-			farmResource.setLease(leaseDetails);
-		} catch (Exception e) {
-			logger.error("Error: {}", e.getMessage());
-		}
+		});
+
+		// Join the future to wait for the result without blocking the thread
+		List<FarmLeaseDTO> leaseDetails = leaseDetailsFuture.join();
+		farmResource.setLease(leaseDetails.isEmpty() ? Collections.emptyList() : leaseDetails);
 
 		return farmResource;
 	}
@@ -149,12 +152,15 @@ public class FarmServiceImpl implements FarmService {
 		return updatedFarmDTO;
 	}
 
-	
 	@Override
-	public FarmDTO createFarm(@NonNull  FarmDTO farmDTO) {
+	public FarmDTO createFarm(FarmDTO farmDTO) throws ResourceAlreadyExistsException {
 		Farm newFarm = farmMapper.mapToFarm(farmDTO);
-		newFarm = farmRepository.save(newFarm);
-		FarmDTO createdFarmDTO = farmMapper.mapToFarmDTO(newFarm);
+
+		// boolean exists = this.exists(newFarm.getId());
+		// if (exists) {
+		// 	throw new ResourceAlreadyExistsException("Farm with id " + newFarm.getId() + " already exists.");
+		// }
+		FarmDTO createdFarmDTO = farmMapper.mapToFarmDTO(farmRepository.save(newFarm));
 		return createdFarmDTO;
 	}
 
@@ -165,16 +171,16 @@ public class FarmServiceImpl implements FarmService {
 
 	@Override
 	public void deleteAllById(@NonNull Iterable<Long> ids) {
-		List<Farm> farms = farmRepository.findAllById(ids);
-		List<Farm> farmsToDelete = farms.stream().filter(farm -> farm != null).collect(Collectors.toList());
-		farmRepository.deleteAll(farmsToDelete);
+		farmRepository.deleteAllById(ids);
 	}
 
 	@Override
 	public void deleteById(@NonNull Long id) throws ResourceNotFoundException {
-		Farm farm = farmRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Farm with id " + id + " not found."));
-		farmRepository.delete(farm);
+		boolean exists = this.exists(id);
+		if (!exists) {
+			throw new ResourceNotFoundException("Farm with id " + id + " not found.");
+		}
+		farmRepository.deleteById(id);
 	}
 
 	@Override

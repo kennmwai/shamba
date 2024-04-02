@@ -5,7 +5,7 @@ meta {
 }
 
 put {
-  url: http://localhost:8081/api/v1/farms/1
+  url: http://localhost:8081/api/v1/farms/11
   body: json
   auth: none
 }
@@ -15,5 +15,13 @@ headers {
 }
 
 body:json {
-  {"farmerName":"Jane Doe","farmAddress":"456 Main St","crop":"Soybeans","acres":200,"pricePerAcre":200.0}
+  {
+    "name": "J Farm",
+    "owner": "Jen",
+    "location": "Raikipia",
+    "type": "Crop",
+    "status": "Inactive",
+    "size": 300,
+    "pricePerAcre": 50
+  }
 }
