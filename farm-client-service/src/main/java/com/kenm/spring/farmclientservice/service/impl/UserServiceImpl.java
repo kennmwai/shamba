@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @Autowired
     private UserMapperImpl userMapper;
 
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleMapperImpl roleMapper;
-    
+
 
     @Override
     public List<UserDTO> getAllUsers() {

@@ -12,8 +12,8 @@ import com.kenm.spring.farmleaseservice.entity.FarmLease;
  */
 public interface FarmLeaseMapper {
 
-	FarmLeaseDTO toFarmLeaseDTO(FarmLease farmLease);
-
 	FarmLease toFarmLease(FarmLeaseDTO farmLeaseDTO);
+
+	FarmLeaseDTO toFarmLeaseDTO(FarmLease farmLease);
 
 }

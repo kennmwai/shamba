@@ -22,7 +22,7 @@ public class UserRoleMapperImpl implements UserRoleMapper {
 
     @Override
     public UserRole toUserRole(UserRoleDTO userRoleDTO) {
-        
+
         if (userRoleDTO == null) {
             return null;
         }
@@ -31,7 +31,7 @@ public class UserRoleMapperImpl implements UserRoleMapper {
 
     @Override
     public Set<UserRoleDTO> toUserRoleDTOs (Set<UserRole> userRoles) {
-        
+
         if (userRoles == null) {
             return null;
         }
@@ -42,7 +42,7 @@ public class UserRoleMapperImpl implements UserRoleMapper {
 
     @Override
     public Set<UserRole> toUserRoles (Set<UserRoleDTO> userRoleDTOs) {
-        
+
         if (userRoleDTOs == null) {
             return null;
         }

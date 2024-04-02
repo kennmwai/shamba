@@ -31,8 +31,8 @@ import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 public class AppConfig {
 
 	@Bean
-	FarmLeaseService farmLeaseService() {
-		return new FarmLeaseServiceImpl();
+	CircuitBreakerConfig circuitBreakerConfig() {
+		return CircuitBreakerConfig.custom().waitDurationInOpenState(Duration.ofMillis(5000)).build();
 	}
 
     @Bean
@@ -41,8 +41,8 @@ public class AppConfig {
     }
 
 	@Bean
-	CircuitBreakerConfig circuitBreakerConfig() {
-		return CircuitBreakerConfig.custom().waitDurationInOpenState(Duration.ofMillis(5000)).build();
+	FarmLeaseService farmLeaseService() {
+		return new FarmLeaseServiceImpl();
 	}
 
 	@Bean

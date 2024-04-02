@@ -20,26 +20,20 @@ import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
  */
 public class FarmLeaseMapperImpl implements FarmLeaseMapper {
 
-	@Override
-	public FarmLeaseDTO toFarmLeaseDTO(FarmLease farmLease) {
-		List<FarmPaymentDTO> paymentDTOs = mapPaymentsToDTOs(farmLease.getPayments());
-		FarmLeaseDTO farmLeaseDTO = new FarmLeaseDTO();
+	private List<FarmPayment> mapDTOsToPayments(List<FarmPaymentDTO> paymentDTOs) {
 
-		BeanUtils.copyProperties(farmLease, farmLeaseDTO);
-		farmLeaseDTO.setPayments(paymentDTOs);
+		List<FarmPayment> payments = paymentDTOs.stream()
+				.map(paymentDTO -> {
+					if (paymentDTO == null) {
+						return null;
+					}
+					FarmPayment payment = new FarmPayment();
+					BeanUtils.copyProperties(paymentDTO, payment);
+					return payment;
+				})
+				.collect(Collectors.toList());
 
-		return farmLeaseDTO;
-	}
-
-	@Override
-	public FarmLease toFarmLease(FarmLeaseDTO farmLeaseDTO) {
-		List<FarmPayment> payments = mapDTOsToPayments(farmLeaseDTO.getPayments());
-		FarmLease farmLease = new FarmLease();
-
-		BeanUtils.copyProperties(farmLeaseDTO, farmLease);
-		farmLease.setPayments(payments);
-
-		return farmLease;
+		return payments;
 	}
 
 	private List<FarmPaymentDTO> mapPaymentsToDTOs(List<FarmPayment> payments) {
@@ -55,19 +49,25 @@ public class FarmLeaseMapperImpl implements FarmLeaseMapper {
                 .collect(Collectors.toList());
     }
 
-	private List<FarmPayment> mapDTOsToPayments(List<FarmPaymentDTO> paymentDTOs) {
+	@Override
+	public FarmLease toFarmLease(FarmLeaseDTO farmLeaseDTO) {
+		List<FarmPayment> payments = mapDTOsToPayments(farmLeaseDTO.getPayments());
+		FarmLease farmLease = new FarmLease();
 
-		List<FarmPayment> payments = paymentDTOs.stream()
-				.map(paymentDTO -> {
-					if (paymentDTO == null) {
-						return null;
-					}
-					FarmPayment payment = new FarmPayment();
-					BeanUtils.copyProperties(paymentDTO, payment);
-					return payment;
-				})
-				.collect(Collectors.toList());
-		
-		return payments;
+		BeanUtils.copyProperties(farmLeaseDTO, farmLease);
+		farmLease.setPayments(payments);
+
+		return farmLease;
+	}
+
+	@Override
+	public FarmLeaseDTO toFarmLeaseDTO(FarmLease farmLease) {
+		List<FarmPaymentDTO> paymentDTOs = mapPaymentsToDTOs(farmLease.getPayments());
+		FarmLeaseDTO farmLeaseDTO = new FarmLeaseDTO();
+
+		BeanUtils.copyProperties(farmLease, farmLeaseDTO);
+		farmLeaseDTO.setPayments(paymentDTOs);
+
+		return farmLeaseDTO;
 	}
 }

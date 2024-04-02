@@ -7,10 +7,13 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 
 import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.dto.FarmResourceDTO;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
+
+import jakarta.validation.Valid;
 
 /**
  * @author User
@@ -18,30 +21,30 @@ import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
  */
 public interface FarmService {
 
-	List<FarmDTO> findAll();
+	long count();
 
-	List<FarmResourceDTO> getAllFarms();
+	boolean exists(@NonNull Long id);
+
+	List<FarmDTO> findAll();
 
 	Page<FarmDTO> findAll(Pageable pageable);
 
-	FarmResourceDTO  findById(Long farmId) throws ResourceNotFoundException;
+	FarmResourceDTO getFarmById(@NonNull Long farmId) throws ResourceNotFoundException;
 
-	FarmDTO createFarm(FarmDTO farmDTO);
+	List<FarmResourceDTO> getFarmsByIds(@NonNull Iterable<Long> ids) throws ResourceNotFoundException;
 
-	FarmDTO updateFarm(Long id, FarmDTO farmDTO) throws ResourceNotFoundException;
+	List<FarmResourceDTO> getAllFarms();
 
-	void deleteById(Long id) throws ResourceNotFoundException;
+	FarmDTO updateFarm(@NonNull Long id, @Valid @NonNull FarmDTO farmDTO) throws ResourceNotFoundException;
+
+	FarmDTO createFarm(@NonNull FarmDTO farmDTO);
 
 	void deleteAll();
 
-	boolean existsById(Long id);
+	void deleteAllById(@NonNull Iterable<Long> ids);
 
-	long count();
+	void deleteById(@NonNull Long id) throws ResourceNotFoundException;
 
-	List<FarmDTO> findAllById(Iterable<Long> ids);
-
-	void deleteAllById(Iterable<Long> ids);
-
-	double calculateTotalPrice(Long id) throws ResourceNotFoundException;
+	double calculateTotalPrice(@NonNull Long id) throws ResourceNotFoundException;
 
 }

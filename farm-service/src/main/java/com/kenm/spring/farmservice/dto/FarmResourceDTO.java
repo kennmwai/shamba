@@ -1,5 +1,7 @@
 package com.kenm.spring.farmservice.dto;
 
+import java.util.List;
+
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 
 import lombok.AllArgsConstructor;
@@ -18,9 +20,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class FarmResourceDTO {
-    private FarmDTO farm;
-    private FarmLeaseDTO lease;
+	private FarmDTO farm;
+	private List<FarmLeaseDTO> lease;
 
-    // private List<Link> links;
+	// private List<Link> links;
 
 }

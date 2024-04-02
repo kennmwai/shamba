@@ -31,26 +31,22 @@ import io.github.resilience4j.timelimiter.TimeLimiterConfig;
 @EnableFeignClients(clients = LeaseServiceClient.class)
 public class AppConfig {
 	@Bean
+	CircuitBreakerConfig circuitBreakerConfig() {
+		return CircuitBreakerConfig.custom().waitDurationInOpenState(Duration.ofMillis(5000)).build();
+	}
+
+	@Bean
+	FarmMapper farmMapper() {
+		return new FarmMapperImpl();
+	}
+
+	@Bean
 	FarmService farmService() {
 		return new FarmServiceImpl();
 	}
 
-    @Bean
-    FarmMapper farmMapper() {
-        return new FarmMapperImpl();
-    }
-
-    @Bean
-    CircuitBreakerConfig circuitBreakerConfig() {
-        return CircuitBreakerConfig.custom()
-                .waitDurationInOpenState(Duration.ofMillis(5000))
-                .build();
-    }
-
-    @Bean
-    TimeLimiterConfig timeLimiterConfig() {
-        return TimeLimiterConfig.custom()
-                .timeoutDuration(Duration.ofMillis(5000))
-                .build();
-    }
+	@Bean
+	TimeLimiterConfig timeLimiterConfig() {
+		return TimeLimiterConfig.custom().timeoutDuration(Duration.ofMillis(5000)).build();
+	}
 }

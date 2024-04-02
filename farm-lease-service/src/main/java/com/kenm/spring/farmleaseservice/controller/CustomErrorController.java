@@ -15,11 +15,19 @@ public class CustomErrorController implements ErrorController {
 
     private static final String ERROR_PATH = "/error";
 
+    public String getErrorPath() {
+        return ERROR_PATH;
+    }
+    private HttpStatus getStatus(HttpServletRequest request) {
+        Integer statusCode = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
+        return HttpStatus.valueOf(statusCode);
+    }
+
     @RequestMapping(value = ERROR_PATH)
     public ResponseEntity<CustomErrorResponse> handleError(HttpServletRequest request) {
         // Map exception to custom error response
         HttpStatus status = getStatus(request);
-        
+
         CustomErrorResponse errorResponse = new CustomErrorResponse();
         errorResponse.setStatus(status.value());
         errorResponse.setError(status.getReasonPhrase());
@@ -27,13 +35,5 @@ public class CustomErrorController implements ErrorController {
         errorResponse.setPath((String) request.getAttribute("jakarta.servlet.error.request_uri"));
 
         return new ResponseEntity<>(errorResponse, status);
-    }
-    public String getErrorPath() {
-        return ERROR_PATH;
-    }
-
-    private HttpStatus getStatus(HttpServletRequest request) {
-        Integer statusCode = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
-        return HttpStatus.valueOf(statusCode);
     }
 }

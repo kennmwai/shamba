@@ -25,5 +25,5 @@ public class SignupRequest {
     private String password;
 
     private Set<String> role;
-    
+
 }

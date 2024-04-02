@@ -19,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
-import com.kenm.spring.farmleaseservice.entity.FarmPayment;
 import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
-import com.kenm.spring.farmleaseservice.repository.FarmPaymentRepository;
 import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
 
 import jakarta.validation.Valid;
@@ -30,17 +28,34 @@ import jakarta.validation.Valid;
  * @author User
  */
 @RestController
-@RequestMapping(path = "/api/leases", produces = "application/json")
+@RequestMapping(path = "/api/v1/leases", produces = "application/json")
 public class FarmLeaseController {
+
 	@Autowired
 	private FarmLeaseService farmLeaseService;
-	
-	@Autowired
-	private FarmPaymentRepository farmPaymentRepository;
 
-	@GetMapping
+	@GetMapping("/exists/{id}")
+	public boolean existsFarmLeaseById(@PathVariable Long id) {
+		boolean exists = farmLeaseService.existsById(id);
+		return exists;
+	}
+
+	@GetMapping("/count")
+	public long countFarmLeases() {
+		long count = farmLeaseService.count();
+		return count;
+	}
+
+	@GetMapping("/all")
 	public ResponseEntity<List<FarmLeaseDTO>> getAllFarmLeases() {
 		return new ResponseEntity<>(farmLeaseService.findAll(), HttpStatus.OK);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<FarmLeaseDTO>> getAllFarmLeasesByIds(@RequestParam List<Long> ids)
+			throws ResourceNotFoundException {
+		List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.findAllById(ids);
+		return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
 	}
 
 	@GetMapping("/{id}")
@@ -50,9 +65,30 @@ public class FarmLeaseController {
 	}
 
 	@GetMapping("/farms/{id}")
-	public ResponseEntity<FarmLeaseDTO> getFarmLeaseByFarmId(@PathVariable Long id) throws ResourceNotFoundException {
-		FarmLeaseDTO farmLeaseDTO = farmLeaseService.findByFarmId(id);
+	public ResponseEntity<?> getFarmLeaseByFarmId(@PathVariable Long id) throws ResourceNotFoundException {
+		List<FarmLeaseDTO> farmLeaseDTO = farmLeaseService.getFarmLeaseByFarmId(id);
 		return new ResponseEntity<>(farmLeaseDTO, HttpStatus.OK);
+	}
+
+	@GetMapping("/status/{status}")
+	public ResponseEntity<List<FarmLeaseDTO>> getFarmLeaseByStatus(@PathVariable String status)
+			throws ResourceNotFoundException {
+		List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.getFarmLeaseByStatus(status);
+		return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
+	}
+
+	@GetMapping("/tenant/{tenant}")
+	public ResponseEntity<List<FarmLeaseDTO>> getFarmLeaseByTenant(@PathVariable String tenant)
+			throws ResourceNotFoundException {
+		List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.getFarmLeaseByTenant(tenant);
+		return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
+	}
+
+	@GetMapping("/type/{type}")
+	public ResponseEntity<List<FarmLeaseDTO>> getFarmLeaseByType(@PathVariable String type)
+			throws ResourceNotFoundException {
+		List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.getFarmLeaseByType(type);
+		return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
 	}
 
 	@PostMapping
@@ -68,67 +104,22 @@ public class FarmLeaseController {
 		return new ResponseEntity<>(updatedFarmLeaseDTO, HttpStatus.OK);
 	}
 
+	@DeleteMapping("/all")
+	public ResponseEntity<?> deleteAllFarmLeases() {
+		farmLeaseService.deleteAll();
+		return ResponseEntity.ok().build();
+	}
+
+	@DeleteMapping
+	public ResponseEntity<?> deleteByIds(@RequestParam List<Long> ids) throws ResourceNotFoundException {
+		farmLeaseService.deleteAllById(ids);
+		return ResponseEntity.ok().build();
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteFarmLease(@PathVariable Long id) throws ResourceNotFoundException {
 		farmLeaseService.deleteById(id);
 		return ResponseEntity.ok().build();
 	}
 
-	@DeleteMapping
-	public ResponseEntity<?> deleteAllFarmLeases() {
-		farmLeaseService.deleteAll();
-		return ResponseEntity.ok().build();
-	}
-
-	@GetMapping("/count")
-	public long countFarmLeases() {
-		long count = farmLeaseService.count();
-		return count;
-	}
-
-	@GetMapping("/exists/{id}")
-	public boolean existsFarmLeaseById(@PathVariable Long id) {
-		boolean exists = farmLeaseService.existsById(id);
-		return exists;
-	}
-
-	@GetMapping("/find-all-by-ids")
-	public ResponseEntity<List<FarmLeaseDTO>> getAllFarmLeasesByIds(@RequestParam List<Long> ids)
-			throws ResourceNotFoundException {
-		List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.findAllById(ids);
-		return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
-	}
-
-	@DeleteMapping("/delete-all-by-ids")
-	public ResponseEntity<?> deleteAllById(@RequestBody List<Long> ids) throws ResourceNotFoundException {
-		farmLeaseService.deleteAllById(ids);
-		return ResponseEntity.ok().build();
-	}
-
-	@GetMapping("/status/{status}")
-	public ResponseEntity<List<FarmLeaseDTO>> getFarmLeaseByStatus(@PathVariable String status)
-			throws ResourceNotFoundException {
-		List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.getFarmLeaseByStatus(status);
-		return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
-	}
-
-	@GetMapping("/type/{type}")
-	public ResponseEntity<List<FarmLeaseDTO>> getFarmLeaseByType(@PathVariable String type)
-			throws ResourceNotFoundException {
-		List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.getFarmLeaseByType(type);
-		return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
-	}
-
-	@GetMapping("/tenant/{tenant}")
-	public ResponseEntity<List<FarmLeaseDTO>> getFarmLeaseByTenant(@PathVariable String tenant)
-			throws ResourceNotFoundException {
-		List<FarmLeaseDTO> farmLeaseDTOs = farmLeaseService.getFarmLeaseByTenant(tenant);
-		return new ResponseEntity<>(farmLeaseDTOs, HttpStatus.OK);
-	}
-
-	@GetMapping("/payments")
-	public ResponseEntity<List<FarmPayment>> getLeasePayments() {
-		List<FarmPayment> payments = farmPaymentRepository.findAll();
-		return new ResponseEntity<>(payments, HttpStatus.OK);
-	}
 }

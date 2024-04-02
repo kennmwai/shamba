@@ -68,7 +68,7 @@ public class UserDetailsImpl implements UserDetails {
     public String getEmail() {
         return email;
     }
-    
+
     @Override
     public String getPassword() {
         return password;

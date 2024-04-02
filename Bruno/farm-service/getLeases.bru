@@ -1,0 +1,15 @@
+meta {
+  name: getLeases
+  type: http
+  seq: 14
+}
+
+get {
+  url: http://localhost:8081/api/v1/farms/leases?ids=1,6,4
+  body: none
+  auth: none
+}
+
+query {
+  ids: 1,6,4
+}

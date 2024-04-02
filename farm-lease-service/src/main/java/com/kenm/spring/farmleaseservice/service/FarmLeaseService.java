@@ -13,34 +13,34 @@ import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
  *
  */
 public interface FarmLeaseService {
-	List<FarmLeaseDTO> findAll();
-
-	FarmLeaseDTO findById(Long id) throws ResourceNotFoundException;
-
-	FarmLeaseDTO findByFarmId(Long id) throws ResourceNotFoundException;
+	long count();
 
 	FarmLeaseDTO createFarmLease(FarmLeaseDTO farmLeaseDTO);
 
-	FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException;
-
-	void deleteById(Long id) throws ResourceNotFoundException;
+//	FarmLeaseDTO findByFarmId(Long id) throws ResourceNotFoundException;
 
 	void deleteAll();
 
+	void deleteAllById(Iterable<Long> ids) throws ResourceNotFoundException;
+
+	void deleteById(Long id) throws ResourceNotFoundException;
+
 	boolean existsById(Long id);
 
-	long count();
+	List<FarmLeaseDTO> findAll();
 
 	List<FarmLeaseDTO> findAllById(Iterable<Long> ids) throws ResourceNotFoundException;
 
-	void deleteAllById(Iterable<Long> ids) throws ResourceNotFoundException;
+	FarmLeaseDTO findById(Long id) throws ResourceNotFoundException;
 
-	FarmLeaseDTO getFarmLeaseByFarmId(Long id) throws ResourceNotFoundException;
+	List<FarmLeaseDTO> getFarmLeaseByFarmId(Long id) throws ResourceNotFoundException;
 
 	List<FarmLeaseDTO> getFarmLeaseByStatus(String status) throws ResourceNotFoundException;
 
+	List<FarmLeaseDTO> getFarmLeaseByTenant(String tenant) throws ResourceNotFoundException;
+
 	List<FarmLeaseDTO> getFarmLeaseByType(String type) throws ResourceNotFoundException;
 
-	List<FarmLeaseDTO> getFarmLeaseByTenant(String tenant) throws ResourceNotFoundException;
+	FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException;
 
 }
