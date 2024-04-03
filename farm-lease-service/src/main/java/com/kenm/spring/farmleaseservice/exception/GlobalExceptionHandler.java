@@ -39,6 +39,16 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
 
+	@ExceptionHandler(ResourceAlreadyExistsException.class)
+	public ResponseEntity<Object> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Object> handleIllegalArgumentException(IllegalArgumentException ex) {
+		return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
 		List<String> errors = ex.getBindingResult().getFieldErrors().stream()

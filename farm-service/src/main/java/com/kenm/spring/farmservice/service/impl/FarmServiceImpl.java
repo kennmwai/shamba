@@ -130,13 +130,20 @@ public class FarmServiceImpl implements FarmService {
 		farmDetails.parallelStream().forEach(farm -> {
 			FarmResourceDTO farmResource = new FarmResourceDTO();
 			farmResource.setFarm(farm);
-			try {
-				List<FarmLeaseDTO> leaseDetails = farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
-				farmResource.setLease(leaseDetails.isEmpty() ? Collections.emptyList() : leaseDetails);
-			} catch (Exception e) {
-				logger.error("Error: {}", e.getMessage());
-				farmResource.setLease(Collections.emptyList());
-			}
+
+			CompletableFuture<List<FarmLeaseDTO>> leaseDetailsFuture = CompletableFuture.supplyAsync(() -> {
+				try {
+					return farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
+				} catch (Exception e) {
+					logger.error("Error: {}", e.getMessage());
+					return Collections.emptyList();
+				}
+			});
+
+			// Join the future to wait for the result without blocking the thread
+			List<FarmLeaseDTO> leaseDetails = leaseDetailsFuture.join();
+			farmResource.setLease(leaseDetails.isEmpty() ? Collections.emptyList() : leaseDetails);
+
 			farmResources.add(farmResource);
 		});
 

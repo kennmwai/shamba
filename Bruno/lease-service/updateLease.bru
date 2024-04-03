@@ -1,11 +1,11 @@
 meta {
   name: updateLease
   type: http
-  seq: 6
+  seq: 7
 }
 
 put {
-  url: http://localhost:8082/api/leases/1
+  url: http://localhost:8082/api/v1/leases/1
   body: json
   auth: none
 }
@@ -15,5 +15,11 @@ headers {
 }
 
 body:json {
-  {"farmerName":"Jane Doe","farmAddress":"456 Main St","crop":"Soybeans","acres":200,"pricePerAcre":200.0}
+  {
+    "farmerName": "Jane Doe",
+    "farmAddress": "456 Main St",
+    "crop": "Soybeans",
+    "acres": 200,
+    "pricePerAcre": 200
+  }
 }

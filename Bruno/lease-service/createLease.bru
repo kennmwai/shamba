@@ -1,11 +1,11 @@
 meta {
   name: createLease
   type: http
-  seq: 5
+  seq: 6
 }
 
 post {
-  url: http://localhost:8082/api/leases
+  url: http://localhost:8082/api/v1/leases
   body: json
   auth: none
 }
@@ -15,5 +15,16 @@ headers {
 }
 
 body:json {
-  {"farmerName":"John Doe","farmAddress":"123 Main St","crop":"Corn","acres":100,"pricePerAcre":100.0}
+  {
+    "id": 3,
+    "farmId": 2,
+    "leaseTenant": "Taken Off",
+    "leaseType": "Long-term",
+    "leaseStatus": "Active",
+    "leaseRent": 5500,
+    "leaseDuration": "36 months",
+    "leaseStart": "2023-01-12",
+    "leaseEnd": "2025-01-11"
+    //"payments": []
+  }
 }

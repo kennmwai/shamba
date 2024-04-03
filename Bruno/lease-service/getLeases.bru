@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: http://localhost:8082/api/leases
+  url: http://localhost:8082/api/v1/leases?ids=1,5,3
   body: none
   auth: none
+}
+
+query {
+  ids: 1,5,3
 }

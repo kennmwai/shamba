@@ -1,5 +1,13 @@
 -- -- use farm_db;
 
+-- CREATE SEQUENCE farm_lease_seq
+--     START WITH 100
+--     INCREMENT BY 1;
+
+CREATE SEQUENCE farm_payments_seq
+    START WITH 1000
+    INCREMENT BY 5;
+
 create table farm_leases (
     id bigint AUTO_INCREMENT PRIMARY KEY,
     farm_id bigint not null,
@@ -13,8 +21,10 @@ create table farm_leases (
     primary key (id)
 );
 
+-- ALTER TABLE farm_leases ALTER COLUMN id SET DEFAULT nextval('farm_lease_seq');
+
 create table farm_payments (
-    id bigint AUTO_INCREMENT PRIMARY KEY,
+    id BIGINT PRIMARY KEY,
     payment_status varchar(53) not null,
     payment_amount float(53) not null,
     payment_method varchar(53) not null,
@@ -24,3 +34,5 @@ create table farm_payments (
     lease_id bigint not null,
     FOREIGN KEY (lease_id) REFERENCES farm_leases(id)
 );
+
+ALTER TABLE farm_payments ALTER COLUMN id SET DEFAULT nextval('farm_payments_seq')

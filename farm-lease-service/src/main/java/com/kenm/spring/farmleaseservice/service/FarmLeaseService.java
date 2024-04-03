@@ -15,17 +15,15 @@ import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 public interface FarmLeaseService {
 	long count();
 
-	FarmLeaseDTO createFarmLease(FarmLeaseDTO farmLeaseDTO);
+	boolean exists(Long id);
 
 //	FarmLeaseDTO findByFarmId(Long id) throws ResourceNotFoundException;
 
-	void deleteAll();
+	void deleteAll() throws ResourceNotFoundException;
 
-	void deleteAllById(Iterable<Long> ids) throws ResourceNotFoundException;
+	void deleteByIds(Iterable<Long> ids) throws ResourceNotFoundException;
 
-	void deleteById(Long id) throws ResourceNotFoundException;
-
-	boolean existsById(Long id);
+	void delete(Long id) throws ResourceNotFoundException;
 
 	List<FarmLeaseDTO> findAll();
 
@@ -40,6 +38,8 @@ public interface FarmLeaseService {
 	List<FarmLeaseDTO> getFarmLeaseByTenant(String tenant) throws ResourceNotFoundException;
 
 	List<FarmLeaseDTO> getFarmLeaseByType(String type) throws ResourceNotFoundException;
+
+	FarmLeaseDTO createFarmLease(FarmLeaseDTO farmLeaseDTO);
 
 	FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException;
 

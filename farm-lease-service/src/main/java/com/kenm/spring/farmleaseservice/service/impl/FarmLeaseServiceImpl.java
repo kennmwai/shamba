@@ -3,6 +3,7 @@
  */
 package com.kenm.spring.farmleaseservice.service.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,9 +12,12 @@ import org.springframework.stereotype.Service;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmleaseservice.entity.FarmLease;
+import com.kenm.spring.farmleaseservice.entity.FarmPayment;
 import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
+import com.kenm.spring.farmleaseservice.mapper.PaymentMapper;
 import com.kenm.spring.farmleaseservice.repository.FarmLeaseRepository;
+import com.kenm.spring.farmleaseservice.repository.FarmPaymentRepository;
 import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
 
 /**
@@ -27,7 +31,13 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	private FarmLeaseRepository farmLeaseRepository;
 
 	@Autowired
+	private FarmPaymentRepository paymentRepository;
+
+	@Autowired
 	private FarmLeaseMapper farmLeaseMapper;
+
+	@Autowired
+	private PaymentMapper paymentMapper;
 
 	@Override
 	public long count() {
@@ -35,35 +45,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public FarmLeaseDTO createFarmLease(FarmLeaseDTO farmLeaseDTO) {
-		FarmLease farmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
-		farmLease = farmLeaseRepository.save(farmLease);
-		FarmLeaseDTO createdFarmLeaseDTO = farmLeaseMapper.toFarmLeaseDTO(farmLease);
-		return createdFarmLeaseDTO;
-	}
-
-	@Override
-	public void deleteAll() {
-		farmLeaseRepository.deleteAll();
-	}
-
-	@Override
-	public void deleteAllById(Iterable<Long> ids) throws ResourceNotFoundException {
-		List<FarmLease> farmLeases = farmLeaseRepository.findAllById(ids);
-		List<FarmLease> farmLeasesToDelete = farmLeases.stream().filter(farmLease -> farmLease != null)
-				.collect(Collectors.toList());
-		farmLeaseRepository.deleteAll(farmLeasesToDelete);
-	}
-
-	@Override
-	public void deleteById(Long id) throws ResourceNotFoundException {
-		FarmLease farmLease = farmLeaseRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with id " + id + " not found."));
-		farmLeaseRepository.delete(farmLease);
-	}
-
-	@Override
-	public boolean existsById(Long id) {
+	public boolean exists(Long id) {
 		return farmLeaseRepository.existsById(id);
 	}
 
@@ -129,11 +111,84 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 
 	@Override
 	public FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException {
+		if (id == null) {
+			throw new IllegalArgumentException("Farm ID cannot be null.");
+		}
+
+		boolean exists = exists(id);
+		if (!exists) {
+			throw new ResourceNotFoundException("Farm Lease with id " + id + " not found.");
+		}
+
+		if (farmLeaseDTO.getPayments() == null) {
+			farmLeaseDTO.setPayments(Collections.emptyList());
+		}
+
 		FarmLease updatedFarmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
-		updatedFarmLease.setId(id);
+		updatedFarmLease.setId(id); // Preserve the original lease ID
 		updatedFarmLease = farmLeaseRepository.save(updatedFarmLease);
-		FarmLeaseDTO updatedFarmLeaseDTO = farmLeaseMapper.toFarmLeaseDTO(updatedFarmLease);
-		return updatedFarmLeaseDTO;
+
+		return farmLeaseMapper.toFarmLeaseDTO(updatedFarmLease);
+	}
+
+	@Override
+	public FarmLeaseDTO createFarmLease(FarmLeaseDTO farmLeaseDTO) {
+		validateCreation(farmLeaseDTO);
+
+		FarmLease farmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
+		farmLease = farmLeaseRepository.save(farmLease);
+
+		createPaymentsForLease(farmLeaseDTO, farmLease);
+
+		return farmLeaseMapper.toFarmLeaseDTO(farmLease);
+	}
+
+	private void validateCreation(FarmLeaseDTO farmLeaseDTO) {
+		if (farmLeaseDTO.getId() != null) {
+			throw new IllegalArgumentException("Lease ID cannot be set on creation.");
+		}
+		if (farmLeaseDTO.getPayments() == null) {
+			farmLeaseDTO.setPayments(Collections.emptyList());
+		}
+	}
+
+	private void createPaymentsForLease(FarmLeaseDTO farmLeaseDTO, FarmLease farmLease) {
+		farmLeaseDTO.getPayments().forEach(paymentDTO -> {
+			FarmPayment payment = paymentMapper.toFarmPayment(paymentDTO);
+			payment.setFarmLease(farmLease);
+			paymentRepository.save(payment);
+		});
+	}
+
+	@Override
+	public void deleteAll() throws ResourceNotFoundException {
+		Long count = farmLeaseRepository.count();
+		if (count == 0) {
+			throw new ResourceNotFoundException("There are no existing farm leases.");
+		}
+		farmLeaseRepository.deleteAll();
+	}
+
+	@Override
+	public void delete(Long id) throws ResourceNotFoundException {
+
+		if (id == null) {
+			throw new IllegalArgumentException("Farm ID cannot be null.");
+		}
+
+		boolean exists = exists(id);
+		if (!exists) {
+			throw new ResourceNotFoundException("Farm Lease with id " + id + " not found.");
+		}
+		farmLeaseRepository.deleteById(id);
+	}
+
+	@Override
+	public void deleteByIds(Iterable<Long> ids) throws ResourceNotFoundException {
+		if (!ids.iterator().hasNext()) {
+			return; // Avoid unnecessary processing if the ids are empty
+		}
+		farmLeaseRepository.deleteAllById(ids);
 	}
 
 }
