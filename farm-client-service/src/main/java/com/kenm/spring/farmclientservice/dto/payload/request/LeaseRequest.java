@@ -2,7 +2,7 @@ package com.kenm.spring.farmclientservice.dto.payload.request;
 
 import java.util.List;
 
-import com.kenm.spring.farmclientservice.dto.payload.PaymentDTO;
+import com.kenm.spring.farmclientservice.dto.payload.response.PaymentDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

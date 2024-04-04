@@ -1,4 +1,4 @@
-package com.kenm.spring.farmclientservice.dto.payload;
+package com.kenm.spring.farmclientservice.dto.payload.response;
 
 import java.time.LocalDate;
 

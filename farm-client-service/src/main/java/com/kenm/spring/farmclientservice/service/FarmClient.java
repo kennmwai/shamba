@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.kenm.spring.farmclientservice.dto.payload.FarmDTO;
-import com.kenm.spring.farmclientservice.dto.payload.LeaseDTO;
 import com.kenm.spring.farmclientservice.dto.payload.request.FarmRequest;
 import com.kenm.spring.farmclientservice.dto.payload.request.LeaseRequest;
+import com.kenm.spring.farmclientservice.dto.payload.response.FarmDTO;
 import com.kenm.spring.farmclientservice.dto.payload.response.FarmResponse;
+import com.kenm.spring.farmclientservice.dto.payload.response.LeaseDTO;
 
 import jakarta.validation.Valid;
 

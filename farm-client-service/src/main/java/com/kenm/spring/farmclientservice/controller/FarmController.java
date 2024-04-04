@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kenm.spring.farmclientservice.dto.payload.FarmDTO;
-import com.kenm.spring.farmclientservice.dto.payload.LeaseDTO;
 import com.kenm.spring.farmclientservice.dto.payload.request.FarmRequest;
 import com.kenm.spring.farmclientservice.dto.payload.request.LeaseRequest;
+import com.kenm.spring.farmclientservice.dto.payload.response.FarmDTO;
 import com.kenm.spring.farmclientservice.dto.payload.response.FarmResponse;
+import com.kenm.spring.farmclientservice.dto.payload.response.LeaseDTO;
 import com.kenm.spring.farmclientservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmclientservice.service.FarmClient;
 
