@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: http://localhost:8081/api/v1/farms
+  url: http://localhost:8081/api/v1/farms/all
   body: none
   auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMjE2NjQyNywiZXhwIjoxNzEyMjUyODI3fQ.R81Tf241T1KeBYL4Ui7B5nMLpahtZLi-t0b0_0FlgQQ
 }
