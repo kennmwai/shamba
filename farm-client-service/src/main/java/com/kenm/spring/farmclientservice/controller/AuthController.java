@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kenm.spring.farmclientservice.dto.payload.request.LoginRequest;
+import com.kenm.spring.farmclientservice.dto.payload.request.SignupRequest;
+import com.kenm.spring.farmclientservice.dto.payload.response.JwtResponse;
+import com.kenm.spring.farmclientservice.dto.payload.response.MessageResponse;
 import com.kenm.spring.farmclientservice.models.User;
 import com.kenm.spring.farmclientservice.models.UserRole;
 import com.kenm.spring.farmclientservice.models.enums.EUserRole;
-import com.kenm.spring.farmclientservice.payload.request.LoginRequest;
-import com.kenm.spring.farmclientservice.payload.request.SignupRequest;
-import com.kenm.spring.farmclientservice.payload.response.JwtResponse;
-import com.kenm.spring.farmclientservice.payload.response.MessageResponse;
 import com.kenm.spring.farmclientservice.repository.UserRepository;
 import com.kenm.spring.farmclientservice.repository.UserRoleRepository;
 import com.kenm.spring.farmclientservice.security.jwt.JwtUtils;

@@ -1,4 +1,4 @@
-package com.kenm.spring.farmclientservice.payload.request;
+package com.kenm.spring.farmclientservice.dto.payload.request;
 
 import java.util.Set;
 

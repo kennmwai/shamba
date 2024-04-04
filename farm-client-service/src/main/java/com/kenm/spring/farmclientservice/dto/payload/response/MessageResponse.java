@@ -1,4 +1,4 @@
-package com.kenm.spring.farmclientservice.payload.response;
+package com.kenm.spring.farmclientservice.dto.payload.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
