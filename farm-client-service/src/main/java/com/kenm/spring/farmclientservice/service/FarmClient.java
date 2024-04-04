@@ -12,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kenm.spring.farmclientservice.dto.payload.FarmDTO;
+import com.kenm.spring.farmclientservice.dto.payload.LeaseDTO;
 import com.kenm.spring.farmclientservice.dto.payload.request.FarmRequest;
+import com.kenm.spring.farmclientservice.dto.payload.request.LeaseRequest;
 import com.kenm.spring.farmclientservice.dto.payload.response.FarmResponse;
+
+import jakarta.validation.Valid;
 
 /**
  * @author User
@@ -54,5 +58,28 @@ public interface FarmClient {
 
 	@DeleteMapping("/api/v1/farms/all")
 	void deleteAllFarms();
+	
+	// Lease
+
+	@GetMapping("/api/v1/farms/{farmId}/leases")
+	List<LeaseDTO> getLeaseByFarmId(@PathVariable Long farmId);
+
+	@GetMapping("/api/v1/farms/leases/{leaseId}")
+	LeaseDTO getLeaseByLeasedId(@PathVariable Long leaseId);
+
+	@GetMapping("/api/v1/farms/leases/all")
+	List<LeaseDTO> getAllLeases();
+
+	@GetMapping("/api/v1/farms/leases")
+	List<LeaseDTO> getLeaseByLeasedIds(@RequestParam List<Long> leaseIds);
+	
+	@PostMapping("/api/v1/farms/leases")
+	LeaseDTO createLease(@Valid @RequestBody LeaseRequest LeaseReqDTO);
+
+	@PutMapping("/api/v1/farms/leases/{leaseId}")
+	LeaseDTO updateLease(@PathVariable Long leaseId, @RequestBody LeaseRequest LeaseReqDTO);
+
+	@DeleteMapping("/api/v1/farms/leases/{leaseId:\\d+}")
+	void deleteLease(@PathVariable Long leaseId);
 
 }

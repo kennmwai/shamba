@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kenm.spring.farmclientservice.dto.payload.FarmDTO;
+import com.kenm.spring.farmclientservice.dto.payload.LeaseDTO;
 import com.kenm.spring.farmclientservice.dto.payload.request.FarmRequest;
+import com.kenm.spring.farmclientservice.dto.payload.request.LeaseRequest;
 import com.kenm.spring.farmclientservice.dto.payload.response.FarmResponse;
 import com.kenm.spring.farmclientservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmclientservice.service.FarmClient;
@@ -108,5 +110,50 @@ public class FarmController {
 		farmClient.deleteAllFarms();
 		return ResponseEntity.noContent().build();
 	}	
+
+	
+	// Lease
+	
+	@GetMapping("/{id}/leases")
+	public ResponseEntity<List<LeaseDTO>> getLeaseByFarmId(@PathVariable Long id) {
+		List<LeaseDTO> leaseDetails = farmClient.getLeaseByFarmId(id);
+		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
+	}
+
+	@GetMapping("/leases/{id}")
+	public ResponseEntity<?> getLeaseByLeasedId(@PathVariable Long id) {
+		LeaseDTO leaseDetails = farmClient.getLeaseByLeasedId(id);
+		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
+	}
+
+	@GetMapping("/leases/all")
+	public ResponseEntity<?> getAllLeases() {
+		List<LeaseDTO> leaseDetails = farmClient.getAllLeases();
+		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
+	}
+
+	@GetMapping("/leases")
+	public ResponseEntity<?> getLeaseByLeasedIds(@RequestParam List<Long> ids) {
+		List<LeaseDTO> leaseDetails = farmClient.getLeaseByLeasedIds(ids);
+		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
+	}
+	@PostMapping("/leases")
+	public ResponseEntity<LeaseDTO> createLease(@Valid @RequestBody LeaseRequest LeaseReqDTO) {
+		LeaseDTO createdLeaseDTO = farmClient.createLease(LeaseReqDTO);
+		return new ResponseEntity<>(createdLeaseDTO, HttpStatus.CREATED);
+	}
+
+	@PutMapping("/leases/{id}")
+	public ResponseEntity<LeaseDTO> updateLease(@PathVariable Long leaseId, @RequestBody LeaseRequest  LeaseReqDTO)
+			throws ResourceNotFoundException {
+		LeaseDTO updatedLeaseDTO = farmClient.updateLease(leaseId, LeaseReqDTO);
+		return new ResponseEntity<>(updatedLeaseDTO, HttpStatus.OK);
+	}
+
+	@DeleteMapping("/leases/{leaseId:\\d+}")
+	public ResponseEntity<?> deleteLease(@PathVariable Long leaseId) {
+		farmClient.deleteLease(leaseId);
+		return ResponseEntity.noContent().build();
+	}
 
 }
