@@ -1,0 +1,67 @@
+spring:
+  application:
+    name: farm-api-gateway-service
+
+  cloud:
+    config:
+      uri: http://localhost:8888
+      retry:
+        initial-interval: 1000
+        max-interval: 10000
+        max-attempts: 10
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+      - id: client_route
+        uri: lb://FARM-CLIENT-SERVICE
+        predicates:
+        - Path=/api/v1/**
+      - id: farm_service_routes
+        uri: lb://FARM-SERVICE
+        predicates:
+        - Path=/api/v1/farms/**
+      - id: farm_lease_service
+        uri: lb://FARM-LEASE-SERVICE
+        predicates:
+        - Path=/api/v1/leases/**
+
+  config:
+    import: optional:configserver:http://localhost:8888/
+
+  docker:
+    compose:
+      enabled: false
+
+  profiles:
+    active: development
+
+server:
+  port: 9090
+  
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
