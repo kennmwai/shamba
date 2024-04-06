@@ -1,0 +1,43 @@
+meta {
+  name: createLease
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8082/api/v1/leases
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    //"id": 102,
+    "farmId": 2,
+    "leaseTenant": "T",
+    "leaseType": "Long-term",
+    "leaseStatus": "Expired",
+    "leaseRent": 7500,
+    "leaseDuration": "12 months",
+    "leaseStart": "2022-01-10",
+    "leaseEnd": "2023-01-11",
+    "payments": [
+      {
+        "paymentStatus": "PAID",
+        "paymentAmount": 200,
+        "paymentMethod": "BANK",
+        "paymentReceipt": 123456789,
+        "paymentDate": [
+          2022,
+          3,
+          10
+        ],
+        "paymentNotes": "TI"
+      }
+    ]
+  }
+}

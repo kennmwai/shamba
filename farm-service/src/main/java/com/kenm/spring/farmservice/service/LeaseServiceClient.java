@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
+import com.kenm.spring.farmservice.dto.payload.request.LeaseReqDTO;
+import com.kenm.spring.farmservice.dto.payload.response.FarmLeaseDTO;
+
 
 @FeignClient(name = "farm-lease-service", url = "${farm-lease-service.url}")
 public interface LeaseServiceClient {
@@ -28,11 +30,11 @@ public interface LeaseServiceClient {
 	@GetMapping("/api/v1/leases")
 	List<FarmLeaseDTO> getLeaseByLeasedId(@RequestParam List<Long> ids);
 
-	@PutMapping(path = "/api/leases/{leaseId}")
-	FarmLeaseDTO update(@PathVariable Long leaseId, @RequestBody FarmLeaseDTO farmLeaseDTO);
+	@PutMapping("/api/leases/{leaseId}")
+	FarmLeaseDTO update(@PathVariable Long leaseId, @RequestBody FarmLeaseDTO LeaseDTO);
 
-	@PostMapping(value = "/api/v1/leases", consumes = "application/json")
-	FarmLeaseDTO create(@RequestBody FarmLeaseDTO farmLeaseDTO);
+	@PostMapping(path = "/api/v1/leases", consumes = "application/json")
+	FarmLeaseDTO create(@RequestBody LeaseReqDTO LeaseDTO);
 
 	@DeleteMapping("/api/v1/leases/{leaseId}")
 	void delete(@PathVariable Long leaseId);

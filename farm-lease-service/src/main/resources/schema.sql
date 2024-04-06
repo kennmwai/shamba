@@ -24,7 +24,7 @@ create table farm_leases (
 -- ALTER TABLE farm_leases ALTER COLUMN id SET DEFAULT nextval('farm_lease_seq');
 
 create table farm_payments (
-    id BIGINT PRIMARY KEY,
+    id bigint AUTO_INCREMENT PRIMARY KEY,
     payment_status varchar(53) not null,
     payment_amount float(53) not null,
     payment_method varchar(53) not null,

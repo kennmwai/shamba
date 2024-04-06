@@ -8,16 +8,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmleaseservice.entity.FarmLease;
-import com.kenm.spring.farmleaseservice.entity.FarmPayment;
 import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
-import com.kenm.spring.farmleaseservice.mapper.PaymentMapper;
 import com.kenm.spring.farmleaseservice.repository.FarmLeaseRepository;
-import com.kenm.spring.farmleaseservice.repository.FarmPaymentRepository;
 import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
 
 /**
@@ -31,13 +29,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	private FarmLeaseRepository farmLeaseRepository;
 
 	@Autowired
-	private FarmPaymentRepository paymentRepository;
-
-	@Autowired
 	private FarmLeaseMapper farmLeaseMapper;
-
-	@Autowired
-	private PaymentMapper paymentMapper;
 
 	@Override
 	public long count() {
@@ -45,7 +37,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public boolean exists(Long id) {
+	public boolean exists(@NonNull Long id) {
 		return farmLeaseRepository.existsById(id);
 	}
 
@@ -58,7 +50,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public List<FarmLeaseDTO> findAllById(Iterable<Long> ids) throws ResourceNotFoundException {
+	public List<FarmLeaseDTO> findAllById(@NonNull Iterable<Long> ids) throws ResourceNotFoundException {
 		List<FarmLease> farmLeases = farmLeaseRepository.findAllById(ids);
 		List<FarmLeaseDTO> farmLeaseDTOs = farmLeases.stream()
 				.map(farmLease -> farmLeaseMapper.toFarmLeaseDTO(farmLease)).collect(Collectors.toList());
@@ -66,7 +58,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public FarmLeaseDTO findById(Long id) throws ResourceNotFoundException {
+	public FarmLeaseDTO findById(@NonNull Long id) throws ResourceNotFoundException {
 		FarmLease farmLease = farmLeaseRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with id " + id + " not found."));
 		FarmLeaseDTO farmLeaseDTO = farmLeaseMapper.toFarmLeaseDTO(farmLease);
@@ -74,7 +66,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public List<FarmLeaseDTO> getFarmLeaseByFarmId(Long id) throws ResourceNotFoundException {
+	public List<FarmLeaseDTO> getFarmLeaseByFarmId(@NonNull Long id) throws ResourceNotFoundException {
 		List<FarmLease> farmLeases = farmLeaseRepository.findByFarmId(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Farm Lease with id " + id + " not found."));
 		List<FarmLeaseDTO> farmLeaseDTOs = farmLeases.stream()
@@ -110,23 +102,16 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public FarmLeaseDTO updateFarmLease(Long id, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException {
-		if (id == null) {
-			throw new IllegalArgumentException("Farm ID cannot be null.");
-		}
-
-		boolean exists = exists(id);
-		if (!exists) {
-			throw new ResourceNotFoundException("Farm Lease with id " + id + " not found.");
-		}
-
-		if (farmLeaseDTO.getPayments() == null) {
-			farmLeaseDTO.setPayments(Collections.emptyList());
+	public FarmLeaseDTO updateFarmLease(@NonNull Long leaseId, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException {
+		if (!exists(leaseId)) {
+			throw new ResourceNotFoundException("Farm Lease with ID " + leaseId + " not found.");
 		}
 
 		FarmLease updatedFarmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
-		updatedFarmLease.setId(id); // Preserve the original lease ID
-		updatedFarmLease = farmLeaseRepository.save(updatedFarmLease);
+		updatedFarmLease.setId(leaseId);
+		farmLeaseRepository.save(updatedFarmLease);
+
+		// paymentService.updatePayments(farmLeaseDTO.getPayments(), updatedFarmLease);
 
 		return farmLeaseMapper.toFarmLeaseDTO(updatedFarmLease);
 	}
@@ -138,7 +123,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 		FarmLease farmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
 		farmLease = farmLeaseRepository.save(farmLease);
 
-		createPaymentsForLease(farmLeaseDTO, farmLease);
+		// createPaymentsForLease(farmLeaseDTO, farmLease);
 
 		return farmLeaseMapper.toFarmLeaseDTO(farmLease);
 	}
@@ -152,13 +137,13 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 		}
 	}
 
-	private void createPaymentsForLease(FarmLeaseDTO farmLeaseDTO, FarmLease farmLease) {
-		farmLeaseDTO.getPayments().forEach(paymentDTO -> {
-			FarmPayment payment = paymentMapper.toFarmPayment(paymentDTO);
-			payment.setFarmLease(farmLease);
-			paymentRepository.save(payment);
-		});
-	}
+//	private void createPaymentsForLease(FarmLeaseDTO farmLeaseDTO, FarmLease farmLease) {
+//		farmLeaseDTO.getPayments().forEach(payment -> paymentService.createPayment(payment, farmLease));
+//	}
+//
+//	private void updatePaymentsForLease(FarmLeaseDTO farmLeaseDTO, FarmLease farmLease) {
+//		farmLeaseDTO.getPayments().forEach(payment -> paymentService.updatePayment(payment, farmLease));
+//	}
 
 	@Override
 	public void deleteAll() throws ResourceNotFoundException {
@@ -170,11 +155,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public void delete(Long id) throws ResourceNotFoundException {
-
-		if (id == null) {
-			throw new IllegalArgumentException("Farm ID cannot be null.");
-		}
+	public void delete(@NonNull Long id) throws ResourceNotFoundException {
 
 		boolean exists = exists(id);
 		if (!exists) {
@@ -184,7 +165,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public void deleteByIds(Iterable<Long> ids) throws ResourceNotFoundException {
+	public void deleteByIds(@NonNull Iterable<Long> ids) throws ResourceNotFoundException {
 		if (!ids.iterator().hasNext()) {
 			return; // Avoid unnecessary processing if the ids are empty
 		}

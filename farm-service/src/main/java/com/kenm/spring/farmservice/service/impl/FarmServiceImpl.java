@@ -14,9 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmservice.dto.FarmDTO;
-import com.kenm.spring.farmservice.dto.FarmResourceDTO;
+import com.kenm.spring.farmservice.dto.payload.FarmResourceDTO;
+import com.kenm.spring.farmservice.dto.payload.request.FarmReqDTO;
+import com.kenm.spring.farmservice.dto.payload.response.FarmLeaseDTO;
 import com.kenm.spring.farmservice.entity.Farm;
 import com.kenm.spring.farmservice.exception.ResourceAlreadyExistsException;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
@@ -124,7 +125,7 @@ public class FarmServiceImpl implements FarmService {
 	public List<FarmResourceDTO> getFarmsByIds(@NonNull Iterable<Long> ids) throws ResourceNotFoundException {
 		List<Farm> farms = farmRepository.findAllById(ids);
 		List<FarmDTO> farmDetails = farmMapper.mapToFarmDTOs(farms);
-		
+
 		List<FarmResourceDTO> farmResources = new ArrayList<>();
 
 		farmDetails.parallelStream().forEach(farm -> {
@@ -151,22 +152,23 @@ public class FarmServiceImpl implements FarmService {
 	}
 
 	@Override
-	public FarmDTO updateFarm(@NonNull Long id, @NonNull FarmDTO farmDTO) throws ResourceNotFoundException {
+	public FarmDTO updateFarm(@NonNull Long FarmId, @NonNull FarmDTO farmDTO) throws ResourceNotFoundException {
+
+		if (!exists(FarmId)) {
+			 	throw new ResourceNotFoundException("Farm with id {" + FarmId + "} does not exists.");
+		 }
+		 
 		Farm updatedFarm = farmMapper.mapToFarm(farmDTO);
-		updatedFarm.setId(id);
+		updatedFarm.setId(FarmId);
 		updatedFarm = farmRepository.save(updatedFarm);
 		FarmDTO updatedFarmDTO = farmMapper.mapToFarmDTO(updatedFarm);
 		return updatedFarmDTO;
 	}
 
 	@Override
-	public FarmDTO createFarm(FarmDTO farmDTO) throws ResourceAlreadyExistsException {
+	public FarmDTO createFarm(@NonNull FarmReqDTO farmDTO) throws ResourceAlreadyExistsException {
 		Farm newFarm = farmMapper.mapToFarm(farmDTO);
 
-		// boolean exists = this.exists(newFarm.getId());
-		// if (exists) {
-		// 	throw new ResourceAlreadyExistsException("Farm with id " + newFarm.getId() + " already exists.");
-		// }
 		FarmDTO createdFarmDTO = farmMapper.mapToFarmDTO(farmRepository.save(newFarm));
 		return createdFarmDTO;
 	}

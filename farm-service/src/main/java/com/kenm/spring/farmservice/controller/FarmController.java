@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kenm.spring.farmservice.dto.FarmDTO;
-import com.kenm.spring.farmservice.dto.FarmResourceDTO;
+import com.kenm.spring.farmservice.dto.payload.FarmResourceDTO;
+import com.kenm.spring.farmservice.dto.payload.request.FarmReqDTO;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmservice.service.FarmService;
 
@@ -82,7 +83,7 @@ public class FarmController {
 	}
 
 	@PostMapping
-	public ResponseEntity<FarmDTO> createFarm(@RequestBody FarmDTO farmDTO) {
+	public ResponseEntity<FarmDTO> createFarm(@RequestBody @Valid @NonNull FarmReqDTO farmDTO) {
 		FarmDTO createdFarmDTO = farmService.createFarm(farmDTO);
 		return new ResponseEntity<>(createdFarmDTO, HttpStatus.CREATED);
 	}
@@ -101,7 +102,7 @@ public class FarmController {
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteByIds(@RequestParam List<Long> ids) {
+	public ResponseEntity<?> deleteByIds(@RequestParam @NonNull List<Long> ids) {
 		farmService.deleteAllById(ids);
 		return ResponseEntity.noContent().build();
 	}

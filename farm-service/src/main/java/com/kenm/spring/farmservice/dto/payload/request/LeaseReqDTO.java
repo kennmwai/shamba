@@ -1,9 +1,4 @@
-/**
- * 
- */
 package com.kenm.spring.farmservice.dto.payload.request;
-
-import java.io.Serializable;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -18,9 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeaseReqDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class LeaseReqDTO {
 
 	@NotBlank(message = "Lease Farm Id {farmId} is required")
 	private Long farmId;

@@ -7,51 +7,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmleaseservice.dto.FarmPaymentDTO;
 import com.kenm.spring.farmleaseservice.entity.FarmLease;
 import com.kenm.spring.farmleaseservice.entity.FarmPayment;
 import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
+import com.kenm.spring.farmleaseservice.mapper.PaymentMapper;
 
 /**
  * @author User
  *
  */
+@Component
 public class FarmLeaseMapperImpl implements FarmLeaseMapper {
 
-	private List<FarmPayment> mapDTOsToPayments(List<FarmPaymentDTO> paymentDTOs) {
-
-		List<FarmPayment> payments = paymentDTOs.stream()
-				.map(paymentDTO -> {
-					if (paymentDTO == null) {
-						return null;
-					}
-					FarmPayment payment = new FarmPayment();
-					BeanUtils.copyProperties(paymentDTO, payment);
-					return payment;
-				})
-				.collect(Collectors.toList());
-
-		return payments;
-	}
-
-	private List<FarmPaymentDTO> mapPaymentsToDTOs(List<FarmPayment> payments) {
-        return payments.stream()
-                .map(payment -> {
-					if (payment == null) {
-						return null;
-					}
-                    FarmPaymentDTO paymentDTO = new FarmPaymentDTO();
-                    BeanUtils.copyProperties(payment, paymentDTO);
-                    return paymentDTO;
-                })
-                .collect(Collectors.toList());
-    }
+	@Autowired
+	private PaymentMapper paymentMapper;
 
 	@Override
 	public FarmLease toFarmLease(FarmLeaseDTO farmLeaseDTO) {
-		List<FarmPayment> payments = mapDTOsToPayments(farmLeaseDTO.getPayments());
+		List<FarmPayment> payments = paymentMapper.toFarmPayments(farmLeaseDTO.getPayments());
 		FarmLease farmLease = new FarmLease();
 
 		BeanUtils.copyProperties(farmLeaseDTO, farmLease);
@@ -62,12 +40,28 @@ public class FarmLeaseMapperImpl implements FarmLeaseMapper {
 
 	@Override
 	public FarmLeaseDTO toFarmLeaseDTO(FarmLease farmLease) {
-		List<FarmPaymentDTO> paymentDTOs = mapPaymentsToDTOs(farmLease.getPayments());
+		List<FarmPaymentDTO> paymentDTOs = paymentMapper.toFarmPaymentDTOs(farmLease.getPayments());
 		FarmLeaseDTO farmLeaseDTO = new FarmLeaseDTO();
 
 		BeanUtils.copyProperties(farmLease, farmLeaseDTO);
 		farmLeaseDTO.setPayments(paymentDTOs);
 
 		return farmLeaseDTO;
+	}
+
+	@Override
+	public List<FarmLeaseDTO> toFarmLeaseDTOs(List<FarmLease> farmLeases) {
+		if (farmLeases == null) {
+			return null;
+		}
+		return farmLeases.stream().map(this::toFarmLeaseDTO).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<FarmLease> toFarmLeases(List<FarmLeaseDTO> farmLeaseDTOs) {
+		if (farmLeaseDTOs == null) {
+			return null;
+		}
+		return farmLeaseDTOs.stream().map(this::toFarmLease).collect(Collectors.toList());
 	}
 }

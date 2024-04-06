@@ -1,7 +1,5 @@
 package com.kenm.spring.farmservice.dto.payload.request;
 
-import java.io.Serializable;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -17,9 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FarmReqDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class FarmReqDTO {
 
 	@NotBlank(message = "Farm name cannot be blank")
 	@Size(min = 1, max = 255)

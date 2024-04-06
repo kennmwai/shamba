@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.kenm.spring.farmservice.controller;
 
@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
+import com.kenm.spring.farmservice.dto.payload.request.LeaseReqDTO;
+import com.kenm.spring.farmservice.dto.payload.response.FarmLeaseDTO;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmservice.service.LeaseServiceClient;
 
@@ -59,8 +60,8 @@ public class LeasesController {
 		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
 	}
 	@PostMapping("/leases")
-	public ResponseEntity<FarmLeaseDTO> createLease(@Valid @RequestBody FarmLeaseDTO farmLeaseDTO) {
-		FarmLeaseDTO createdLeaseDTO = leaseServiceClient.create(farmLeaseDTO);
+	public ResponseEntity<FarmLeaseDTO> createLease(@Valid @RequestBody LeaseReqDTO LeaseDTO) {
+		FarmLeaseDTO createdLeaseDTO = leaseServiceClient.create(LeaseDTO);
 		return new ResponseEntity<>(createdLeaseDTO, HttpStatus.CREATED);
 	}
 
@@ -71,9 +72,9 @@ public class LeasesController {
 		return new ResponseEntity<>(updatedLeaseDTO, HttpStatus.OK);
 	}
 
-	@DeleteMapping("/leases/{id}")
-	public ResponseEntity<?> deleteLease(@PathVariable Long id) {
-		leaseServiceClient.delete(id);
+	@DeleteMapping("/leases/{leaseId:\\d+}")
+	public ResponseEntity<?> deleteLease(@PathVariable Long leaseId) {
+		leaseServiceClient.delete(leaseId);
 		return ResponseEntity.noContent().build();
 	}
 

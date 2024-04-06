@@ -1,6 +1,5 @@
 package com.kenm.spring.farmservice.dto.payload.request;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 import com.kenm.spring.farmservice.dto.validation.ValidIsoDate;
@@ -17,9 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentReqDTO implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class PaymentReqDTO {
 
 	@NotBlank(message = "Lease {paymentStatus} can not be null.")
 	private String paymentStatus;

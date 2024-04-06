@@ -5,9 +5,8 @@ package com.kenm.spring.farmservice.mapper;
 
 import java.util.List;
 
-import org.springframework.lang.NonNull;
-
 import com.kenm.spring.farmservice.dto.FarmDTO;
+import com.kenm.spring.farmservice.dto.payload.request.FarmReqDTO;
 import com.kenm.spring.farmservice.entity.Farm;
 
 /**
@@ -16,12 +15,14 @@ import com.kenm.spring.farmservice.entity.Farm;
  */
 public interface FarmMapper {
 
-	Farm mapToFarm(@NonNull FarmDTO farmDTO);
+	Farm mapToFarm(FarmDTO farmDTO);
 
-	FarmDTO mapToFarmDTO(@NonNull Farm farm);
+	Farm mapToFarm(FarmReqDTO farmReqDTO);
 
-	List<FarmDTO> mapToFarmDTOs(@NonNull List<Farm> farms);
+	FarmDTO mapToFarmDTO(Farm farm);
 
-	List<Farm> mapToFarms(@NonNull List<FarmDTO> farmDTOs);
+	List<FarmDTO> mapToFarmDTOs(List<Farm> farms);
+
+	List<Farm> mapToFarms(List<FarmDTO> farmDTOs);
 
 }
