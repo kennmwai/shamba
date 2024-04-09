@@ -1,0 +1,160 @@
+version: '3.8'
+services:
+
+  # Database
+  shamba-mysql-db:
+    image: mysql:5.7
+    container_name: shamba-mysql-db
+    environment:
+      MYSQL_DATABASE: shamba_db
+      MYSQL_USER: mkulima
+      MYSQL_PASSWORD: 'PaSSworD'
+      MYSQL_ROOT_PASSWORD: rootpassword
+
+    volumes:
+      - ./shamba-db-volume:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    networks:
+      - shamba-app-network
+
+  # Core services
+  config-server:
+    build:
+      context: ./farm-config-server-service
+      args:
+        JAR_FILE: farm-config-server-service-0.0.1-SNAPSHOT.jar
+      dockerfile: Dockerfile
+    image: farm-config-server-service
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+      - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCH_LOCATIONS=classpath:/config
+      - SPRING_DATASOURCE_URL=jdbc:mysql://shamba-mysql-db:3306/shamba?useSSL=false
+      - SPRING_DATASOURCE_USERNAME=shamba
+      - SPRING_DATASOURCE_PASSWORD=shamapassword
+    networks:
+      - shamba-app-network
+
+  eureka-server:
+    build:
+      context: ./farm-eureka-discovery-service
+      args:
+        JAR_FILE: farm-eureka-discovery-service-0.0.1-SNAPSHOT.jar
+      dockerfile: Dockerfile
+    image: farm-eureka-discovery-service
+    restart: always
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+    networks:
+      - shamba-app-network
+
+  api-gateway:
+    build:
+      context: ./farm-api-gateway-service
+      args:
+        JAR_FILE: farm-api-gateway-service-0.0.1-SNAPSHOT.jar
+      dockerfile: Dockerfile
+    image: farm-api-gateway-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    networks:
+      - shamba-app-network
+
+  client-service:
+    build:
+      context: ./farm-client-service
+      args:
+        JAR_FILE: farm-client-service-0.0.1-SNAPSHOT.jar
+      dockerfile: Dockerfile
+    image: farm-client-service
+    ports:
+      - "8001:8001"
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    networks:
+      - shamba-app-network
+
+  farm-service:
+    build:
+      context: ./farm-service
+      args:
+        JAR_FILE: farm-service-0.0.1-SNAPSHOT.jar
+      dockerfile: Dockerfile
+    image: farm-service
+    ports:
+      - "8002:8002"
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    networks:
+      - shamba-app-network
+
+  lease-service:
+    build:
+      context: ./farm-lease-service
+      args:
+        JAR_FILE: farm-lease-service-0.0.1-SNAPSHOT.jar
+      dockerfile: Dockerfile
+    image: farm-lease-service
+    ports:
+      - "8003:8003"
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    networks:
+      - shamba-app-network
+
+  # Tracing service
+  # shamba-zipkin:
+  #   image: openzipkin/zipkin
+  #   container_name: shamba-zipkin
+  #   hostname: shamba-zipkin
+  #   ports:
+  #     - "9411:9411"
+  #   networks:
+  #     - shamba-app-network
+
+  # Monitoring Services
+  shamba-prometheus:
+    build:
+      context: ./farm-observability/prometheus
+      dockerfile: Dockerfile
+    image: farm-prometheus
+    container_name: shamba-prometheus
+    hostname: shamba-prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - shamba-app-network
+
+  shamba-grafana:
+    build:
+      context: ./farm-observability/monitoring/graphana
+      dockerfile: Dockerfile
+    image: graphana
+    container_name: shamba-graphana
+    hostname: shamba-graphana
+    ports:
+      - "3030:3000"
+    volumes:
+      - shamba-graphana-volume:/var/lib/grafana
+    networks:
+      - shamba-app-network
+
+networks:
+  default:
+    name: shamba-network
