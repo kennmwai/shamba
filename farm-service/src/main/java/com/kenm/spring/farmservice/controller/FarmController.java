@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.dto.payload.FarmResourceDTO;
-import com.kenm.spring.farmservice.dto.payload.request.FarmReqDTO;
+import com.kenm.spring.farmservice.dto.payload.request.CreateFarmReq;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmservice.service.FarmService;
 
@@ -83,7 +83,7 @@ public class FarmController {
 	}
 
 	@PostMapping
-	public ResponseEntity<FarmDTO> createFarm(@RequestBody @Valid @NonNull FarmReqDTO farmDTO) {
+	public ResponseEntity<FarmDTO> createFarm(@RequestBody @Valid @NonNull CreateFarmReq farmDTO) {
 		FarmDTO createdFarmDTO = farmService.createFarm(farmDTO);
 		return new ResponseEntity<>(createdFarmDTO, HttpStatus.CREATED);
 	}

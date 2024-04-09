@@ -4,13 +4,15 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class FarmPaymentDTO implements Serializable {
+@NoArgsConstructor
+@Builder
+public class GetPaymentInfoResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

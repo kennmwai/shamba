@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.dto.payload.FarmResourceDTO;
-import com.kenm.spring.farmservice.dto.payload.request.FarmReqDTO;
-import com.kenm.spring.farmservice.dto.payload.response.FarmLeaseDTO;
+import com.kenm.spring.farmservice.dto.payload.request.CreateFarmReq;
+import com.kenm.spring.farmservice.dto.payload.response.GetLeaseInfoResponse;
 import com.kenm.spring.farmservice.entity.Farm;
 import com.kenm.spring.farmservice.exception.ResourceAlreadyExistsException;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
@@ -82,7 +82,7 @@ public class FarmServiceImpl implements FarmService {
 			FarmResourceDTO farmResourceDTO = new FarmResourceDTO();
 			farmResourceDTO.setFarm(farm);
 			try {
-				List<FarmLeaseDTO> leaseDetails = farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
+				List<GetLeaseInfoResponse> leaseDetails = farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
 				farmResourceDTO.setLease(leaseDetails.isEmpty() ? Collections.emptyList() : leaseDetails);
 			} catch (Exception e) {
 				logger.error("Error: {}", e.getMessage());
@@ -105,7 +105,7 @@ public class FarmServiceImpl implements FarmService {
 		FarmResourceDTO farmResource = new FarmResourceDTO();
 		farmResource.setFarm(farmDetails);
 
-		CompletableFuture<List<FarmLeaseDTO>> leaseDetailsFuture = CompletableFuture.supplyAsync(() -> {
+		CompletableFuture<List<GetLeaseInfoResponse>> leaseDetailsFuture = CompletableFuture.supplyAsync(() -> {
 			try {
 				return farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
 			} catch (Exception e) {
@@ -115,7 +115,7 @@ public class FarmServiceImpl implements FarmService {
 		});
 
 		// Join the future to wait for the result without blocking the thread
-		List<FarmLeaseDTO> leaseDetails = leaseDetailsFuture.join();
+		List<GetLeaseInfoResponse> leaseDetails = leaseDetailsFuture.join();
 		farmResource.setLease(leaseDetails.isEmpty() ? Collections.emptyList() : leaseDetails);
 
 		return farmResource;
@@ -132,7 +132,7 @@ public class FarmServiceImpl implements FarmService {
 			FarmResourceDTO farmResource = new FarmResourceDTO();
 			farmResource.setFarm(farm);
 
-			CompletableFuture<List<FarmLeaseDTO>> leaseDetailsFuture = CompletableFuture.supplyAsync(() -> {
+			CompletableFuture<List<GetLeaseInfoResponse>> leaseDetailsFuture = CompletableFuture.supplyAsync(() -> {
 				try {
 					return farmLeaseServiceClient.getLeaseByFarmId(farm.getId());
 				} catch (Exception e) {
@@ -142,7 +142,7 @@ public class FarmServiceImpl implements FarmService {
 			});
 
 			// Join the future to wait for the result without blocking the thread
-			List<FarmLeaseDTO> leaseDetails = leaseDetailsFuture.join();
+			List<GetLeaseInfoResponse> leaseDetails = leaseDetailsFuture.join();
 			farmResource.setLease(leaseDetails.isEmpty() ? Collections.emptyList() : leaseDetails);
 
 			farmResources.add(farmResource);
@@ -166,7 +166,7 @@ public class FarmServiceImpl implements FarmService {
 	}
 
 	@Override
-	public FarmDTO createFarm(@NonNull FarmReqDTO farmDTO) throws ResourceAlreadyExistsException {
+	public FarmDTO createFarm(@NonNull CreateFarmReq farmDTO) throws ResourceAlreadyExistsException {
 		Farm newFarm = farmMapper.mapToFarm(farmDTO);
 
 		FarmDTO createdFarmDTO = farmMapper.mapToFarmDTO(farmRepository.save(newFarm));

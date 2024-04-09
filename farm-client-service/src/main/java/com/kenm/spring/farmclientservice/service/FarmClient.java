@@ -58,7 +58,7 @@ public interface FarmClient {
 
 	@DeleteMapping("/api/v1/farms/all")
 	void deleteAllFarms();
-	
+
 	// Lease
 
 	@GetMapping("/api/v1/farms/{farmId}/leases")
@@ -72,7 +72,7 @@ public interface FarmClient {
 
 	@GetMapping("/api/v1/farms/leases")
 	List<LeaseDTO> getLeaseByLeasedIds(@RequestParam List<Long> leaseIds);
-	
+
 	@PostMapping("/api/v1/farms/leases")
 	LeaseDTO createLease(@Valid @RequestBody LeaseRequest LeaseReqDTO);
 

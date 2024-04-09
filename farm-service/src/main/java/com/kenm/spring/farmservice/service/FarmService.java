@@ -8,7 +8,7 @@ import org.springframework.lang.NonNull;
 
 import com.kenm.spring.farmservice.dto.FarmDTO;
 import com.kenm.spring.farmservice.dto.payload.FarmResourceDTO;
-import com.kenm.spring.farmservice.dto.payload.request.FarmReqDTO;
+import com.kenm.spring.farmservice.dto.payload.request.CreateFarmReq;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 
 import jakarta.validation.Valid;
@@ -35,7 +35,7 @@ public interface FarmService {
 
 	FarmDTO updateFarm(@NonNull Long id, @Valid @NonNull FarmDTO farmDTO) throws ResourceNotFoundException;
 
-	FarmDTO createFarm(@Valid @NonNull FarmReqDTO farmDTO);
+	FarmDTO createFarm(@Valid @NonNull CreateFarmReq farmDTO);
 
 	void deleteAll();
 

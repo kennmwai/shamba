@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,9 +14,10 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class FarmReqDTO {
+@NoArgsConstructor
+@Builder
+public class CreateFarmReq {
 
 	@NotBlank(message = "Farm name cannot be blank")
 	@Size(min = 1, max = 255)

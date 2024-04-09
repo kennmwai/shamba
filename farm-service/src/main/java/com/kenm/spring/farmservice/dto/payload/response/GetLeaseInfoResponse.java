@@ -6,14 +6,16 @@ import java.util.List;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class FarmLeaseDTO implements Serializable {
+@NoArgsConstructor
+@Builder
+public class GetLeaseInfoResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -43,5 +45,5 @@ public class FarmLeaseDTO implements Serializable {
 	@NotBlank(message = "Lease End Date is required")
 	private String leaseEnd;
 
-	private List<FarmPaymentDTO> payments;
+	private List<GetPaymentInfoResponse> payments;
 }

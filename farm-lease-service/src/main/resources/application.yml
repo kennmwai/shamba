@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: farm-lease-service
+
+  profiles:
+    active: development
+
+  config:
+    import: optional:configserver:http://localhost:8888/
+    
+  docker:
+    compose:
+      enabled: false
+
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/farm_db
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: ''
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ''
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  sql:
+    init:
+      mode: always
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+
+eureka:
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+server:
+  port: 8083

@@ -6,6 +6,7 @@ import com.kenm.spring.farmservice.dto.validation.ValidIsoDate;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,9 +15,10 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class PaymentReqDTO {
+@NoArgsConstructor
+@Builder
+public class CreatePaymentReq {
 
 	@NotBlank(message = "Lease {paymentStatus} can not be null.")
 	private String paymentStatus;

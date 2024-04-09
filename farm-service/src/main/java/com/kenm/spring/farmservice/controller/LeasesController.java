@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kenm.spring.farmservice.dto.payload.request.LeaseReqDTO;
-import com.kenm.spring.farmservice.dto.payload.response.FarmLeaseDTO;
+import com.kenm.spring.farmservice.dto.payload.request.CreateLeaseReq;
+import com.kenm.spring.farmservice.dto.payload.response.GetLeaseInfoResponse;
 import com.kenm.spring.farmservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmservice.service.LeaseServiceClient;
 
@@ -38,37 +38,37 @@ public class LeasesController {
 
 	@GetMapping("/{id}/leases")
 	public ResponseEntity<?> getLeaseByFarmId(@PathVariable Long id) {
-		List<FarmLeaseDTO> leaseDetails = leaseServiceClient.getLeaseByFarmId(id);
+		List<GetLeaseInfoResponse> leaseDetails = leaseServiceClient.getLeaseByFarmId(id);
 		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
 	}
 
 	@GetMapping("/leases/{id}")
 	public ResponseEntity<?> getLeaseByLeasedId(@PathVariable Long id) {
-		FarmLeaseDTO leaseDetails = leaseServiceClient.getLeaseById(id);
+		GetLeaseInfoResponse leaseDetails = leaseServiceClient.getLeaseById(id);
 		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
 	}
 
 	@GetMapping("/leases/all")
 	public ResponseEntity<?> getAllLeases() {
-		List<FarmLeaseDTO> leaseDetails = leaseServiceClient.getLeases();
+		List<GetLeaseInfoResponse> leaseDetails = leaseServiceClient.getLeases();
 		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
 	}
 
 	@GetMapping("/leases")
 	public ResponseEntity<?> getLeaseByLeasedIds(@RequestParam List<Long> ids) {
-		List<FarmLeaseDTO> leaseDetails = leaseServiceClient.getLeaseByLeasedId(ids);
+		List<GetLeaseInfoResponse> leaseDetails = leaseServiceClient.getLeaseByLeasedId(ids);
 		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
 	}
 	@PostMapping("/leases")
-	public ResponseEntity<FarmLeaseDTO> createLease(@Valid @RequestBody LeaseReqDTO LeaseDTO) {
-		FarmLeaseDTO createdLeaseDTO = leaseServiceClient.create(LeaseDTO);
+	public ResponseEntity<GetLeaseInfoResponse> createLease(@Valid @RequestBody CreateLeaseReq LeaseDTO) {
+		GetLeaseInfoResponse createdLeaseDTO = leaseServiceClient.create(LeaseDTO);
 		return new ResponseEntity<>(createdLeaseDTO, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/leases/{id}")
-	public ResponseEntity<FarmLeaseDTO> updateLease(@PathVariable Long id, @RequestBody FarmLeaseDTO farmLeaseDTO)
+	public ResponseEntity<GetLeaseInfoResponse> updateLease(@PathVariable Long id, @RequestBody GetLeaseInfoResponse getLeaseInfoResponse)
 			throws ResourceNotFoundException {
-		FarmLeaseDTO updatedLeaseDTO = leaseServiceClient.update(id, farmLeaseDTO);
+		GetLeaseInfoResponse updatedLeaseDTO = leaseServiceClient.update(id, getLeaseInfoResponse);
 		return new ResponseEntity<>(updatedLeaseDTO, HttpStatus.OK);
 	}
 

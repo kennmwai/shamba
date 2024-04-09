@@ -10,7 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import com.kenm.spring.farmservice.dto.FarmDTO;
-import com.kenm.spring.farmservice.dto.payload.request.FarmReqDTO;
+import com.kenm.spring.farmservice.dto.payload.request.CreateFarmReq;
 import com.kenm.spring.farmservice.entity.Farm;
 import com.kenm.spring.farmservice.mapper.FarmMapper;
 
@@ -32,7 +32,7 @@ public class FarmMapperImpl implements FarmMapper {
 	}
 
 	@Override
-	public Farm mapToFarm(FarmReqDTO farmReqDto) {
+	public Farm mapToFarm(CreateFarmReq farmReqDto) {
 		Farm farm = new Farm();
 		BeanUtils.copyProperties(farmReqDto, farm);
 		return farm;		

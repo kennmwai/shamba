@@ -6,7 +6,7 @@ package com.kenm.spring.farmservice.mapper;
 import java.util.List;
 
 import com.kenm.spring.farmservice.dto.FarmDTO;
-import com.kenm.spring.farmservice.dto.payload.request.FarmReqDTO;
+import com.kenm.spring.farmservice.dto.payload.request.CreateFarmReq;
 import com.kenm.spring.farmservice.entity.Farm;
 
 /**
@@ -17,7 +17,7 @@ public interface FarmMapper {
 
 	Farm mapToFarm(FarmDTO farmDTO);
 
-	Farm mapToFarm(FarmReqDTO farmReqDTO);
+	Farm mapToFarm(CreateFarmReq createFarmReq);
 
 	FarmDTO mapToFarmDTO(Farm farm);
 

@@ -11,30 +11,30 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.kenm.spring.farmservice.dto.payload.request.LeaseReqDTO;
-import com.kenm.spring.farmservice.dto.payload.response.FarmLeaseDTO;
+import com.kenm.spring.farmservice.dto.payload.request.CreateLeaseReq;
+import com.kenm.spring.farmservice.dto.payload.response.GetLeaseInfoResponse;
 
 
 @FeignClient(name = "farm-lease-service", url = "${farm-lease-service.url}")
 public interface LeaseServiceClient {
 
 	@GetMapping("/api/v1/leases/all")
-	List<FarmLeaseDTO> getLeases();
+	List<GetLeaseInfoResponse> getLeases();
 
 	@GetMapping("/api/v1/leases/farms/{farmId}")
-	List<FarmLeaseDTO> getLeaseByFarmId(@PathVariable Long farmId);
+	List<GetLeaseInfoResponse> getLeaseByFarmId(@PathVariable Long farmId);
 
 	@GetMapping("/api/v1/leases/{leaseId}")
-	FarmLeaseDTO getLeaseById(@PathVariable Long leaseId);
+	GetLeaseInfoResponse getLeaseById(@PathVariable Long leaseId);
 
 	@GetMapping("/api/v1/leases")
-	List<FarmLeaseDTO> getLeaseByLeasedId(@RequestParam List<Long> ids);
+	List<GetLeaseInfoResponse> getLeaseByLeasedId(@RequestParam List<Long> ids);
 
 	@PutMapping("/api/leases/{leaseId}")
-	FarmLeaseDTO update(@PathVariable Long leaseId, @RequestBody FarmLeaseDTO LeaseDTO);
+	GetLeaseInfoResponse update(@PathVariable Long leaseId, @RequestBody GetLeaseInfoResponse LeaseDTO);
 
 	@PostMapping(path = "/api/v1/leases", consumes = "application/json")
-	FarmLeaseDTO create(@RequestBody LeaseReqDTO LeaseDTO);
+	GetLeaseInfoResponse create(@RequestBody CreateLeaseReq LeaseDTO);
 
 	@DeleteMapping("/api/v1/leases/{leaseId}")
 	void delete(@PathVariable Long leaseId);

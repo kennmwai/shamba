@@ -3,6 +3,7 @@ package com.kenm.spring.farmservice.dto.payload.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,9 +12,10 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class LeaseReqDTO {
+@NoArgsConstructor
+@Builder
+public class CreateLeaseReq {
 
 	@NotBlank(message = "Lease Farm Id {farmId} is required")
 	private Long farmId;
