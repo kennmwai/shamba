@@ -7,7 +7,7 @@ spring:
 
   config:
     import: optional:configserver:http://localhost:8888/
-    
+
   docker:
     compose:
       enabled: false
@@ -59,4 +59,4 @@ management:
         include: '*'
 
 server:
-  port: 8083
+  port: 8003
