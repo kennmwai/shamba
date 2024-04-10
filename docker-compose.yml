@@ -10,9 +10,8 @@ services:
       MYSQL_USER: mkulima
       MYSQL_PASSWORD: 'PaSSworD'
       MYSQL_ROOT_PASSWORD: rootpassword
-
     volumes:
-      - ./shamba-db-volume:/var/lib/mysql
+      - shamba-db-volume:/var/lib/mysql
     ports:
       - "3306:3306"
     expose:
@@ -65,8 +64,8 @@ services:
       - "8080:8080"
     environment:
       - SPRING_PROFILES_ACTIVE=native
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://localhost:8888
     networks:
       - shamba-app-network
 
@@ -81,8 +80,8 @@ services:
       - "8001:8001"
     environment:
       - SPRING_PROFILES_ACTIVE=native
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://localhost:8888
     networks:
       - shamba-app-network
 
@@ -97,8 +96,8 @@ services:
       - "8002:8002"
     environment:
       - SPRING_PROFILES_ACTIVE=native
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://localhost:8888
     networks:
       - shamba-app-network
 
@@ -113,23 +112,24 @@ services:
       - "8003:8003"
     environment:
       - SPRING_PROFILES_ACTIVE=native
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://localhost:8888
     networks:
       - shamba-app-network
 
   # Tracing service
-  # shamba-zipkin:
-  #   image: openzipkin/zipkin
-  #   container_name: shamba-zipkin
-  #   hostname: shamba-zipkin
-  #   ports:
-  #     - "9411:9411"
-  #   networks:
-  #     - shamba-app-network
+  zipkin-service:
+    image: openzipkin/zipkin
+    container_name: shamba-zipkin
+    hostname: shamba-zipkin
+    restart: always
+    ports:
+      - "9411:9411"
+    networks:
+      - shamba-app-network
 
   # Monitoring Services
-  shamba-prometheus:
+  prometheus-service:
     build:
       context: ./farm-observability/prometheus
       dockerfile: Dockerfile
@@ -141,7 +141,7 @@ services:
     networks:
       - shamba-app-network
 
-  shamba-grafana:
+  grafana-service:
     build:
       context: ./farm-observability/monitoring/graphana
       dockerfile: Dockerfile
@@ -155,6 +155,10 @@ services:
     networks:
       - shamba-app-network
 
+volumes:
+  - shamba-db-volume
+  - shamba-graphana-volume
+
 networks:
-  default:
-    name: shamba-network
+	shamba-app-network:
+		driver: bridge

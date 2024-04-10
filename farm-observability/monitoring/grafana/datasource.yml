@@ -35,9 +35,9 @@ deleteDatasources:
   # <int> org id. will default to orgId 1 if not specified
   orgId: 1
   # <string> url
-  url: bookstore-mysql-db:3306
+  url: shamba-mysql-db:3306
   # <string> database user, if used
-  user: bookstoreDBA
+  user: mkulima
   secureJsonData:
     # <string> database password, if used
     password: PaSSworD
