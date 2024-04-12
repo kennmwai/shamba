@@ -1,0 +1,29 @@
+meta {
+  name: updateUser
+  type: http
+  seq: 18
+}
+
+put {
+  url: http://localhost:8001/api/v1/users/2
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjMiLCJpYXQiOjE3MTI5NDcxMzgsImV4cCI6MTcxMzAzMzUzOH0.Vs9YOMN-rHOk8DiyqDK52V2zsfuHLHH7hCMmrOjySXw
+}
+
+body:json {
+    {
+      "username": "user",
+      "email": "user@email.com",
+      "password": "apass123",
+      "roles": [
+        {
+          "id": 1,
+          "name": "ROLE_USER"
+        }
+      ]
+    }
+}
