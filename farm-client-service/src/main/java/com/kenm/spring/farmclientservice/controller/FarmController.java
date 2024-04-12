@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,12 +82,14 @@ public class FarmController {
 	}
 
 	@PostMapping
-	public ResponseEntity<FarmDTO> createFarm(@RequestBody @Valid FarmRequest farmReqDTO) {
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	public ResponseEntity<FarmDTO> createFarm(@RequestBody @Valid @NonNull FarmRequest farmReqDTO) {
 		FarmDTO createdFarmDTO = farmClient.createFarm(farmReqDTO);
 		return new ResponseEntity<>(createdFarmDTO, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<FarmDTO> updateFarm(@PathVariable @NonNull Long id, @Valid @NonNull @RequestBody FarmRequest farmReqDTO)
 			throws ResourceNotFoundException {
 		FarmDTO updatedFarmDTO = farmClient.updateFarm(id, farmReqDTO);
@@ -94,18 +97,21 @@ public class FarmController {
 	}
 
 	@DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteFarm(@PathVariable @NonNull Long id) {
 		farmClient.deleteFarm(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping
-	public ResponseEntity<?> deleteByIds(@RequestParam @NonNull List<Long> framIds) {
-		farmClient.deleteByIds(framIds);
+    @PreAuthorize("hasRole('ADMIN')")
+	public ResponseEntity<?> deleteByIds(@Valid @NonNull @RequestParam List<Long> ids) {
+		farmClient.deleteByIds(ids);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteAllFarms() {
 		farmClient.deleteAllFarms();
 		return ResponseEntity.noContent().build();
@@ -138,12 +144,14 @@ public class FarmController {
 		return new ResponseEntity<>(leaseDetails, HttpStatus.OK);
 	}
 	@PostMapping("/leases")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<LeaseDTO> createLease(@Valid @RequestBody LeaseRequest LeaseReqDTO) {
 		LeaseDTO createdLeaseDTO = farmClient.createLease(LeaseReqDTO);
 		return new ResponseEntity<>(createdLeaseDTO, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/leases/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
 	public ResponseEntity<LeaseDTO> updateLease(@PathVariable Long leaseId, @RequestBody LeaseRequest  LeaseReqDTO)
 			throws ResourceNotFoundException {
 		LeaseDTO updatedLeaseDTO = farmClient.updateLease(leaseId, LeaseReqDTO);
@@ -151,6 +159,7 @@ public class FarmController {
 	}
 
 	@DeleteMapping("/leases/{leaseId:\\d+}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteLease(@PathVariable Long leaseId) {
 		farmClient.deleteLease(leaseId);
 		return ResponseEntity.noContent().build();
