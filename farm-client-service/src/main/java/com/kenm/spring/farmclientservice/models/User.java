@@ -3,6 +3,8 @@ package com.kenm.spring.farmclientservice.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.kenm.spring.farmclientservice.utils.AuditMetadata;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,10 +20,12 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "farm_users",
@@ -29,9 +33,11 @@ import lombok.NoArgsConstructor;
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
     })
-public class User {
+public class User extends AuditMetadata {
 
-    @Id
+    private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

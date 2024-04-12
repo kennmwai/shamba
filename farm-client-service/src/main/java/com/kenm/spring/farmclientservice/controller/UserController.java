@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,12 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
+
+    @GetMapping("/users/current")
+    public ResponseEntity<String> getCurrentUser() {
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        return ResponseEntity.ok(currentUser);
+    }
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDTO>> fetchAllUsers() {
