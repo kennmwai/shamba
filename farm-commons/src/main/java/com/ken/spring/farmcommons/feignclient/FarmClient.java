@@ -1,6 +1,5 @@
 package com.ken.spring.farmcommons.feignclient;
 
-
 import java.util.List;
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -37,7 +36,7 @@ public interface FarmClient {
 	public double calculateTotalPrice(@PathVariable Long farmId);
 
 	@GetMapping("/api/v1/farms/exists/{farmId}")
-	public boolean existsFarmById(@PathVariable  Long farmId);
+	public boolean existsFarmById(@PathVariable Long farmId);
 
 	@GetMapping("/api/v1/farms/count")
 	public long countFarms();

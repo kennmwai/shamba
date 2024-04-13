@@ -18,7 +18,6 @@ import com.ken.spring.farmcommons.web.GetPaymentInfoResponse;
 import com.ken.spring.farmcommons.web.UpdateLeaseRequest;
 import com.ken.spring.farmcommons.web.UpdatePaymentRequest;
 
-
 @FeignClient("farm-lease-service")
 public interface LeaseClient {
 

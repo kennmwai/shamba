@@ -18,10 +18,7 @@ import lombok.Data;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(
-    value = {"created_at", "updated_at"},
-    allowGetters = true
-)
+@JsonIgnoreProperties(value = { "created_at", "updated_at" }, allowGetters = true)
 @Data
 public abstract class AuditMetadata implements Serializable {
 
@@ -35,11 +32,11 @@ public abstract class AuditMetadata implements Serializable {
 	@Column(name = "CREATED_BY", updatable = false)
 	private String createdBy;
 
-    @LastModifiedDate
-    @Column(name = "UPDATED_AT")
-    private LocalDateTime lastModifiedAt;
+	@LastModifiedDate
+	@Column(name = "UPDATED_AT")
+	private LocalDateTime lastModifiedAt;
 
-    @LastModifiedBy
-    @Column(name = "UPDATED_BY")
-    private String lastModifiedBy;
+	@LastModifiedBy
+	@Column(name = "UPDATED_BY")
+	private String lastModifiedBy;
 }
