@@ -35,7 +35,7 @@ public class FarmMapperImpl implements FarmMapper {
 	public Farm mapToFarm(CreateFarmReq farmReqDto) {
 		Farm farm = new Farm();
 		BeanUtils.copyProperties(farmReqDto, farm);
-		return farm;		
+		return farm;
 	}
 
 	@Override
