@@ -20,7 +20,7 @@
     </properties>
 
     <modules>
-        <!-- <module>farm-commons</module> -->
+        <module>farm-commons</module>
         <!-- <module>farm-feign</module> -->
         <module>farm-config-server-service</module>
         <module>farm-eureka-discovery-service</module>
