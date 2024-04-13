@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ken.spring.farmcommons.web.CreateLeaseRequest;
+import com.ken.spring.farmcommons.web.CreatePaymentRequest;
 import com.ken.spring.farmcommons.web.GetLeaseInfoResponse;
+import com.ken.spring.farmcommons.web.GetPaymentInfoResponse;
+import com.ken.spring.farmcommons.web.UpdateLeaseRequest;
+import com.ken.spring.farmcommons.web.UpdatePaymentRequest;
 
 
 @FeignClient("farm-lease-service")
@@ -31,12 +35,35 @@ public interface LeaseClient {
 	List<GetLeaseInfoResponse> getLeaseByLeasedId(@RequestParam List<Long> ids);
 
 	@PutMapping("/api/leases/{leaseId}")
-	GetLeaseInfoResponse update(@PathVariable Long leaseId, @RequestBody GetLeaseInfoResponse LeaseDTO);
+	GetLeaseInfoResponse update(@PathVariable Long leaseId, @RequestBody UpdateLeaseRequest updateLeaseRequest);
 
 	@PostMapping(path = "/api/v1/leases", consumes = "application/json")
 	GetLeaseInfoResponse create(@RequestBody CreateLeaseRequest createLeaseRequest);
 
 	@DeleteMapping("/api/v1/leases/{leaseId}")
 	void delete(@PathVariable Long leaseId);
+
+	// Payments
+
+	@GetMapping("/api/v1/leases/payments/all")
+	List<GetPaymentInfoResponse> payments();
+
+	@GetMapping("/api/v1/leases/{leaseId}/payments")
+	List<GetPaymentInfoResponse> getPaymentsByLeaseId(@PathVariable Long paymentId);
+
+	@GetMapping("/api/v1/leases/payments/{paymentId}")
+	GetPaymentInfoResponse getPaymentById(@PathVariable Long paymentId);
+
+	@GetMapping("/api/v1/leases/payments")
+	List<GetLeaseInfoResponse> getPaymentsByPaymentIds(@RequestParam List<Long> ids);
+
+	@PutMapping("/api/leases/payments/{paymentId}")
+	GetPaymentInfoResponse updatePayment(@PathVariable Long paymentId, @RequestBody UpdatePaymentRequest payment);
+
+	@PostMapping(path = "/api/v1/leases/payments", consumes = "application/json")
+	GetPaymentInfoResponse create(@RequestBody CreatePaymentRequest createPaymentRequest);
+
+	@DeleteMapping("/api/v1/leases/payments/{paymentId}")
+	void deletePayment(@PathVariable Long paymentId);
 
 }
