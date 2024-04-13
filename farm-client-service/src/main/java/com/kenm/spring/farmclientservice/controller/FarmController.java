@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.kenm.spring.farmclientservice.controller;
 
@@ -39,11 +39,11 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping(path = "/api/v1/farms")
 public class FarmController {
-	
+
 	@Autowired
 	private FarmClient farmClient;
-	
-	
+
+
 	@GetMapping("/all")
 	public ResponseEntity<List<FarmResponse>> getAllFarms() {
 		List<FarmResponse> farmResources = farmClient.getAllFarms();
@@ -115,11 +115,11 @@ public class FarmController {
 	public ResponseEntity<?> deleteAllFarms() {
 		farmClient.deleteAllFarms();
 		return ResponseEntity.noContent().build();
-	}	
+	}
 
-	
+
 	// Lease
-	
+
 	@GetMapping("/{id}/leases")
 	public ResponseEntity<List<LeaseDTO>> getLeaseByFarmId(@PathVariable Long id) {
 		List<LeaseDTO> leaseDetails = farmClient.getLeaseByFarmId(id);

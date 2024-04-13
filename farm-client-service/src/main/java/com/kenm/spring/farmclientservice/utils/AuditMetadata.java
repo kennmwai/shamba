@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.kenm.spring.farmclientservice.utils;
 
@@ -31,17 +31,17 @@ import lombok.Data;
 )
 @Data
 public abstract class AuditMetadata implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@CreatedDate
 	@Column(name = "CREATED_AT", updatable = false)
 	private LocalDateTime createdAt;
-    
+
 	@CreatedBy
 	@Column(name = "CREATED_BY", updatable = false)
 	private String createdBy;
-    
+
     @LastModifiedDate
     @Column(name = "UPDATED_AT")
     private LocalDateTime lastModifiedAt;

@@ -34,12 +34,12 @@ public class UserDTO {
     private String password;
 
     private Set<UserRoleDTO> roles = new HashSet<>();
-    
+
 	private LocalDateTime createdAt;
-    
+
     private String createdBy;
-    
+
     private LocalDateTime lastModifiedAt;
-        
+
     private String lastModifiedBy;
 }
