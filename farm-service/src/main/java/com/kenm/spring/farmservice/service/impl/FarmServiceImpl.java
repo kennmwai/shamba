@@ -196,7 +196,7 @@ public class FarmServiceImpl implements FarmService {
 	public double calculateTotalPrice(@NonNull Long id) throws ResourceNotFoundException {
 		Farm farm = farmRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Farm with id " + id + " not found."));
-		double totalPrice = farm.getSize() * farm.getPricePerAcre();
+		double totalPrice = farm.getFarmSize() * farm.getPricePerAcre();
 		return totalPrice;
 	}
 
