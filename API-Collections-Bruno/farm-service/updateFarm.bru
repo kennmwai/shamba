@@ -16,12 +16,29 @@ headers {
 
 body:json {
   {
-    "name": "J Farm",
-    "owner": "Jen",
-    "location": "Raikipia",
-    "type": "Crop",
-    "status": "Inactive",
-    "size": 300,
-    "pricePerAcre": 50
+    "farmName": "My Updated Farm",
+    "farmOwner": "Jane Doe",
+    "farmLocation": "456 Elm St",
+    "farmType": "Livestock Farm",
+    "farmStatus": "Active",
+    "farmSize": 50,
+    "pricePerAcre": 20,
+    "farmFeatures": [
+      {
+        "featureName": "Irrigation",
+        "featureDescription": "Sprinkler irrigation system"
+      },
+      {
+        "featureName": "Fencing",
+        "featureDescription": "Electric fence"
+      }
+    ],
+    "links": [
+      {
+        "imageUrl": "https://example.com/updated-farm-image.jpg",
+        "mapUrl": "https://example.com/updated-farm-map.pdf",
+        "videoUrl": "https://example.com/updated-farm-video.mp4"
+      }
+    ]
   }
 }

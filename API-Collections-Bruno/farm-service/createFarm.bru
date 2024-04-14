@@ -16,12 +16,29 @@ headers {
 
 body:json {
   {
-    "name": "KM Farm",
-    "owner": "Ken",
-    "location": "Laikipia",
-    "type": "Livestock",
-    "status": "Active",
-    "size": 100,
-    "pricePerAcre": 100
+    "farmName": "My Updated Farm",
+    "farmOwner": "Jane Doe",
+    "farmLocation": "456 Elm St",
+    "farmType": "Livestock Farm",
+    "farmStatus": "Active",
+    "farmSize": 20,
+    "pricePerAcre": 10,
+    "farmFeatures": [
+      {
+        "featureName": "Irrigation",
+        "featureDescription": "Drip irrigation system"
+      },
+      {
+        "featureName": "Fencing",
+        "featureDescription": "Barbed wire fence"
+      }
+    ],
+    "links": [
+      {
+        "imageUrl": "https://example.com/farm-image.jpg",
+        "mapUrl": "https://example.com/farm-map.pdf",
+        "videoUrl": "https://example.com/farm-video.mp4"
+      }
+    ]
   }
 }
