@@ -10,12 +10,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author User
@@ -24,12 +21,9 @@ import lombok.ToString;
 @Entity
 @Table(name = "farms")
 @Data
-@NoArgsConstructor
-@Getter
-@Setter
+@Builder
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@NoArgsConstructor
 public class Farm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,4 +49,5 @@ public class Farm {
 
 	@Column(nullable = false)
 	private Double pricePerAcre;
+
 }
