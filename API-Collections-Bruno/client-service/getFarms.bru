@@ -7,10 +7,14 @@ meta {
 get {
   url: http://localhost:8001/api/v1/farms/all
   body: none
-  auth: none
+  auth: bearer
 }
 
 headers {
   Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMjk0NDEyOCwiZXhwIjoxNzEzMDMwNTI4fQ.1sNI1cP9dcp2JCMNHmwFTxFKQwqugQbhMfXZIOYUctk
   ~Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMjkyMjQ0MiwiZXhwIjoxNzEzMDA4ODQyfQ.sa1he4sRIwOUiBrEx93ltDAvAlr0MleSKHjRAQBcG3k
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMzEwNDEzMCwiZXhwIjoxNzEzMTkwNTMwfQ.SwY8o0LplFSKW-y14d7aUPKDzriGdPkztHNbuTBbBGk
 }

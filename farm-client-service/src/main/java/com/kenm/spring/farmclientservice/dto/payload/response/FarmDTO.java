@@ -1,5 +1,7 @@
 package com.kenm.spring.farmclientservice.dto.payload.response;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,12 +12,13 @@ import lombok.NoArgsConstructor;
 public class FarmDTO {
 
 	private Long id;
-	private String name;
-	private String owner;
-	private String location;
-	private String type;
-	private String status;
-	private Integer size;
+	private UUID farmId;
+	private String farmName;
+	private String farmOwner;
+	private String farmLocation;
+	private String farmType;
+	private String farmStatus;
+	private Integer farmSize;
 	private Double pricePerAcre;
 
 }
