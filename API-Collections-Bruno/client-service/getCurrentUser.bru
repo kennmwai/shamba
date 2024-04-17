@@ -1,0 +1,15 @@
+meta {
+  name: getCurrentUser
+  type: http
+  seq: 17
+}
+
+get {
+  url: http://localhost:8001/api/v1/users/current
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMjk0OTc3OSwiZXhwIjoxNzEzMDM2MTc5fQ.kTNrPAJWrczcdBweV6CmSKHfI8cIFlGm66VH8YB11js
+}

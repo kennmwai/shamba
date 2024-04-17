@@ -1,0 +1,27 @@
+meta {
+  name: updateFarm
+  type: http
+  seq: 6
+}
+
+put {
+  url: http://localhost:8001/api/v1/farms/1
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "KM Farm",
+    "owner": "Ken",
+    "location": "Laikipia",
+    "type": "Livestock",
+    "status": "Active",
+    "size": 100,
+    "pricePerAcre": 100
+  }
+}

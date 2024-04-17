@@ -1,0 +1,43 @@
+meta {
+  name: updateLease
+  type: http
+  seq: 6
+}
+
+put {
+  url: http://localhost:8003/api/v1/leases/3
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    //"id": 3,
+    "farmId": 2,
+    "leaseTenant": "Take Off",
+    "leaseType": "Long-term",
+    "leaseStatus": "Active",
+    "leaseRent": 5500,
+    "leaseDuration": "36 months",
+    "leaseStart": "2023-01-12",
+    "leaseEnd": "2025-01-11",
+    "payments": [
+          {
+            "paymentStatus": "PAID",
+            "paymentAmount": 200,
+            "paymentMethod": "Mpesa",
+            "paymentReceipt": 123456789,
+            "paymentDate": [
+                2022,
+                3,
+                10
+              ],
+              "paymentNotes": "TI"
+      }
+    ]
+  }
+}

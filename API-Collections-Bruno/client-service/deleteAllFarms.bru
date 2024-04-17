@@ -1,0 +1,15 @@
+meta {
+  name: deleteAllFarms
+  type: http
+  seq: 7
+}
+
+delete {
+  url: http://localhost:8001/api/v1/farms/all
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbjIiLCJpYXQiOjE3MTI5MjI2NDEsImV4cCI6MTcxMzAwOTA0MX0.C00QdZy80Uf4J9B2Moom0dXJcAv39CMkQ-lUfn8blDo
+}

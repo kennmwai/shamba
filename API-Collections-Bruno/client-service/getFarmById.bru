@@ -1,0 +1,15 @@
+meta {
+  name: getFarmById
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8001/api/v1/farms/10
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMjI2OTA0MiwiZXhwIjoxNzEyMzU1NDQyfQ.yGbvhev8YdzSzdo7JQ_JrQ-dKb9sa-73-Vs6WCAUOWo
+}

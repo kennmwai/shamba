@@ -1,0 +1,27 @@
+meta {
+  name: updateFarm
+  type: http
+  seq: 7
+}
+
+put {
+  url: http://localhost:8002/api/v1/farms/2
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "J Farm",
+    "owner": "Jen",
+    "location": "Raikipia",
+    "type": "Crop",
+    "status": "Inactive",
+    "size": 300,
+    "pricePerAcre": 50
+  }
+}

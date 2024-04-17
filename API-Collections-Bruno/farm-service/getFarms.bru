@@ -1,0 +1,15 @@
+meta {
+  name: getFarms
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8002/api/v1/farms?ids=1,2,3,4
+  body: none
+  auth: none
+}
+
+query {
+  ids: 1,2,3,4
+}

@@ -1,0 +1,16 @@
+meta {
+  name: getFarms
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8001/api/v1/farms/all
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMjk0NDEyOCwiZXhwIjoxNzEzMDMwNTI4fQ.1sNI1cP9dcp2JCMNHmwFTxFKQwqugQbhMfXZIOYUctk
+  ~Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMjkyMjQ0MiwiZXhwIjoxNzEzMDA4ODQyfQ.sa1he4sRIwOUiBrEx93ltDAvAlr0MleSKHjRAQBcG3k
+}
