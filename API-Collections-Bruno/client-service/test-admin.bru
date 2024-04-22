@@ -1,15 +1,15 @@
 meta {
   name: test-admin
   type: http
-  seq: 12
+  seq: 14
 }
 
 get {
   url: http://localhost:8001/api/v1/test/admin
   body: none
-  auth: none
+  auth: bearer
 }
 
-headers {
-  Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtb2QiLCJpYXQiOjE3MTE5MTA5NzEsImV4cCI6MTcxMTk5NzM3MX0.wLmsl5t9WZTdGXRC-KC6l5XQGXjPvM36y23WOeD6MzA
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTcxMzgwNzAwNCwiZXhwIjoxNzEzODkzNDA0fQ.8rpAdNKykX1vWXXWA3I6fw4rCwc0Bv0byIwSh_WSgRc
 }

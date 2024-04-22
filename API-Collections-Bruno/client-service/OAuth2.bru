@@ -1,0 +1,18 @@
+meta {
+  name: OAuth2
+  type: http
+  seq: 11
+}
+
+post {
+  url: http://localhost:8080/realms/master/protocol/openid-connect/token
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  grant_type: client_credentials
+  client_id: shamba-farmlease
+  client_secret: VE7UK2v2Xsdi147UYEDzwPL9mTlq3ty1
+  scope: openid email profile
+}
