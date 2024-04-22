@@ -11,12 +11,11 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UpdateFarmRequest {
 
-	private Long id;
-	private String name;
-	private String owner;
-	private String location;
-	private String type;
-	private String status;
-	private Integer size;
+	private String farmName;
+	private String farmOwner;
+	private String farmLocation;
+	private String farmType;
+	private String farmStatus;
+	private Integer farmSize;
 	private Double pricePerAcre;
 }

@@ -1,5 +1,7 @@
 package com.ken.spring.farmcommons.web;
 
+import java.io.Serializable;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -13,32 +15,34 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CreateFarmRequest {
+public class CreateFarmRequest  implements Serializable  {
 
-	@NotBlank(message = "Farm name cannot be blank")
+	private static final long serialVersionUID = 1L;
+
+	@NotBlank(message = "FarmName cannot be blank")
 	@Size(min = 1, max = 255)
-	private String name;
+	private String farmName;
 
-	@NotBlank(message = "Farm {owner} cannot be blank")
+	@NotBlank(message = "FarmOwner cannot be blank")
 	@Size(min = 1, max = 255)
-	private String owner;
+	private String farmOwner;
 
-	@NotBlank(message = "Farm {location} cannot be blank")
+	@NotBlank(message = "FarmLocation cannot be blank")
 	@Size(min = 1, max = 255)
-	private String location;
+	private String farmLocation;
 
-	@NotBlank(message = "Farm {type} cannot be blank")
+	@NotBlank(message = "FarmType cannot be blank")
 	@Size(min = 1, max = 255)
-	private String type;
+	private String farmType;
 
-	@NotBlank(message = "Farm {status} cannot be blank")
+	@NotBlank(message = "FarmStatus cannot be blank")
 	@Size(min = 1, max = 255)
-	private String status;
+	private String farmStatus;
 
-	@Positive(message = "farm {size} in Acres must be greater than or equal to 1")
-	private Integer size;
+	@Positive(message = "farmSize (Acres) must be greater than or equal to 1")
+	private Integer farmSize;
 
-	@PositiveOrZero(message = "Farm {pricePerAcre} must be greater than or equal to 0")
+	@PositiveOrZero(message = "PricePerAcre must be greater than or equal to 0")
 	private Double pricePerAcre;
 
 }
