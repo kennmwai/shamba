@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
+import com.kenm.spring.farmleaseservice.dto.payload.CreateLeaseRequest;
+import com.kenm.spring.farmleaseservice.dto.payload.UpdateLeaseRequest;
 import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmleaseservice.service.FarmLeaseService;
 
@@ -93,15 +95,15 @@ public class FarmLeaseController {
 	}
 
 	@PostMapping
-	public ResponseEntity<FarmLeaseDTO> createFarmLease(@Valid @RequestBody FarmLeaseDTO farmLeaseDTO) {
-		FarmLeaseDTO createdFarmLeaseDTO = farmLeaseService.createFarmLease(farmLeaseDTO);
+	public ResponseEntity<FarmLeaseDTO> createFarmLease(@NonNull @Valid @RequestBody CreateLeaseRequest createLeaseDTO) {
+		FarmLeaseDTO createdFarmLeaseDTO = farmLeaseService.createFarmLease(createLeaseDTO);
 		return new ResponseEntity<>(createdFarmLeaseDTO, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<FarmLeaseDTO> updateFarmLease(@PathVariable @NonNull Long id, @Valid @RequestBody FarmLeaseDTO farmLeaseDTO)
+	public ResponseEntity<FarmLeaseDTO> updateFarmLease(@PathVariable @NonNull Long id, @Valid @RequestBody UpdateLeaseRequest updateLeaseDTO)
 			throws ResourceNotFoundException {
-		FarmLeaseDTO updatedFarmLeaseDTO = farmLeaseService.updateFarmLease(id, farmLeaseDTO);
+		FarmLeaseDTO updatedFarmLeaseDTO = farmLeaseService.updateFarmLease(id, updateLeaseDTO);
 		return new ResponseEntity<>(updatedFarmLeaseDTO, HttpStatus.OK);
 	}
 

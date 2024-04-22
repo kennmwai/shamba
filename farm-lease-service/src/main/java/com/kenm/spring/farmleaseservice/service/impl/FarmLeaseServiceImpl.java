@@ -12,6 +12,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
+import com.kenm.spring.farmleaseservice.dto.payload.CreateLeaseRequest;
+import com.kenm.spring.farmleaseservice.dto.payload.UpdateLeaseRequest;
 import com.kenm.spring.farmleaseservice.entity.FarmLease;
 import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
@@ -102,13 +104,13 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public FarmLeaseDTO updateFarmLease(@NonNull Long leaseId, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException {
-		if (!exists(leaseId)) {
-			throw new ResourceNotFoundException("Farm Lease with ID " + leaseId + " not found.");
+	public FarmLeaseDTO updateFarmLease(@NonNull Long id, UpdateLeaseRequest updateLeaseDTO) throws ResourceNotFoundException {
+		if (!exists(id)) {
+			throw new ResourceNotFoundException("Farm Lease with ID " + id + " not found.");
 		}
 
-		FarmLease updatedFarmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
-		updatedFarmLease.setId(leaseId);
+		FarmLease updatedFarmLease = farmLeaseMapper.toFarmLease(updateLeaseDTO);
+		updatedFarmLease.setId(id);
 		farmLeaseRepository.save(updatedFarmLease);
 
 		// paymentService.updatePayments(farmLeaseDTO.getPayments(), updatedFarmLease);
@@ -117,10 +119,10 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 	}
 
 	@Override
-	public FarmLeaseDTO createFarmLease(FarmLeaseDTO farmLeaseDTO) {
-		validateCreation(farmLeaseDTO);
+	public FarmLeaseDTO createFarmLease(CreateLeaseRequest createLeaseDTO) {
+		// validateCreation(createLease);
 
-		FarmLease farmLease = farmLeaseMapper.toFarmLease(farmLeaseDTO);
+		FarmLease farmLease = farmLeaseMapper.toFarmLease(createLeaseDTO);
 		farmLease = farmLeaseRepository.save(farmLease);
 
 		// createPaymentsForLease(farmLeaseDTO, farmLease);
@@ -128,14 +130,14 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 		return farmLeaseMapper.toFarmLeaseDTO(farmLease);
 	}
 
-	private void validateCreation(FarmLeaseDTO farmLeaseDTO) {
-		if (farmLeaseDTO.getId() != null) {
-			throw new IllegalArgumentException("Lease ID cannot be set on creation.");
-		}
-		if (farmLeaseDTO.getPayments() == null) {
-			farmLeaseDTO.setPayments(Collections.emptyList());
-		}
-	}
+//	private void validateCreation(CreateLeaseRequest createLease) {
+//		if (createLease.getId() != null) {
+//			throw new IllegalArgumentException("Lease ID cannot be set on creation.");
+//		}
+//		if (createLease.getPayments() == null) {
+//			createLease.setPayments(Collections.emptyList());
+//		}
+//	}
 
 //	private void createPaymentsForLease(FarmLeaseDTO farmLeaseDTO, FarmLease farmLease) {
 //		farmLeaseDTO.getPayments().forEach(payment -> paymentService.createPayment(payment, farmLease));

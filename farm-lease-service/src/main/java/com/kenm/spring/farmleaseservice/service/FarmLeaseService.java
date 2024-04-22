@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.lang.NonNull;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
+import com.kenm.spring.farmleaseservice.dto.payload.CreateLeaseRequest;
+import com.kenm.spring.farmleaseservice.dto.payload.UpdateLeaseRequest;
 import com.kenm.spring.farmleaseservice.exception.ResourceNotFoundException;
 
 /**
@@ -41,8 +43,8 @@ public interface FarmLeaseService {
 
 	List<FarmLeaseDTO> getFarmLeaseByType(String type) throws ResourceNotFoundException;
 
-	FarmLeaseDTO createFarmLease(FarmLeaseDTO farmLeaseDTO);
+	FarmLeaseDTO createFarmLease(CreateLeaseRequest createLease);
 
-	FarmLeaseDTO updateFarmLease(@NonNull Long id, FarmLeaseDTO farmLeaseDTO) throws ResourceNotFoundException;
+	FarmLeaseDTO updateFarmLease(@NonNull Long id, UpdateLeaseRequest updateLease) throws ResourceNotFoundException;
 
 }

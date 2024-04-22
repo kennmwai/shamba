@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import com.kenm.spring.farmleaseservice.dto.FarmLeaseDTO;
 import com.kenm.spring.farmleaseservice.dto.FarmPaymentDTO;
+import com.kenm.spring.farmleaseservice.dto.payload.CreateLeaseRequest;
+import com.kenm.spring.farmleaseservice.dto.payload.UpdateLeaseRequest;
 import com.kenm.spring.farmleaseservice.entity.FarmLease;
 import com.kenm.spring.farmleaseservice.entity.FarmPayment;
 import com.kenm.spring.farmleaseservice.mapper.FarmLeaseMapper;
@@ -63,5 +65,23 @@ public class FarmLeaseMapperImpl implements FarmLeaseMapper {
 			return null;
 		}
 		return farmLeaseDTOs.stream().map(this::toFarmLease).collect(Collectors.toList());
+	}
+
+	@Override
+	public FarmLease toFarmLease(CreateLeaseRequest createLeaseDTO) {
+		FarmLease farmLease = new FarmLease();
+
+		BeanUtils.copyProperties(createLeaseDTO, farmLease);
+
+		return farmLease;
+	}
+
+	@Override
+	public FarmLease toFarmLease(UpdateLeaseRequest updateLeaseDTO) {
+		FarmLease farmLease = new FarmLease();
+
+		BeanUtils.copyProperties(updateLeaseDTO, farmLease);
+
+		return farmLease;
 	}
 }
