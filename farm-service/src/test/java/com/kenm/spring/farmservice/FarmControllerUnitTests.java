@@ -23,7 +23,7 @@ import com.kenm.spring.farmservice.dto.payload.request.CreateFarmReq;
 import com.kenm.spring.farmservice.service.FarmService;
 
 @WebMvcTest(FarmController.class)
-public class ControllerUnitTests {
+public class FarmControllerUnitTests {
 
 	@Autowired
 	private MockMvc mockMvc;
