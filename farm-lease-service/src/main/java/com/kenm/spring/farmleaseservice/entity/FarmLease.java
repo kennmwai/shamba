@@ -16,26 +16,20 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author User
  *
  */
 @Entity
-@Data
-@NoArgsConstructor
-@Getter
-@Setter
-@AllArgsConstructor
-@EqualsAndHashCode
-@ToString
 @Table(name = "farm_leases")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class FarmLease {
 	@Id
 	// @GeneratedValue(strategy = GenerationType.IDENTITY)
