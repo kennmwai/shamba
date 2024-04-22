@@ -15,12 +15,14 @@ import com.kenm.spring.farmservice.entity.Amenities;
 import com.kenm.spring.farmservice.entity.Links;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FarmDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;

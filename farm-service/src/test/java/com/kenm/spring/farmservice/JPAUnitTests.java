@@ -12,7 +12,7 @@ import com.kenm.spring.farmservice.entity.Farm;
 import com.kenm.spring.farmservice.repository.FarmRepository;
 
 @DataJpaTest
-class JPAUnitTest {
+class JPAUnitTests {
 
 	@Autowired
 	private TestEntityManager entityManager;
