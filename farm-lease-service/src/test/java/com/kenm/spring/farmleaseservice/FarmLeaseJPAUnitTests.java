@@ -35,7 +35,7 @@ class FarmLeaseJPAUnitTests {
 		FarmLease savedFarmLease = leaseRepo.save(farmLease);
 
 		// Verify that the entity was saved
-		assertThat(savedFarmLease.getId()).isNotNull();
+		assertThat(savedFarmLease.getLeaseId()).isNotNull();
 		assertThat(savedFarmLease.getFarmId()).isEqualTo(1L);
 		assertThat(savedFarmLease.getLeaseTenant()).isEqualTo("John Doe");
 
@@ -60,12 +60,12 @@ class FarmLeaseJPAUnitTests {
 		entityManager.persist(farmLease3);
 
 		// Find the farm lease by ID
-		Optional<FarmLease> optionalFarmLease = leaseRepo.findById(farmLease2.getId());
+		Optional<FarmLease> optionalFarmLease = leaseRepo.findById(farmLease2.getLeaseId());
 
 		// Verify that the farm lease was found
 		assertTrue(optionalFarmLease.isPresent());
 		FarmLease foundFarmLease = optionalFarmLease.get();
-		assertEquals(foundFarmLease.getId(), farmLease2.getId());
+		assertEquals(foundFarmLease.getLeaseId(), farmLease2.getLeaseId());
 
 	}
 
@@ -126,7 +126,7 @@ class FarmLeaseJPAUnitTests {
 		leaseRepo.delete(farmLease);
 
 		// Verify that the farm lease was deleted
-		Optional<FarmLease> optionalFarmLease = leaseRepo.findById(farmLease.getId());
+		Optional<FarmLease> optionalFarmLease = leaseRepo.findById(farmLease.getLeaseId());
 		assertTrue(optionalFarmLease.isEmpty());
 	}
 
@@ -149,10 +149,10 @@ class FarmLeaseJPAUnitTests {
 		entityManager.persist(lease3);
 
 		// Delete Farm
-		leaseRepo.deleteById(lease3.getId());
+		leaseRepo.deleteById(lease3.getLeaseId());
 
 		// Retrieve all leases
-		Optional<FarmLease> optionalFarmLease = leaseRepo.findById(lease3.getId());
+		Optional<FarmLease> optionalFarmLease = leaseRepo.findById(lease3.getLeaseId());
 		assertTrue(optionalFarmLease.isEmpty());
 
        // Long leasesCount = leaseRepo.count();

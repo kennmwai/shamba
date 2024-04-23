@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LeaseDTO  {
 
-	private Long id;
+	private Long leaseId;
 	private Long farmId;
 	private String leaseTenant;
 	private String leaseType;

@@ -16,7 +16,7 @@ public class GetPaymentInfoResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private Long paymentId;
 	private String paymentStatus;
 	private Double paymentAmount;
 	private String paymentMethod;

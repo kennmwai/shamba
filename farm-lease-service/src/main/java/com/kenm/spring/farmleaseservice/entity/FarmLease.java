@@ -32,10 +32,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FarmLease {
 	@Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "lease_seq")
 	@SequenceGenerator(name = "lease_seq", sequenceName = "lease_sequence", allocationSize = 1, initialValue = 100)
-	private Long id;
+	@Column(name = "lease_id")
+	private Long leaseId;
 
 	@Column(name = "farm_id", nullable = false)
 	private Long farmId;

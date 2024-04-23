@@ -9,7 +9,7 @@ CREATE SEQUENCE farm_payments_seq
     INCREMENT BY 5;
 
 create table farm_leases (
-    id bigint AUTO_INCREMENT PRIMARY KEY,
+    lease_id bigint AUTO_INCREMENT PRIMARY KEY,
     farm_id bigint not null,
     lease_tenant varchar(255) not null,
     lease_type varchar(53) not null,
@@ -18,13 +18,13 @@ create table farm_leases (
     lease_duration varchar(53) not null,
     lease_start varchar(53) not null,
     lease_end varchar(53) not null,
-    primary key (id)
+    primary key (lease_id)
 );
 
--- ALTER TABLE farm_leases ALTER COLUMN id SET DEFAULT nextval('farm_lease_seq');
+-- ALTER TABLE farm_leases ALTER COLUMN lease_id SET DEFAULT nextval('farm_lease_seq');
 
 create table farm_payments (
-    id bigint AUTO_INCREMENT PRIMARY KEY,
+    payment_id bigint AUTO_INCREMENT PRIMARY KEY,
     payment_status varchar(53) not null,
     payment_amount float(53) not null,
     payment_method varchar(53) not null,
@@ -32,7 +32,7 @@ create table farm_payments (
     payment_date date not null,
     payment_notes varchar(255),
     lease_id bigint not null,
-    FOREIGN KEY (lease_id) REFERENCES farm_leases(id)
+    FOREIGN KEY (lease_id) REFERENCES farm_leases(lease_id)
 );
 
-ALTER TABLE farm_payments ALTER COLUMN id SET DEFAULT nextval('farm_payments_seq')
+ALTER TABLE farm_payments ALTER COLUMN payment_id SET DEFAULT nextval('farm_payments_seq')

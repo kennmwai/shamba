@@ -109,7 +109,7 @@ public class FarmLeaseServiceImpl implements FarmLeaseService {
 		}
 
 		FarmLease updatedFarmLease = farmLeaseMapper.toFarmLease(updateLeaseDTO);
-		updatedFarmLease.setId(id);
+		updatedFarmLease.setLeaseId(id);
 		farmLeaseRepository.save(updatedFarmLease);
 
 		// paymentService.updatePayments(farmLeaseDTO.getPayments(), updatedFarmLease);

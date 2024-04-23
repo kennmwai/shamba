@@ -19,7 +19,7 @@ import lombok.ToString;
 @ToString
 public class FarmPaymentDTO {
 
-	private Long id;
+	private Long paymentId;
 	private String paymentStatus;
 	private Double paymentAmount;
 	private String paymentMethod;

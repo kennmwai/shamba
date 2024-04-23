@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetPaymentInfoResponse {
 
-	private Long id;
+	private Long paymentId;
 	private String paymentStatus;
 	private Double paymentAmount;
 	private String paymentMethod;

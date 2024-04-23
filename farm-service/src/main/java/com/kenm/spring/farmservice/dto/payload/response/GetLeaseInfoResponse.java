@@ -19,31 +19,14 @@ public class GetLeaseInfoResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
-
-	@PositiveOrZero(message = "Farm ID is required")
+	private Long leaseId;
 	private Long farmId;
-
-	@NotBlank(message = "Tenant Names is required")
 	private String leaseTenant;
-
-	@NotBlank(message = "Lease Type is required")
 	private String leaseType;
-
-	@NotBlank(message = "Lease Status is required")
 	private String leaseStatus;
-
-	@PositiveOrZero(message = "Rent Amount is required")
 	private Double leaseRent;
-
-	@NotBlank(message = "Lease Duration is required")
 	private String leaseDuration;
-
-	@NotBlank(message = "Lease Start Date is required")
 	private String leaseStart;
-
-	@NotBlank(message = "Lease End Date is required")
 	private String leaseEnd;
-
 	private List<GetPaymentInfoResponse> payments;
 }

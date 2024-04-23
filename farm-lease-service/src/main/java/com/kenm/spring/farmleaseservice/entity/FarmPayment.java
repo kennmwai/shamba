@@ -31,7 +31,7 @@ public class FarmPayment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE , generator = "payment_seq")
 	@SequenceGenerator(name = "payment_seq", sequenceName = "payment_sequence", allocationSize = 1, initialValue = 1000)
-	private Long id;
+	private Long paymentId;
 
 	@Column(name = "payment_Status", nullable = false)
 	private String paymentStatus;

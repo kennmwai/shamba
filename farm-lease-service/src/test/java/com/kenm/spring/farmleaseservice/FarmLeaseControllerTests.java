@@ -57,13 +57,13 @@ public class FarmLeaseControllerTests {
 	public void testGetById() throws Exception {
 		// Mock the service response
 		FarmLeaseDTO lease = new FarmLeaseDTO();
-		lease.setId(1L);
+		lease.setLeaseId(1L);
 
 		when(leaseService.findById(1L)).thenReturn(lease);
 
 		// Perform the GET request and verify the response
 		mockMvc.perform(get("/api/v1/leases/1")).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(1L));
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.leaseId").value(1L));
 	}
 
 	@Test
@@ -86,14 +86,14 @@ public class FarmLeaseControllerTests {
 				.leaseStart("2024-04-22").leaseEnd("2025-04-22").build();
 
 		FarmLeaseDTO createdLease = new FarmLeaseDTO();
-		createdLease.setId(1L);
+		createdLease.setLeaseId(1L);
 
 		when(leaseService.createFarmLease(request)).thenReturn(createdLease);
 
 		mockMvc.perform(post("/api/v1/leases").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request))).andExpect(status().isCreated())
 				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-				.andExpect(jsonPath("$.id").value(createdLease.getId()));
+				.andExpect(jsonPath("$.leaseId").value(createdLease.getLeaseId()));
 	}
 
 	@Test
@@ -103,7 +103,7 @@ public class FarmLeaseControllerTests {
 		request.setLeaseTenant("John Doe");
 
 		FarmLeaseDTO updatedLease = new FarmLeaseDTO();
-		updatedLease.setId(1L);
+		updatedLease.setLeaseId(1L);
 		updatedLease.setLeaseTenant("Jane Doe");
 
 		when(leaseService.updateFarmLease(1L, request)).thenReturn(updatedLease);
@@ -111,7 +111,7 @@ public class FarmLeaseControllerTests {
 		// Act & Assert
 		mockMvc.perform(put("/api/v1/leases/1").contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(request))).andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.id").value(1L))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON)).andExpect(jsonPath("$.leaseId").value(1L))
 				.andExpect(jsonPath("$.leaseTenant").value("Jane Doe"));
 	}
 

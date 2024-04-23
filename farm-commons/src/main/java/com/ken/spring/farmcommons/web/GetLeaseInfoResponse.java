@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetLeaseInfoResponse {
 
-	private Long id;
+	private Long leaseId;
 	private Long farmId;
 	private String leaseTenant;
 	private String leaseType;

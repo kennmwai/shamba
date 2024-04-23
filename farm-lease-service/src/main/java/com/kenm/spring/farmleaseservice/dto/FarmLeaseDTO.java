@@ -31,7 +31,7 @@ public class FarmLeaseDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
+	private Long leaseId;
 
 	@PositiveOrZero(message = "Farm ID is required")
 	private Long farmId;
