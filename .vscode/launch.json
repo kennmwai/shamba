@@ -1,0 +1,64 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-FarmServiceApplication<farm-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kenm.spring.farmservice.FarmServiceApplication",
+            "projectName": "farm-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-FarmLeaseServiceApplication<farm-lease-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kenm.spring.farmleaseservice.FarmLeaseServiceApplication",
+            "projectName": "farm-lease-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-FarmEurekaDiscoveryServiceApplication<farm-eureka-discovery-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kenm.spring.farmeurekadiscoveryservice.FarmEurekaDiscoveryServiceApplication",
+            "projectName": "farm-eureka-discovery-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-FarmConfigServerServiceApplication<farm-config-server-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kenm.spring.farmconfigserverservice.FarmConfigServerServiceApplication",
+            "projectName": "farm-config-server-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-FarmApiGatewayServiceApplication<farm-api-gateway-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kenm.spring.farmapigatewayservice.FarmApiGatewayServiceApplication",
+            "projectName": "farm-api-gateway-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-FarmClientServiceApplication<farm-client-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.kenm.spring.farmclientservice.FarmClientServiceApplication",
+            "projectName": "farm-client-service",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
