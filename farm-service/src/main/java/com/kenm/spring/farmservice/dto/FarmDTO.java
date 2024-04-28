@@ -8,47 +8,35 @@ package com.kenm.spring.farmservice.dto;
  *
  */
 import java.io.Serializable;
+import java.util.List;
+import java.util.UUID;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+import com.kenm.spring.farmservice.entity.Amenities;
+import com.kenm.spring.farmservice.entity.Links;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class FarmDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-
-	@NotBlank(message = "Farm name cannot be blank")
-	@Size(min = 1, max = 255)
-	private String name;
-
-	@NotBlank(message = "Farm Owner cannot be blank")
-	@Size(min = 1, max = 255)
-	private String owner;
-
-	@NotBlank(message = "Farm address cannot be blank")
-	@Size(min = 1, max = 255)
-	private String location;
-
-	@NotBlank(message = "Farm Type cannot be blank")
-	@Size(min = 1, max = 255)
-	private String type;
-
-	@NotBlank(message = "Farm Status cannot be blank")
-	@Size(min = 1, max = 255)
-	private String status;
-
-	@Positive(message = "farm Size (Acres) must be greater than or equal to 1")
-	private Integer size;
-
-	@PositiveOrZero(message = "Price per acre must be greater than or equal to 0")
+	private UUID farmId;
+	private String farmName;
+	private String farmOwner;
+	private String farmLocation;
+	private String farmType;
+	private String farmStatus;
+	private Integer farmSize;
 	private Double pricePerAcre;
+
+    private List<Amenities> farmFeatures;
+    private List<Links> links;
 }

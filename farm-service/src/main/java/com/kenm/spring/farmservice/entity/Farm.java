@@ -3,19 +3,21 @@
  */
 package com.kenm.spring.farmservice.entity;
 
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.UUID;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * @author User
@@ -24,35 +26,43 @@ import lombok.ToString;
 @Entity
 @Table(name = "farms")
 @Data
-@NoArgsConstructor
-@Getter
-@Setter
+@Builder
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString
+@NoArgsConstructor
 public class Farm {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private String name;
+    @Column(name = "farm_id", nullable = false, unique = true, updatable = false)
+    @Builder.Default
+    private UUID farmId = UUID.nameUUIDFromBytes(("farm-details-" + UUID.randomUUID()).getBytes(StandardCharsets.UTF_8));
 
-	@Column(nullable = false)
-	private String owner;
+	@Column(name = "farm_name", nullable = false)
+	private String farmName;
 
-	@Column(nullable = false)
-	private String location;
+	@Column(name = "farm_owner", nullable = false)
+	private String farmOwner;
 
-	@Column(nullable = false)
-	private String type; // i.e Crop, Livestock, Mixed, Orchard
+	@Column(name = "farm_location", nullable = false)
+	private String farmLocation;
 
-	@Column(nullable = false)
-	private String status; // i.e. Active, Inactive
+	@Column(name = "farm_type", nullable = false)
+	private String farmType; // i.e Crop, Livestock, Mixed, Orchard
 
-	@Column(nullable = false)
-	private Integer size; // in Acres
+	@Column(name = "farm_status", nullable = false)
+	private String farmStatus; // i.e. Active, Inactive
+
+	@Column(name = "farm_size", nullable = false)
+	private Integer farmSize; // in Acres
 
 	@Column(nullable = false)
 	private Double pricePerAcre;
+
+    @ElementCollection
+    private List<Amenities> farmFeatures;
+
+    @ElementCollection
+    private List<Links> links;
+
 }
