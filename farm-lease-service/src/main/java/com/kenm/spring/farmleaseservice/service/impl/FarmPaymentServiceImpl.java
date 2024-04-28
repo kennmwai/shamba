@@ -3,8 +3,7 @@ package com.kenm.spring.farmleaseservice.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.kenm.spring.farmleaseservice.dto.FarmPaymentDTO;
 import com.kenm.spring.farmleaseservice.entity.FarmLease;
@@ -13,7 +12,7 @@ import com.kenm.spring.farmleaseservice.mapper.PaymentMapper;
 import com.kenm.spring.farmleaseservice.repository.FarmPaymentRepository;
 import com.kenm.spring.farmleaseservice.service.FarmPaymentService;
 
-@Service
+@Component
 public class FarmPaymentServiceImpl implements FarmPaymentService {
 
     @Autowired
@@ -28,7 +27,7 @@ public class FarmPaymentServiceImpl implements FarmPaymentService {
     }
 
     @Override
-    public boolean exists(@NonNull Long id) {
+    public boolean exists(Long id) {
         return paymentRepository.existsById(id);
     }
 
@@ -38,7 +37,7 @@ public class FarmPaymentServiceImpl implements FarmPaymentService {
     }
 
     @Override
-    public void delete(@NonNull Long id) {
+    public void delete(Long id) {
         if (!exists(id)) {
             throw new IllegalArgumentException("Farm Payment with id " + id + " not found");
         }
@@ -46,7 +45,7 @@ public class FarmPaymentServiceImpl implements FarmPaymentService {
     }
 
     @Override
-    public void deleteByIds(@NonNull Iterable<Long> ids) {
+    public void deleteByIds(Iterable<Long> ids) {
         paymentRepository.deleteAllById(ids);
     }
 
@@ -57,13 +56,13 @@ public class FarmPaymentServiceImpl implements FarmPaymentService {
     }
 
     @Override
-    public FarmPaymentDTO getPayment(@NonNull Long id) {
+    public FarmPaymentDTO getPayment(Long id) {
         FarmPayment payment = paymentRepository.findById(id).orElse(null);
         return paymentMapper.toFarmPaymentDTO(payment);
     }
 
     @Override
-    public List<FarmPaymentDTO> getPaymentsByIds(@NonNull Iterable<Long> ids) {
+    public List<FarmPaymentDTO> getPaymentsByIds(Iterable<Long> ids) {
         List <FarmPayment> payments = paymentRepository.findAllById(ids);
         return paymentMapper.toFarmPaymentDTOs(payments);
     }
@@ -96,17 +95,13 @@ public class FarmPaymentServiceImpl implements FarmPaymentService {
 
     @Override
     public FarmPaymentDTO updatePayment(FarmPaymentDTO farmPaymentDTO, FarmLease lease) {
+        if (!exists(farmPaymentDTO.getId())) {
+            throw new IllegalArgumentException("Farm Payment with id " + farmPaymentDTO.getId() + " not found");
+        }
         FarmPayment payment = paymentMapper.toFarmPayment(farmPaymentDTO);
         payment.setFarmLease(lease);
         payment = paymentRepository.save(payment);
         return paymentMapper.toFarmPaymentDTO(payment);
-    }
-    @Override
-    public List<FarmPaymentDTO> updatePayments(List<FarmPaymentDTO> farmPaymentDTO, FarmLease lease) {
-        List <FarmPayment> payments = paymentMapper.toFarmPayments(farmPaymentDTO);
-        payments.forEach(payment -> payment.setFarmLease(lease));
-        paymentRepository.saveAll(payments);
-        return paymentMapper.toFarmPaymentDTOs(payments);
     }
 
 }
